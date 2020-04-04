@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const requireDir = require("require-dir");
 const cors = require("cors");
 
-// Starting the App, enabling receiving json and using CORS
+// Starting the app, enabling receiving json and using CORS
 const app = express();
 app.use(express.json());
 app.use(cors());
