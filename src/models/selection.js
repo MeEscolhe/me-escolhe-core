@@ -1,5 +1,6 @@
 // Importing dependences
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate");
 
 // Creating schema
 const SelectionSchema = new mongoose.Schema({
@@ -18,6 +19,9 @@ const SelectionSchema = new mongoose.Schema({
         default: []
     }
 });
+
+// Adding paginate plugin
+SelectionSchema.plugin(mongoosePaginate);
 
 // Exporting to controllers
 mongoose.model("Selection", SelectionSchema);
