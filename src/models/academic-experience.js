@@ -2,21 +2,20 @@
 const mongoose = require("mongoose");
 
 // Creating schema
-const ProjectSchema = new mongoose.Schema({
-  name: {
+const AcademicExperienceSchema = new mongoose.Schema({
+  title: {
     type: String,
     required: true,
   },
-  description: {
+  category: {
     type: String,
     required: true,
   },
-  selections: {
-    type: [String],
+  institution: {
+    type: String,
     required: true,
-    default: [],
   },
 });
 
 // Exporting to controllers
-mongoose.model("Project", ProjectSchema);
+mongoose.model("AcademicExperience", AcademicExperienceSchema);
