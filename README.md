@@ -1,4 +1,4 @@
-# Me Escolhe
+# Me Escolhe !
 
 Plataforma de seleções de projetos.
 
@@ -21,15 +21,20 @@ docker run --name mongodb -p 27017:27017 -d mongo
 
 ## Rodando o Servidor
 
-Podemos executar a API REST em **modo de produção** utilizando o seguinte comando:
+Podemos executar a API REST em dois modos:
+1. Em **modo de produção**, utilizando o seguinte comando:
 ```
 npm run prod
 ```
-
-Já em **modo de desenvolvimento**, utiliza-se o seguinte comando:
-
+2. Em **modo de desenvolvimento**, utilizando o seguinte comando:
 ```
 npm run dev
+```
+
+Opcionalmente podemos executar a aplicação em modo de produção através de um contâiner **docker** com os comandos:
+```
+docker build --tag me-escolhe-core .
+docker run --name core -p 3000:3000 -d me-escolhe-core
 ```
 
 ## Requisitos
