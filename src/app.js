@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
-
+require('./config/Mongoose')();
+const { swaggerServe, swaggetSetup } = require('./config/Swagger');
 const labs = require('./controllers/lab');
 const workExperiences = require('./controllers/work-experience');
 const academicExperiences = require('./controllers/academic-experience');
@@ -21,11 +22,6 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 
-
-mongoose.connect('mongodb://localhost:27017/apiCompcult')
-  .then(() => console.log('Connected to MongoDB...'))
-  .catch(err => console.error('Could not connect to MongoDB...'));
-
 app.use(express.json());
 app.use('/labs', labs);
 app.use('/workExperiences', workExperiences);
@@ -41,7 +37,8 @@ app.use('/projects', projects);
 app.use('/feedbackRequests', feedbackRequests);
 app.use('/students', students);
 app.use('/teachers', teachers);
-const port = process.env.PORT || 27017;
+app.use('/docs', swaggerServe, swaggetSetup);
+const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 

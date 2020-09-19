@@ -24,9 +24,6 @@ router.get('/:id', async (req, res) => {
     return res.status(404).send('No academicExperiences to show.');
   }
   const academicExperience = await AcademicExperience.findById((mongoose.Types.ObjectId(req.params.id)));
-  
-  
-  
 
   if (!academicExperience) return res.status(404).send('The academicExperiences with the given ID was not found.');
 
@@ -54,8 +51,8 @@ router.put('/:id', async (req, res) => {
   const academicExperience = await AcademicExperience.findByIdAndUpdate((mongoose.Types.ObjectId(req.params.id)), 
 	{ 
     title: req.body.title,
-	category: req.body.category,
-	institution: req.body.institution
+    category: req.body.category,
+    institution: req.body.institution
   }, 
   { new: true });
         
