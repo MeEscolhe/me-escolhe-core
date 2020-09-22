@@ -1,4 +1,5 @@
 // Importing dependences
+
 const Joi = require('joi');
 const mongoose = require("mongoose");
 const ObjectId = require('mongodb').ObjectID;
@@ -19,9 +20,4 @@ const FeedbackRequestSchema = mongoose.model('FeedbackRequest', new mongoose.Sch
 
 // Exporting to controllers
 exports.FeedbackRequest = FeedbackRequestSchema; 
-
-
-
-
-
 

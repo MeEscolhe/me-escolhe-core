@@ -1,13 +1,16 @@
 // Importing dependences
+
 const Joi = require('joi');
 const mongoose = require("mongoose");
 
 // Creating schema
 const WorkExperienceSchema = mongoose.model('WorkExperience',new mongoose.Schema({
+
   role: {
     type: String,
     required: true,
   },
+
   institution: {
     type: String,
     required: true,
@@ -16,6 +19,7 @@ const WorkExperienceSchema = mongoose.model('WorkExperience',new mongoose.Schema
     type: Number,
     min: 0,
   },
+
 }));
 
 function validateWorkExperience(workExperience) {
@@ -31,14 +35,6 @@ function validateWorkExperience(workExperience) {
 
 exports.WorkExperience = WorkExperienceSchema; 
 exports.valWorkExperience = validateWorkExperience;
-
-
-
-
-
-
-
-
 
 
 

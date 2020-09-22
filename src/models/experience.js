@@ -1,4 +1,5 @@
 // Importing dependences
+
 const Joi = require('joi');
 const mongoose = require("mongoose");
 const ObjectId = require('mongodb').ObjectID;
@@ -32,15 +33,4 @@ function validateExperience(experience) {
 
 exports.Experience = ExperienceSchema; 
 //exports.valExperience = validateExperience;
-
-
-
-
-
-
-
-
-
-
-
 

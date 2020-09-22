@@ -1,4 +1,5 @@
 // Importing dependences
+
 const Joi = require('joi');
 
 const mongoose = require("mongoose");
@@ -14,6 +15,7 @@ const LabSchema = mongoose.model('Lab', new mongoose.Schema({
     required: true,
     default: "",
   },
+
 }));
 
 function validateLab(lab) {
@@ -28,7 +30,6 @@ function validateLab(lab) {
 
 exports.Lab = LabSchema; 
 exports.valLab = validateLab;
-
 
 
 

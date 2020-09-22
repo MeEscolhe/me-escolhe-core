@@ -1,4 +1,5 @@
 // Importing dependences
+
 const Joi = require('joi');
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate");
@@ -17,9 +18,11 @@ const SelectionSchema = mongoose.model('Selection', new mongoose.Schema({
     default: "",
   },
   phases: {
+
     type: [ObjectId],
     ref: 'PhaseSchema',
     //required: true,
+
     default: [],
   },
   current: {
@@ -27,6 +30,7 @@ const SelectionSchema = mongoose.model('Selection', new mongoose.Schema({
     required: true,
     default: true,
   },
+
 }));
 
 // Adding paginate plugin
@@ -47,13 +51,3 @@ exports.Selection = SelectionSchema;
 
  
 //exports.valSelection = validateSelection;
-
-
-
-
-
-
-
-
-
-

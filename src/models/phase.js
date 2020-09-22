@@ -1,4 +1,5 @@
 // Importing dependences
+
 const Joi = require('joi');
 const mongoose = require("mongoose");
 const ObjectId = require('mongodb').ObjectID;
@@ -12,6 +13,7 @@ const PhaseSchema = mongoose.model('Phase', new mongoose.Schema({
     default: [],
   },
   selectionId: {
+
     type: ObjectId,
     ref: 'SelectionSchema',
     required: true,
@@ -20,4 +22,5 @@ const PhaseSchema = mongoose.model('Phase', new mongoose.Schema({
 
 // Exporting to controllers
 exports.Phase = PhaseSchema;
+
 

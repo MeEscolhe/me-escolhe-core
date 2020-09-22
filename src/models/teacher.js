@@ -1,4 +1,5 @@
 // Importing dependences
+
 const Joi = require('joi');
 const mongoose = require("mongoose");
 const ObjectId = require('mongodb').ObjectID;
@@ -45,16 +46,6 @@ const TeacherSchema = mongoose.model('Teacher', new mongoose.Schema({
 
 // Exporting to controllers
 exports.Teacher = TeacherSchema; 
-
-
-
-
-
-
-
-
-
-
 
 
 

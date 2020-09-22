@@ -1,9 +1,11 @@
 // Importing dependences
+
 const Joi = require('joi');
 const mongoose = require("mongoose");
 
 // Creating schema
 const AcademicExperienceSchema = mongoose.model('AcademicExperience',new mongoose.Schema({
+
   title: {
     type: String,
     required: true,
@@ -16,6 +18,7 @@ const AcademicExperienceSchema = mongoose.model('AcademicExperience',new mongoos
     type: String,
     required: true,
   },
+
 }));
 
 function validateAcademicExperience(academicExperience) {
@@ -31,12 +34,4 @@ function validateAcademicExperience(academicExperience) {
 
 exports.AcademicExperience = AcademicExperienceSchema; 
 exports.valAcademicExperience = validateAcademicExperience;
-
-
-
-
-
-
-
-
 

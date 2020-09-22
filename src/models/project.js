@@ -1,10 +1,12 @@
 // Importing dependences
+
 const Joi = require('joi');
 const mongoose = require("mongoose");
 const ObjectId = require('mongodb').ObjectID;
 
 // Creating schema
 const ProjectSchema = mongoose.model('Project', new mongoose.Schema({
+
   name: {
     type: String,
     required: true,
