@@ -1,78 +1,46 @@
+"use strict";
+
 const { Experience } = require("../models/experience");
-const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
+const getAll = () => {
   const experiences = await Experience.find();
-  if (isEmpty(experiences)) {
-    return res.status(404).send("No experiences to show.");
-  }
+  return experiences;
+};
 
-  res.send(experiences);
-});
-
-router.get("/:id", async (req, res) => {
-  const experiences = await Experience.find();
-  if (isEmpty(experiences)) {
-    return res.status(404).send("No experiences to show.");
-  }
+const getById = (id) => {
   const experience = await Experience.findById(
-    mongoose.Types.ObjectId(req.params.id)
+    mongoose.Types.ObjectId(id)
   );
+  return experience;
+};
 
-  if (!experience)
-    return res
-      .status(404)
-      .send("The experience with the given ID was not found.");
-
-  res.send(experience);
-});
-
-router.post("/", async (req, res) => {
-  // const { error } = valLab(req.body);
-  // if (error) return res.status(400).send(error.details[0].message);
-
+const create = ({academic, work}) => {
   let experience = new Experience({
-    academic: req.body.academic,
-    work: req.body.work,
+    academic: academic,
+    work: work,
   });
   experience = await experience.save();
+  return experience;
+};
 
-  res.send(experience);
-});
-
-router.put("/:id", async (req, res) => {
-  //const { error } = valExperience(req.body);
-  //if (error) return res.status(400).send(error.details[0].message);
+const update = (id, {academic, work}) => {
   const experience = await Experience.findByIdAndUpdate(
-    mongoose.Types.ObjectId(req.params.id),
+    mongoose.Types.ObjectId(id),
     {
-      academic: req.body.academic,
-      work: req.body.work,
+      academic: academic,
+      work: work,
     },
     { new: true }
   );
-  if (!experience) {
-    return res
-      .status(404)
-      .send("The experience with the given ID was not found.");
-  }
-  res.send(experience);
-});
+  return experience;
+};
 
-router.delete("/:id", async (req, res) => {
+const remove = (id) => {
   const experience = await Experience.findByIdAndRemove(
-    mongoose.Types.ObjectId(req.params.id)
+    mongoose.Types.ObjectId(id)
   );
+  return experience;
+};
 
-  if (!experience)
-    return res
-      .status(404)
-      .send("The experience with the given ID was not found.");
-
-  res.send(experience);
-});
-
-module.exports = router;
+export {getAll, getById, create, update, remove};

@@ -1,85 +1,53 @@
-const {
-  AcademicExperience,
-  valAcademicExperience,
-} = require("../models/academic-experience");
-const express = require("express");
+"use strict";
+
+const {AcademicExperience, valAcademicExperience} = require("../models/academic-experience");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
+const getAll = () =>{
   const academicExperiences = await AcademicExperience.find().sort("title");
-  if (isEmpty(academicExperiences)) {
-    return res.status(404).send("No academicExperiences to show.");
-  }
+  return academicExperiences;
+};
 
-  res.send(academicExperiences);
-});
-
-router.get("/:id", async (req, res) => {
-  const academicExperiences = await AcademicExperience.find();
-  if (isEmpty(academicExperiences)) {
-    return res.status(404).send("No academicExperiences to show.");
-  }
+const getById = (id) => {
   const academicExperience = await AcademicExperience.findById(
     mongoose.Types.ObjectId(req.params.id)
   );
+  return academicExperience;
+};
 
-  if (!academicExperience)
-    return res
-      .status(404)
-      .send("The academicExperiences with the given ID was not found.");
-
-  res.send(academicExperience);
-});
-
-router.post("/", async (req, res) => {
-  const { error } = valAcademicExperience(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+const create = ({title, category, institution}) => {
   let academicExperience = new AcademicExperience({
-    title: req.body.title,
-    category: req.body.category,
-    institution: req.body.institution,
+    title: title,
+    category: category,
+    institution: institution,
   });
   academicExperience = await academicExperience.save();
+  return academicExperience;
+};
 
-  res.send(academicExperience);
-});
-
-router.put("/:id", async (req, res) => {
-  const { error } = valAcademicExperience(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+const update = (id, {title, category, institution}) => {
   const academicExperience = await AcademicExperience.findByIdAndUpdate(
-    mongoose.Types.ObjectId(req.params.id),
+    mongoose.Types.ObjectId(id),
     {
-      title: req.body.title,
-      category: req.body.category,
-      institution: req.body.institution,
+      title: title,
+      category: category,
+      institution: institution,
     },
     { new: true }
   );
+  return academicExperience;
+};
 
-  if (!academicExperience) {
-    return res
-      .status(404)
-      .send("The academicExperiences with the given ID was not found.");
-  }
-
-  res.send(academicExperience);
-});
-
-router.delete("/:id", async (req, res) => {
+const remove = (id) => {
   const academicExperience = await AcademicExperience.findByIdAndRemove(
     mongoose.Types.ObjectId(req.params.id)
   );
+  return academicExperience;
+};
 
-  if (!academicExperience)
-    return res
-      .status(404)
-      .send("The academicExperiences with the given ID was not found.");
+const validate = (object) => {
+  const { error } = valAcademicExperience(object);
+  return error;
+}
 
-  res.send(academicExperience);
-});
-
-module.exports = router;
+export {getAll, getById, create, update, remove, validate};
