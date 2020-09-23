@@ -1,10 +1,6 @@
-// Importing dependences
-
 const Joi = require("joi");
-
 const mongoose = require("mongoose");
 
-// Creating schema
 const LabSchema = mongoose.model(
   "Lab",
   new mongoose.Schema({

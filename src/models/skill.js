@@ -1,10 +1,6 @@
-// Importing dependences
-
-const Joi = require("joi");
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
 
-// Creating schema
 const SkillSchema = mongoose.model(
   "Skill",
   new mongoose.Schema({

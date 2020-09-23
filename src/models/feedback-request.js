@@ -1,10 +1,7 @@
-// Importing dependences
-
 const Joi = require("joi");
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
 
-// Creating schema
 const FeedbackRequestSchema = mongoose.model(
   "FeedbackRequest",
   new mongoose.Schema({
@@ -21,5 +18,4 @@ const FeedbackRequestSchema = mongoose.model(
   })
 );
 
-// Exporting to controllers
 exports.FeedbackRequest = FeedbackRequestSchema;
