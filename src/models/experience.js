@@ -1,23 +1,25 @@
 // Importing dependences
 
-const Joi = require('joi');
+const Joi = require("joi");
 const mongoose = require("mongoose");
-const ObjectId = require('mongodb').ObjectID;
-
+const ObjectId = require("mongodb").ObjectID;
 
 // Creating schema
-const ExperienceSchema = mongoose.model('Experience',new mongoose.Schema({
-  academic: {
-    type: [ObjectId],
-    ref: 'AcademicExperienceSchema',
-    required: true,
-  },
-  work: {
-    type: [ObjectId],
-    ref: 'WorkExperienceSchema',
-    required: true,
-  },
-}));
+const ExperienceSchema = mongoose.model(
+  "Experience",
+  new mongoose.Schema({
+    academic: {
+      type: [ObjectId],
+      ref: "AcademicExperienceSchema",
+      required: true,
+    },
+    work: {
+      type: [ObjectId],
+      ref: "WorkExperienceSchema",
+      required: true,
+    },
+  })
+);
 
 /*
 function validateExperience(experience) {
@@ -30,7 +32,5 @@ function validateExperience(experience) {
   return schemaExperience.validate(experience.body);
 }*/
 
-
-exports.Experience = ExperienceSchema; 
+exports.Experience = ExperienceSchema;
 //exports.valExperience = validateExperience;
-

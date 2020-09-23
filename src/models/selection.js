@@ -1,37 +1,37 @@
 // Importing dependences
 
-const Joi = require('joi');
+const Joi = require("joi");
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate");
-const ObjectId = require('mongodb').ObjectID;
-
+const ObjectId = require("mongodb").ObjectID;
 
 // Creating schema
-const SelectionSchema = mongoose.model('Selection', new mongoose.Schema({
-  role: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-    default: "",
-  },
-  phases: {
+const SelectionSchema = mongoose.model(
+  "Selection",
+  new mongoose.Schema({
+    role: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      default: "",
+    },
+    phases: {
+      type: [ObjectId],
+      ref: "PhaseSchema",
+      //required: true,
 
-    type: [ObjectId],
-    ref: 'PhaseSchema',
-    //required: true,
-
-    default: [],
-  },
-  current: {
-    type: Boolean,
-    required: true,
-    default: true,
-  },
-
-}));
+      default: [],
+    },
+    current: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
+  })
+);
 
 // Adding paginate plugin
 //SelectionSchema.plugin(mongoosePaginate);
@@ -49,5 +49,4 @@ exports.Selection = SelectionSchema;
   return schemaLab.validate(lab.body);
 }*/
 
- 
 //exports.valSelection = validateSelection;

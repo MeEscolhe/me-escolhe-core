@@ -1,8 +1,6 @@
 {
   "get": {
-    "tags": [
-      "Academic experience"
-    ],
+    "tags": ["Academic experience"],
     "description": "",
     "parameters": [],
     "responses": {
@@ -44,9 +42,7 @@
             "schema": {
               "type": "string",
               "example": "No academicExperiences to show.",
-              "enum": [
-                "No academicExperiences to show."
-              ]
+              "enum": ["No academicExperiences to show."]
             }
           }
         }

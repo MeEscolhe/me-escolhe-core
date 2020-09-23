@@ -1,11 +1,6 @@
 {
   "type": "object",
-  "required": [
-    "id",
-    "title",
-    "category",
-    "institution"
-  ],
+  "required": ["id", "title", "category", "institution"],
   "properties": {
     "id": {
       "type": "string",

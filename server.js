@@ -11,8 +11,6 @@ app.use(cors());
 
 // Starting connection with MongoDB
 mongoose.connect("mongodb://localhost:27017/me-escolhe", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
-
-
