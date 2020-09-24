@@ -5,7 +5,7 @@ const express = require("express");
 const router = express.Router();
 const { isEmpty } = require("../middlewares/util");
 
-const validateBody = (body) => {
+const validate = (body) => {
   const { error } = academicExperienceCtrl.validate(body);
   if (error) return res.status(400).send(error.details[0].message);
 };
@@ -29,13 +29,13 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  validateBody(req.body);
+  validate(req.body);
   const academicExperience = academicExperienceCtrl.create(req.body);
   res.send(academicExperience);
 });
 
 router.put("/:id", async (req, res) => {
-  validateBody(req.body);
+  validate(req.body);
   const academicExperience = academicExperienceCtrl.update(
     req.params.id,
     req.body
