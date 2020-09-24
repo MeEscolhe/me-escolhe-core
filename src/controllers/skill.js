@@ -1,72 +1,47 @@
 const { Skill } = require("../models/skill");
-const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
+const getAll = async () => {
   const skills = await Skill.find().sort("name");
-  if (isEmpty(skills)) {
-    return res.status(404).send("No skills to show.");
-  }
+  return skills;
+};
 
-  res.send(skills);
-});
+const getById = async (id) => {
+  const skill = await Skill.findById(mongoose.Types.ObjectId(id));
+  return skill;
+};
 
-router.get("/:id", async (req, res) => {
-  const skills = await Skill.find();
-  if (isEmpty(skills)) {
-    return res.status(404).send("No skills to show.");
-  }
-  const skill = await Skill.findById(mongoose.Types.ObjectId(req.params.id));
-
-  if (!skill)
-    return res.status(404).send("The skill with the given ID was not found.");
-
-  res.send(skill);
-});
-
-router.post("/", async (req, res) => {
-  // const { error } = valSkill(req.body);
-  // if (error) return res.status(400).send(error.details[0].message);
-
+const create = async ({ languages, soft, hard }) => {
   let skill = new Skill({
-    languages: req.body.languages,
-    soft: req.body.soft,
-    hard: req.body.hard,
+    languages: languages,
+    soft: soft,
+    hard: hard,
   });
   skill = await skill.save();
+  return skill;
+};
 
-  res.send(skill);
-});
-
-router.put("/:id", async (req, res) => {
-  //const { error } = valSkill(req.body);
-  //if (error) return res.status(400).send(error.details[0].message);
+const update = async (id, { languages, soft, hard }) => {
   const skill = await Skill.findByIdAndUpdate(
-    mongoose.Types.ObjectId(req.params.id),
+    mongoose.Types.ObjectId(id),
     {
-      languages: req.body.languages,
-      soft: req.body.soft,
-      hard: req.body.hard,
+      languages: languages,
+      soft: soft,
+      hard: hard,
     },
     { new: true }
   );
-  if (!skill) {
-    return res.status(404).send("The skill with the given ID was not found.");
-  }
-  res.send(skill);
-});
+  return skill;
+};
 
-router.delete("/:id", async (req, res) => {
-  const skill = await Skill.findByIdAndRemove(
-    mongoose.Types.ObjectId(req.params.id)
-  );
+const remove = async (id) => {
+  const skill = await Skill.findByIdAndRemove(mongoose.Types.ObjectId(id));
+  return skill;
+};
 
-  if (!skill)
-    return res.status(404).send("The skill with the given ID was not found.");
+const validate = (object) => {
+  const { error } = valSkill(object);
+  return error;
+};
 
-  res.send(skill);
-});
-
-module.exports = router;
+export { getAll, getById, create, update, remove, validate };

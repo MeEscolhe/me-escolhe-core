@@ -1,78 +1,49 @@
+"use strict";
+
 const { Project } = require("../models/project");
-//const {Project, valProject} = require('../models/Project');
-const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
-const ObjectId = require("mongodb").ObjectID;
 
-router.get("/", async (req, res) => {
+const getAll = async () => {
   const projects = await Project.find().sort("name");
-  if (isEmpty(projects)) {
-    return res.status(404).send("No projects to show.");
-  }
+  return projects;
+};
 
-  res.send(projects);
-});
+const getById = async (id) => {
+  const project = await Project.findById(mongoose.Types.ObjectId(id));
+  return project;
+};
 
-router.get("/:id", async (req, res) => {
-  const projects = await Project.find();
-  if (isEmpty(projects)) {
-    return res.status(404).send("No projects to show.");
-  }
-  const project = await Project.findById(
-    mongoose.Types.ObjectId(req.params.id)
-  );
-
-  if (!project)
-    return res.status(404).send("The project with the given ID was not found.");
-
-  res.send(project);
-});
-
-router.post("/", async (req, res) => {
-  //const { error } = valProject(req.body);
-  //if (error) return res.status(400).send(error.details[0].message);
-
+const create = async ({ name, description, selections }) => {
   let project = new Project({
-    name: req.body.name,
-    description: req.body.description,
-    selections: req.body.selections,
+    name: name,
+    description: description,
+    selections: selections,
   });
   project = await project.save();
+  return project;
+};
 
-  res.send(project);
-});
-
-router.put("/:id", async (req, res) => {
-  //const { error } = valProject(req.body);
-  //if (error) return res.status(400).send(error.details[0].message);
+const update = async (id, { name, description, selections }) => {
   const project = await Project.findByIdAndUpdate(
-    mongoose.Types.ObjectId(req.params.id),
+    mongoose.Types.ObjectId(id),
     {
-      name: req.body.name,
-      description: req.body.description,
-      selections: req.body.selections,
+      name: name,
+      description: description,
+      selections: selections,
     },
     { new: true }
   );
+  return project;
+};
 
-  if (!project) {
-    return res.status(404).send("The project with the given ID was not found.");
-  }
+const remove = async (id) => {
+  const project = await Project.findByIdAndRemove(mongoose.Types.ObjectId(id));
+  return project;
+};
 
-  res.send(project);
-});
+const validate = async (object) => {
+  const { error } = valProject(object);
+  return error;
+};
 
-router.delete("/:id", async (req, res) => {
-  const project = await Project.findByIdAndRemove(
-    mongoose.Types.ObjectId(req.params.id)
-  );
-
-  if (!project)
-    return res.status(404).send("The project with the given ID was not found.");
-
-  res.send(project);
-});
-
-module.exports = router;
+export { getAll, getById, create, update, remove, validate };

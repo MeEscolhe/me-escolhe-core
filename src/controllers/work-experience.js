@@ -1,101 +1,56 @@
+"use strict";
+
 const {
   WorkExperience,
   valWorkExperience,
 } = require("../models/work-experience");
-const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
+const getAll = async () => {
   const workExperiences = await WorkExperience.find().sort("role");
-  if (isEmpty(workExperiences)) {
-    return res.status(404).send("No workExperiences to show.");
-  }
+  return workExperiences;
+};
 
-  res.send(workExperiences);
-});
-
-router.get("/:id", async (req, res) => {
-  const workExperiences = await WorkExperience.find();
-  if (isEmpty(workExperiences)) {
-    return res.status(404).send("No workExperiences to show.");
-  }
+const getById = async (id) => {
   const workExperience = await WorkExperience.findById(
-    mongoose.Types.ObjectId(req.params.id)
+    mongoose.Types.ObjectId(id)
   );
+  return workExperience;
+};
 
-  if (!workExperience)
-    return res
-      .status(404)
-      .send("The workExperience with the given ID was not found.");
-
-  res.send(workExperience);
-});
-
-router.post("/", async (req, res) => {
-  const { error } = valWorkExperience(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+const create = async ({ role, institution, durationInMonths }) => {
   let workExperience = new WorkExperience({
-    role: req.body.role,
-    institution: req.body.institution,
-    durationInMonths: req.body.durationInMonths,
+    role: role,
+    institution: institution,
+    durationInMonths: durationInMonths,
   });
   workExperience = await workExperience.save();
+  return workExperience;
+};
 
-  res.send(workExperience);
-});
-
-router.put("/:id", async (req, res) => {
-  const { error } = valWorkExperience(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-  let varDurationInMonths = req.body.durationInMonths;
-  if (typeof varDurationInMonths === "undefined") {
-    const workExperience = await WorkExperience.findByIdAndUpdate(
-      mongoose.Types.ObjectId(req.params.id),
-      {
-        role: req.body.role,
-        institution: req.body.institution,
-      },
-      { new: true }
-    );
-    if (!workExperience) {
-      return res
-        .status(404)
-        .send("The workExperience with the given ID was not found.");
-    }
-    res.send(workExperience);
-  } else {
-    const workExperience = await WorkExperience.findByIdAndUpdate(
-      mongoose.Types.ObjectId(req.params.id),
-      {
-        role: req.body.role,
-        institution: req.body.institution,
-        durationInMonths: varDurationInMonths,
-      },
-      { new: true }
-    );
-    if (!workExperience) {
-      return res
-        .status(404)
-        .send("The workExperience with the given ID was not found.");
-    }
-    res.send(workExperience);
-  }
-});
-
-router.delete("/:id", async (req, res) => {
-  const workExperience = await WorkExperience.findByIdAndRemove(
-    mongoose.Types.ObjectId(req.params.id)
+const update = async (id, { role, institution, durationInMonths }) => {
+  const workExperience = await WorkExperience.findByIdAndUpdate(
+    mongoose.Types.ObjectId(id),
+    {
+      role: role,
+      institution: institution,
+      durationInMonths: durationInMonths,
+    },
+    { new: true }
   );
+  return workExperience;
+};
 
-  if (!workExperience)
-    return res
-      .status(404)
-      .send("The workExperience with the given ID was not found.");
+const remove = async (id) => {
+  const workExperience = await WorkExperience.findByIdAndRemove(
+    mongoose.Types.ObjectId(id)
+  );
+  return workExperience;
+};
 
-  res.send(workExperience);
-});
+const validate = (object) => {
+  const { error } = valWorkExperience(object);
+  return error;
+};
 
 module.exports = router;

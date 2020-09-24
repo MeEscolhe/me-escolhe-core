@@ -1,72 +1,47 @@
+"use strict";
+
 const { Phase } = require("../models/phase");
-const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
-  const phases = await Phases.find().sort("name");
-  if (isEmpty(phases)) {
-    return res.status(404).send("No phases to show.");
-  }
+const getAll = async () => {
+  const Phase = await Phase.find().sort("name");
+  return Phase;
+};
 
-  res.send(phases);
-});
+const getById = async (id) => {
+  const phase = await Phase.findById(mongoose.Types.ObjectId(id));
+  return phase;
+};
 
-router.get("/:id", async (req, res) => {
-  const phases = await Phases.find();
-  if (isEmpty(phases)) {
-    return res.status(404).send("No phases to show.");
-  }
-  const phase = await Phases.findById(mongoose.Types.ObjectId(req.params.id));
-
-  if (!phase)
-    return res.status(404).send("The phases with the given ID was not found.");
-
-  res.send(phase);
-});
-
-router.post("/", async (req, res) => {
-  const { error } = valPhases(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  let phases = new Phases({
-    students: req.body.students,
-    selectionId: req.body.selectionId,
+const create = async ({ students, selectionId }) => {
+  let Phase = new Phase({
+    students: students,
+    selectionId: selectionId,
   });
-  phases = await phases.save();
+  Phase = await Phase.save();
+  return Phase;
+};
 
-  res.send(phases);
-});
-
-router.put("/:id", async (req, res) => {
-  const { error } = valPhases(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-  const phases = await Phases.findByIdAndUpdate(
-    mongoose.Types.ObjectId(req.params.id),
+const update = async (id, { students, selectionId }) => {
+  const Phase = await Phase.findByIdAndUpdate(
+    mongoose.Types.ObjectId(id),
     {
-      students: req.body.students,
-      selectionId: req.body.selectionId,
+      students: students,
+      selectionId: selectionId,
     },
     { new: true }
   );
+  return Phase;
+};
 
-  if (!phases) {
-    return res.status(404).send("The phases with the given ID was not found.");
-  }
+const remove = async (id) => {
+  const Phase = await Phase.findByIdAndRemove(mongoose.Types.ObjectId(id));
+  return Phase;
+};
 
-  res.send(phases);
-});
+const validate = (object) => {
+  const { error } = valPhase(object);
+  return error;
+};
 
-router.delete("/:id", async (req, res) => {
-  const phases = await Phases.findByIdAndRemove(
-    mongoose.Types.ObjectId(req.params.id)
-  );
-
-  if (!phases)
-    return res.status(404).send("The phases with the given ID was not found.");
-
-  res.send(phases);
-});
-
-module.exports = router;
+export { getAll, getById, create, update, remove, validate };

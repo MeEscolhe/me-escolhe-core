@@ -3,19 +3,17 @@
 const { Experience } = require("../models/experience");
 const mongoose = require("mongoose");
 
-const getAll = () => {
-  const experiences = await Experience.find();
-  return experiences;
-};
-
-const getById = (id) => {
-  const experience = await Experience.findById(
-    mongoose.Types.ObjectId(id)
-  );
+const getAll = async () => {
+  const experience = await Experience.find();
   return experience;
 };
 
-const create = ({academic, work}) => {
+const getById = async (id) => {
+  const experience = await Experience.findById(mongoose.Types.ObjectId(id));
+  return experience;
+};
+
+const create = async ({ academic, work }) => {
   let experience = new Experience({
     academic: academic,
     work: work,
@@ -24,7 +22,7 @@ const create = ({academic, work}) => {
   return experience;
 };
 
-const update = (id, {academic, work}) => {
+const update = async (id, { academic, work }) => {
   const experience = await Experience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
@@ -36,11 +34,11 @@ const update = (id, {academic, work}) => {
   return experience;
 };
 
-const remove = (id) => {
+const remove = async (id) => {
   const experience = await Experience.findByIdAndRemove(
     mongoose.Types.ObjectId(id)
   );
   return experience;
 };
 
-export {getAll, getById, create, update, remove};
+export { getAll, getById, create, update, remove };

@@ -1,83 +1,54 @@
+"use strict";
+
 const {
   FeedbackRequest,
   valFeedbackRequest,
 } = require("../models/feedback-request");
-const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
+const getAll = async () => {
   const feedbackRequests = await FeedbackRequest.find();
-  if (isEmpty(feedbackRequests)) {
-    return res.status(404).send("No feedbackRequests to show.");
-  }
+  return feedbackRequests;
+};
 
-  res.send(feedbackRequests);
-});
-
-router.get("/:id", async (req, res) => {
-  const feedbackRequests = await FeedbackRequest.find();
-  if (isEmpty(feedbackRequests)) {
-    return res.status(404).send("No feedbackRequests to show.");
-  }
+const getById = async (id) => {
   const feedbackRequest = await FeedbackRequest.findById(
-    mongoose.Types.ObjectId(req.params.id)
+    mongoose.Types.ObjectId(id)
   );
+  return feedbackRequest;
+};
 
-  if (!feedbackRequest)
-    return res
-      .status(404)
-      .send("The feedbackRequest with the given ID was not found.");
-
-  res.send(feedbackRequest);
-});
-
-router.post("/", async (req, res) => {
-  const { error } = valFeedbackRequest(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+const create = async ({ studentId, phaseId }) => {
   let feedbackRequest = new FeedbackRequest({
-    studentId: req.body.studentId,
-    phaseId: req.body.phaseId,
+    studentId: studentId,
+    phaseId: phaseId,
   });
   feedbackRequest = await feedbackRequest.save();
+  return feedbackRequest;
+};
 
-  res.send(feedbackRequest);
-});
-
-router.put("/:id", async (req, res) => {
-  const { error } = valFeedbackRequest(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+const update = async (id, { studentId, phaseId }) => {
   const feedbackRequest = await FeedbackRequest.findByIdAndUpdate(
-    mongoose.Types.ObjectId(req.params.id),
+    mongoose.Types.ObjectId(id),
     {
-      studentId: req.body.studentId,
-      phaseId: req.body.phaseId,
+      studentId: studentId,
+      phaseId: phaseId,
     },
     { new: true }
   );
+  return feedbackRequest;
+};
 
-  if (!feedbackRequest) {
-    return res
-      .status(404)
-      .send("The feedbackRequest with the given ID was not found.");
-  }
-
-  res.send(feedbackRequest);
-});
-
-router.delete("/:id", async (req, res) => {
+const remove = async (id) => {
   const feedbackRequest = await FeedbackRequest.findByIdAndRemove(
-    mongoose.Types.ObjectId(req.params.id)
+    mongoose.Types.ObjectId(id)
   );
+  return feedbackRequest;
+};
 
-  if (!feedbackRequest)
-    return res
-      .status(404)
-      .send("The feedbackRequest with the given ID was not found.");
+const validate = (object) => {
+  const { error } = valFeedbackRequest(object);
+  return error;
+};
 
-  res.send(feedbackRequest);
-});
-
-module.exports = router;
+export { getAll, getById, create, update, remove, validate };

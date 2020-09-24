@@ -1,72 +1,47 @@
+"use strict";
+
 const { Lab, valLab } = require("../models/lab");
-const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
+const getAll = async () => {
   const labs = await Lab.find().sort("name");
-  if (isEmpty(labs)) {
-    return res.status(404).send("No labs to show.");
-  }
+  return labs;
+};
 
-  res.send(labs);
-});
+const getById = async (id) => {
+  const lab = await Lab.findById(mongoose.Types.ObjectId(id));
+  return lab;
+};
 
-router.get("/:id", async (req, res) => {
-  const labs = await Lab.find();
-  if (isEmpty(labs)) {
-    return res.status(404).send("No labs to show.");
-  }
-  const lab = await Lab.findById(mongoose.Types.ObjectId(req.params.id));
-
-  if (!lab)
-    return res.status(404).send("The lab with the given ID was not found.");
-
-  res.send(lab);
-});
-
-router.post("/", async (req, res) => {
-  const { error } = valLab(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+const create = async ({ name, description }) => {
   let lab = new Lab({
-    name: req.body.name,
-    description: req.body.description,
+    name: name,
+    description: description,
   });
   lab = await lab.save();
+  return lab;
+};
 
-  res.send(lab);
-});
-
-router.put("/:id", async (req, res) => {
-  const { error } = valLab(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+const update = async (id, { name, description }) => {
   const lab = await Lab.findByIdAndUpdate(
-    mongoose.Types.ObjectId(req.params.id),
+    mongoose.Types.ObjectId(id),
     {
-      name: req.body.name,
-      description: req.body.description,
+      name: name,
+      description: description,
     },
     { new: true }
   );
+  return lab;
+};
 
-  if (!lab) {
-    return res.status(404).send("The lab with the given ID was not found.");
-  }
+const remove = async (id) => {
+  const lab = await Lab.findByIdAndRemove(mongoose.Types.ObjectId(id));
+  return lab;
+};
 
-  res.send(lab);
-});
+const validate = (object) => {
+  const { error } = valLab(object);
+  return error;
+};
 
-router.delete("/:id", async (req, res) => {
-  const lab = await Lab.findByIdAndRemove(
-    mongoose.Types.ObjectId(req.params.id)
-  );
-
-  if (!lab)
-    return res.status(404).send("The lab with the given ID was not found.");
-
-  res.send(lab);
-});
-
-module.exports = router;
+export { getAll, getById, create, update, remove, validate };

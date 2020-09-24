@@ -1,76 +1,47 @@
+"use strict";
+
 const { Soft, valSoft } = require("../models/soft");
-const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
+const getAll = async () => {
   const softs = await Soft.find().sort("name");
-  if (isEmpty(softs)) {
-    return res.status(404).send("No soft skills to show.");
-  }
+  return softs;
+};
 
-  res.send(softs);
-});
+const getById = async (id) => {
+  const soft = await Soft.findById(mongoose.Types.ObjectId(id));
+  return soft;
+};
 
-router.get("/:id", async (req, res) => {
-  const softs = await Soft.find();
-  if (isEmpty(softs)) {
-    return res.status(404).send("No soft skills to show.");
-  }
-  const soft = await Soft.findById(mongoose.Types.ObjectId(req.params.id));
-
-  if (!soft)
-    return res
-      .status(404)
-      .send("The soft skill with the given ID was not found.");
-
-  res.send(soft);
-});
-
-router.post("/", async (req, res) => {
-  const { error } = valSoft(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
+const create = async (id, { name }) => {
   let soft = new Soft({
-    name: req.body.name,
+    name: name,
   });
   soft = await soft.save();
+  return soft;
+};
 
-  res.send(soft);
-});
-
-router.put("/:id", async (req, res) => {
-  const { error } = valSoft(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+const update = async (id, { name }) => {
   const soft = await Soft.findByIdAndUpdate(
-    mongoose.Types.ObjectId(req.params.id),
+    mongoose.Types.ObjectId(id),
     {
-      name: req.body.name,
+      name: name,
     },
     { new: true }
   );
+  return soft;
+};
 
-  if (!soft) {
-    return res
-      .status(404)
-      .send("The soft skill with the given ID was not found.");
-  }
-
-  res.send(soft);
-});
-
-router.delete("/:id", async (req, res) => {
+const remove = async (id) => {
   const soft = await Soft.findByIdAndRemove(
     mongoose.Types.ObjectId(req.params.id)
   );
+  return soft;
+};
 
-  if (!soft)
-    return res
-      .status(404)
-      .send("The soft skill with the given ID was not found.");
-
-  res.send(soft);
-});
+const validate = (object) => {
+  const { error } = valSoft(object);
+  return error;
+};
 
 module.exports = router;

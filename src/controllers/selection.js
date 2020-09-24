@@ -1,84 +1,53 @@
+"use strict";
+
 const { Selection } = require("../models/selection");
-const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
+const getAll = async () => {
   const selections = await Selection.find().sort("role");
-  if (isEmpty(selections)) {
-    return res.status(404).send("No selections to show.");
-  }
+  return selections;
+};
 
-  res.send(selections);
-});
+const getById = async (id) => {
+  const selection = await Selection.findById(mongoose.Types.ObjectId(id));
+  return selection;
+};
 
-router.get("/:id", async (req, res) => {
-  const selections = await Selection.find();
-  if (isEmpty(selections)) {
-    return res.status(404).send("No selections to show.");
-  }
-  const selection = await Selection.findById(
-    mongoose.Types.ObjectId(req.params.id)
-  );
-
-  if (!selection)
-    return res
-      .status(404)
-      .send("The selection with the given ID was not found.");
-
-  res.send(selection);
-});
-
-router.post("/", async (req, res) => {
-  //const { error } = valSelection(req.body);
-  //if (error) return res.status(400).send(error.details[0].message);
-
+const create = async ({ role, description, phases, current }) => {
   let selection = new Selection({
-    role: req.body.role,
-    description: req.body.description,
-    phases: req.body.phases,
-    current: req.body.current,
+    role: role,
+    description: description,
+    phases: phases,
+    current: current,
   });
   selection = await selection.save();
+  return selection;
+};
 
-  res.send(selection);
-});
-
-router.put("/:id", async (req, res) => {
-  //const { error } = valSelection(req.body);
-  //if (error) return res.status(400).send(error.details[0].message);
+const update = async (id, { role, description, phases, current }) => {
   const selection = await Selection.findByIdAndUpdate(
-    mongoose.Types.ObjectId(req.params.id),
+    mongoose.Types.ObjectId(id),
     {
-      role: req.body.role,
-      description: req.body.description,
-      phases: req.body.phases,
-      current: req.body.current,
+      role: role,
+      description: description,
+      phases: phases,
+      current: current,
     },
     { new: true }
   );
+  return selection;
+};
 
-  if (!selection) {
-    return res
-      .status(404)
-      .send("The selection with the given ID was not found.");
-  }
-
-  res.send(selection);
-});
-
-router.delete("/:id", async (req, res) => {
+const remove = async (id) => {
   const selection = await Selection.findByIdAndRemove(
-    mongoose.Types.ObjectId(req.params.id)
+    mongoose.Types.ObjectId(id)
   );
+  return selection;
+};
 
-  if (!selection)
-    return res
-      .status(404)
-      .send("The selection with the given ID was not found.");
+const validate = (object) => {
+  const { error } = valSelection(object);
+  return error;
+};
 
-  res.send(selection);
-});
-
-module.exports = router;
+export { getAll, getById, create, update, remove, validate };

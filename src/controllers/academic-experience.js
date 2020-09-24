@@ -1,21 +1,24 @@
 "use strict";
 
-const {AcademicExperience, valAcademicExperience} = require("../models/academic-experience");
+const {
+  AcademicExperience,
+  valAcademicExperience,
+} = require("../models/academic-experience");
 const mongoose = require("mongoose");
 
-const getAll = () =>{
+const getAll = async () => {
   const academicExperiences = await AcademicExperience.find().sort("title");
   return academicExperiences;
 };
 
-const getById = (id) => {
+const getById = async (id) => {
   const academicExperience = await AcademicExperience.findById(
-    mongoose.Types.ObjectId(req.params.id)
+    mongoose.Types.ObjectId(id)
   );
   return academicExperience;
 };
 
-const create = ({title, category, institution}) => {
+const create = async ({ title, category, institution }) => {
   let academicExperience = new AcademicExperience({
     title: title,
     category: category,
@@ -25,7 +28,7 @@ const create = ({title, category, institution}) => {
   return academicExperience;
 };
 
-const update = (id, {title, category, institution}) => {
+const update = async (id, { title, category, institution }) => {
   const academicExperience = await AcademicExperience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
@@ -38,9 +41,9 @@ const update = (id, {title, category, institution}) => {
   return academicExperience;
 };
 
-const remove = (id) => {
+const remove = async (id) => {
   const academicExperience = await AcademicExperience.findByIdAndRemove(
-    mongoose.Types.ObjectId(req.params.id)
+    mongoose.Types.ObjectId(id)
   );
   return academicExperience;
 };
@@ -48,6 +51,6 @@ const remove = (id) => {
 const validate = (object) => {
   const { error } = valAcademicExperience(object);
   return error;
-}
+};
 
-export {getAll, getById, create, update, remove, validate};
+export { getAll, getById, create, update, remove, validate };

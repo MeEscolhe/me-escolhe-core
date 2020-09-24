@@ -1,83 +1,60 @@
-//const {Teacher, valTeacher} = require('../models/Teacher');
+"use strict";
+
 const { Teacher } = require("../models/teacher");
-const express = require("express");
 const mongoose = require("mongoose");
-const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
+const getAll = async () => {
   const teachers = await Teacher.find().sort("name");
-  if (isEmpty(teachers)) {
-    return res.status(404).send("No teachers to show.");
-  }
+  return teachers;
+};
 
-  res.send(teachers);
-});
+const getById = async (id) => {
+  const teacher = await Teacher.findById(mongoose.Types.ObjectId(id));
+  return teacher;
+};
 
-router.get("/:id", async (req, res) => {
-  const teachers = await Teacher.find();
-  if (isEmpty(teachers)) {
-    return res.status(404).send("No teachers to show.");
-  }
-  const teacher = await Teacher.findById(
-    mongoose.Types.ObjectId(req.params.id)
-  );
-
-  if (!teacher)
-    return res.status(404).send("The teacher with the given ID was not found.");
-
-  res.send(teacher);
-});
-
-router.post("/", async (req, res) => {
-  //const { error } = valTeacher(req.body);
-  //if (error) return res.status(400).send(error.details[0].message);
-
+const create = async ({
+  name,
+  email,
+  description,
+  labId,
+  managements,
+  feedbackRequests,
+}) => {
   let teacher = new Teacher({
-    name: req.body.name,
-    email: req.body.email,
-    description: req.body.description,
-    labId: req.body.labId,
-    managements: req.body.managements,
-    feedbackRequests: req.body.feedbackRequests,
+    name: name,
+    email: email,
+    description: description,
+    labId: labId,
+    managements: managements,
+    feedbackRequests: feedbackRequests,
   });
   teacher = await teacher.save();
+  return teacher;
+};
 
-  res.send(teacher);
-});
-
-router.put("/:id", async (req, res) => {
-  //const { error } = valTeacher(req.body);
-  //if (error) return res.status(400).send(error.details[0].message);
+const update = async (
+  id,
+  { name, email, description, labId, managements, feedbackRequests }
+) => {
   const teacher = await Teacher.findByIdAndUpdate(
-    mongoose.Types.ObjectId(req.params.id),
+    mongoose.Types.ObjectId(id),
     {
-      name: req.body.name,
-      email: req.body.email,
-      description: req.body.description,
-      labId: req.body.labId,
-      managements: req.body.managements,
-      feedbackRequests: req.body.feedbackRequests,
+      name: name,
+      email: email,
+      description: description,
+      labId: labId,
+      managements: managements,
+      feedbackRequests: feedbackRequests,
     },
     { new: true }
   );
+  return teacher;
+};
 
-  if (!teacher) {
-    return res.status(404).send("The teacher with the given ID was not found.");
-  }
-
-  res.send(teacher);
-});
-
-router.delete("/:id", async (req, res) => {
-  const teacher = await Teacher.findByIdAndRemove(
-    mongoose.Types.ObjectId(req.params.id)
-  );
-
-  if (!teacher)
-    return res.status(404).send("The teacher with the given ID was not found.");
-
-  res.send(teacher);
-});
+const remove = async (id) => {
+  const teacher = await Teacher.findByIdAndRemove(mongoose.Types.ObjectId(id));
+  return teacher;
+};
 
 module.exports = router;
