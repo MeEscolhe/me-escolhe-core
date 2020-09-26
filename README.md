@@ -27,7 +27,7 @@ Podemos executar a API REST em dois modos:
 1. Em **modo de produção**, utilizando o seguinte comando:
 
 ```
-yarn run prod
+yarn run start
 ```
 
 2. Em **modo de desenvolvimento**, utilizando o seguinte comando:
@@ -40,7 +40,7 @@ Opcionalmente podemos executar a aplicação em modo de produção através de u
 
 ```
 docker build --tag me-escolhe-core .
-docker run --name core -p 3000:3000 -d me-escolhe-core
+docker run --name core -p 8080:8080 -d me-escolhe-core
 ```
 
 ## Requisitos
