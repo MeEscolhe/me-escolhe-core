@@ -44,4 +44,4 @@ const validate = (object) => {
   return error;
 };
 
-module.exports = router;
+module.exports = { getAll, getById, create, update, remove, validate };

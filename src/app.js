@@ -3,20 +3,22 @@ const express = require("express");
 const app = express();
 require("./config/Mongoose")();
 const { swaggerServe, swaggetSetup } = require("./config/Swagger");
-const labs = require("./controllers/lab");
-const workExperiences = require("./controllers/work-experience");
-const academicExperiences = require("./controllers/academic-experience");
-const experiences = require("./controllers/experience");
-const languages = require("./controllers/language");
-const softSkills = require("./controllers/soft");
-const hardSkills = require("./controllers/hard");
-const skills = require("./controllers/skill");
-const selections = require("./controllers/selection");
-const phases = require("./controllers/phase");
-const projects = require("./controllers/project");
-const feedbackRequests = require("./controllers/feedback-request");
-const students = require("./controllers/student");
-const teachers = require("./controllers/teacher");
+const {
+  labs,
+  workExperiences,
+  academicExperiences,
+  experiences,
+  languages,
+  softSkills,
+  hardSkills,
+  skills,
+  selections,
+  phases,
+  projects,
+  feedbackRequests,
+  students,
+  teachers,
+} = require("./services/Router");
 
 mongoose.set("useFindAndModify", false);
 mongoose.set("useNewUrlParser", true);

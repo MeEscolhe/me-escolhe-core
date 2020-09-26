@@ -41,4 +41,4 @@ const remove = async (id) => {
   return experience;
 };
 
-export { getAll, getById, create, update, remove };
+module.exports = { getAll, getById, create, update, remove };

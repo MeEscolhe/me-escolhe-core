@@ -51,4 +51,4 @@ const validate = (object) => {
   return error;
 };
 
-export { getAll, getById, create, update, remove, validate };
+module.exports = { getAll, getById, create, update, remove, validate };

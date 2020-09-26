@@ -66,4 +66,4 @@ const validate = (object) => {
   return error;
 };
 
-module.exports = router;
+module.exports = { getAll, create, update, remove, validate };

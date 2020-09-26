@@ -7,7 +7,7 @@ Plataforma de seleções de projetos.
 Primeiro de tudo, instalamos as dependências utilizadas pelo Node.js:
 
 ```
-npm install
+yarn
 ```
 
 Em seguida, instalamos o MongoDB. Para tal, temos duas opções:
@@ -27,13 +27,13 @@ Podemos executar a API REST em dois modos:
 1. Em **modo de produção**, utilizando o seguinte comando:
 
 ```
-npm run prod
+yarn run prod
 ```
 
 2. Em **modo de desenvolvimento**, utilizando o seguinte comando:
 
 ```
-npm run dev
+yarn run dev
 ```
 
 Opcionalmente podemos executar a aplicação em modo de produção através de um contâiner **docker** com os comandos:

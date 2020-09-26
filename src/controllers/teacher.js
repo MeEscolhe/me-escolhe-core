@@ -57,4 +57,4 @@ const remove = async (id) => {
   return teacher;
 };
 
-module.exports = router;
+module.exports = { getAll, getById, create, update, remove };
