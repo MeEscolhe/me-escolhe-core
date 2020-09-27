@@ -1,16 +1,17 @@
 "use strict";
 
-const { Student } = require("../models/student");
+const { Student, valStudent } = require("../models/student");
 
-const getAll = async () => {
-  const students = await Student.find().sort("registration");
-  return students;
-};
+const getAll = () => Student.find().sort("registration");
 
-const getByRegistration = async (registration) => {
-  const student = await Student.find(registration);
-  return student;
-};
+/**
+ * get student by registration
+ * @param {string} registration student registration
+ * @typedef {{registration: number,name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
+ * @returns {StudentSchema}
+ */
+const getByRegistration = (registration) =>
+  Student.findOne({ registration: registration });
 
 const create = async ({
   registration,
@@ -20,7 +21,6 @@ const create = async ({
   description,
   skills,
   experiences,
-  phases,
 }) => {
   let student = new Student({
     registration: registration,
@@ -30,40 +30,33 @@ const create = async ({
     description: description,
     skills: skills,
     experiences: experiences,
-    phases: phases,
   });
   student = await student.save();
   return student;
 };
 
-const update = async (
-  registration,
-  { name, email, cra, description, skills, experiences, phases }
-) => {
-  const student = await Student.findOneAndUpdate(
-    registration,
-    {
-      name: name,
-      email: email,
-      cra: cra,
-      description: description,
-      skills: skills,
-      experiences: experiences,
-      phases: phases,
-    },
-    { new: true }
-  );
-  return student;
+const update = (registration, updateData) => {
+  return Student.findOneAndUpdate(registration, updateData, {
+    new: true,
+  });
 };
-
-const remove = async (registration) => {
-  const student = await Student.findOneAndDelete(registration);
-  return student;
-};
+/**
+ * remove student by registration
+ * @param {string} registration student registration
+ * @returns {StudentSchema}
+ */
+const remove = async (registration) => Student.findOneAndDelete(registration);
 
 const validate = (object) => {
   const { error } = valStudent(object);
   return error;
 };
 
-module.exports = { getAll, create, update, remove, validate };
+module.exports = {
+  getAll,
+  getByRegistration,
+  create,
+  update,
+  remove,
+  validate,
+};

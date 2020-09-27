@@ -18,7 +18,7 @@ const {
   feedbackRequests,
   students,
   teachers,
-} = require("./services/Router");
+} = require("./Router");
 
 mongoose.set("useFindAndModify", false);
 mongoose.set("useNewUrlParser", true);
