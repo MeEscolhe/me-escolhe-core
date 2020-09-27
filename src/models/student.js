@@ -48,6 +48,7 @@ const StudentSchema = mongoose.model(
     },
   })
 );
+
 /**
  * validade student from request
  * @param {StudentSchema} student
