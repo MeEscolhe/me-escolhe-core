@@ -31,7 +31,7 @@ router
   });
 
 router.get("/:registration", async (request, response) => {
-  StudentController.getByRegistration(request.params.registration).then(
+  StudentController.getByRegistrationWithSelections(request.params.registration).then(
     (student) => {
       if (!student) {
         response

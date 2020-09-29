@@ -30,9 +30,10 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   validate(req.body);
-  const feedbackRequest = feedbackRequestCtrl.create(req.body);
-  res.send(feedbackRequest);
-});
+  const feedbackRequest = feedbackRequestCtrl.create(req.body)
+    .then((feedback) => res.send(feedback)).catch((e) =>
+      res.status(400).send(e));
+};
 
 router.put("/:id", async (req, res) => {
   validate(req.body);

@@ -37,8 +37,40 @@ const filterProps = (props) =>
 
     return accumulate;
   }, {});
+/**
+ * get selection from phase id
+ * @param {string} phaseId 
+ * 
+ */
+const getSelectionFromPhase = (phaseId) => {
+  const Phase = require('../models/phase');
+  const Selection = require('../models/selection');
+
+  return Phase.findById(phaseId)
+    .then((phase) =>
+      (phase) ?
+        Selection.findById(phase.selectionId).then(
+          (selection) => (selection) ? { phaseId, ...selection } : { error: "selection " + phase.selectionId + " not found" };
+      ) 
+      : { error: "phase " + phaseId + " not found" } 
+      );
+}
+const FKHelper = (model, id) => {
+
+	return new Promise((resolve, reject) => {
+
+		model.findOne({ _id: id }, (err, result) => {
+			if (result) {
+				return resolve(true);
+			}
+			else return reject(new Error(`FK Constraint 'checkObjectsExists' for '${id.toString()}' failed`));
+		});
+	});
+};
 module.exports = {
   validate,
   isEmpty,
   filterProps,
+  getSelectionFromPhase,
+  FKHelper
 };

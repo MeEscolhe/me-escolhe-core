@@ -67,4 +67,45 @@ const valStudent = (student) => {
 
   return studentSchema.validate(student);
 };
-module.exports = { Student: StudentSchema, valStudent };
+/**
+ * get student with selections 
+ * 
+ */
+const getStudentWithSelections = () => {
+  const { getSelectionFromPhase } = require('../middlewares/util');
+  return Promise.all(this.phases.map((phase) => getSelectionFromPhase(phase))).then((selections) => {
+    const catchError = selections.filter((selections) => selection.error);
+    if (catchError.length === 0) {
+
+      const selectionsData = selections.map((selection) => {
+        const indexOfPhase = selection.phases.indexOf(selection.phaseId);
+        const currentPhase = selection.phases.length;
+        delete selection.phases;
+        return {
+          ...selections,
+          phase: {
+            current: currentPhase,
+            studentIsParticipating: indexOfPhase + 1 === currentPhase
+          };
+        }
+      });
+      return {
+        registration: this.registration,
+        name: this.name,
+        email: this.email,
+        cra: this.cra,
+        description: this.description,
+        skills: this.skills,
+        experiences: this.experiences
+        selections: selectionsData
+      }
+    } else {
+      return {
+        error: catchError
+      }
+    }
+
+  }).catch((e) => ({ error: e }))
+}
+
+module.exports = { Student: StudentSchema, valStudent, getStudentWithSelections };

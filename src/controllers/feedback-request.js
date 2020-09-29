@@ -23,8 +23,7 @@ const create = async ({ studentId, phaseId }) => {
     studentId: studentId,
     phaseId: phaseId,
   });
-  feedbackRequest = await feedbackRequest.save();
-  return feedbackRequest;
+  return feedbackRequest.save();
 };
 
 const update = async (id, { studentId, phaseId }) => {
