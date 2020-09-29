@@ -1,33 +1,28 @@
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const { FKHelper } = require('../middlewares/util');
+const { FKHelper } = require("../middlewares/util");
 
 const FeedbackRequestSchema = mongoose.model(
   "FeedbackRequest",
   new mongoose.Schema({
     studentId: {
       type: Number,
-      ref: "StudentSchema",
+      ref: "Student",
       required: true,
       validate: {
-        isAsync: true,
-        validator: function (v) {
-          return FKHelper(mongoose.model('StudentSchema'), v);
-        },
-        message: `studentId doesn't exist`
-      }
+        validator: (v) =>
+          FKHelper(mongoose.model("Student"), "registration", v),
+        message: `studentId doesn't exist`,
+      },
     },
     phaseId: {
       type: ObjectId,
       ref: "PhaseSchema",
       required: true,
       validate: {
-        isAsync: true,
-        validator: function (v) {
-          return FKHelper(mongoose.model('PhaseSchema'), v);
-        },
-        message: `PhaseSchema doesn't exist`
-      }
+        validator: (v) => FKHelper(mongoose.model("Phase"), "_id", v),
+        message: `PhaseSchema doesn't exist`,
+      },
     },
   })
 );

@@ -32,45 +32,58 @@ const validate = (body, controller) => {
  */
 const filterProps = (props) =>
   Object.entries(props).reduce((accumulate, [key, value]) => {
-    if (value || (key === "description" && value === ""))
+    if (
+      (key !== "registration" && value) ||
+      (key === "description" && value === "")
+    )
       accumulate[key] = value;
 
     return accumulate;
   }, {});
 /**
  * get selection from phase id
- * @param {string} phaseId 
- * 
+ * @param {string} phaseId
+ *
  */
 const getSelectionFromPhase = (phaseId) => {
-  const Phase = require('../models/phase');
-  const Selection = require('../models/selection');
+  const Phase = require("../models/phase");
+  const Selection = require("../models/selection");
 
-  return Phase.findById(phaseId)
-    .then((phase) =>
-      (phase) ?
-        Selection.findById(phase.selectionId).then(
-          (selection) => (selection) ? { phaseId, ...selection } : { error: "selection " + phase.selectionId + " not found" };
-      ) 
-      : { error: "phase " + phaseId + " not found" } 
-      );
-}
-const FKHelper = (model, id) => {
-
-	return new Promise((resolve, reject) => {
-
-		model.findOne({ _id: id }, (err, result) => {
-			if (result) {
-				return resolve(true);
-			}
-			else return reject(new Error(`FK Constraint 'checkObjectsExists' for '${id.toString()}' failed`));
-		});
-	});
+  return Phase.findById(phaseId).then((phase) =>
+    phase
+      ? Selection.findById(phase.selectionId).then((selection) =>
+          selection
+            ? { phaseId, ...selection }
+            : { error: "selection " + phase.selectionId + " not found" }
+        )
+      : { error: "phase " + phaseId + " not found" }
+  );
+};
+/**
+ * Validate foreing key to model
+ * @param {object} model
+ * @param {string} type is object's prop
+ * @param {object} key key value
+ * @returns {promise}
+ */
+const FKHelper = (model, type, key) => {
+  return new Promise((resolve, reject) => {
+    model.findOne({ [type]: key }, (err, result) => {
+      if (result) {
+        return resolve(true);
+      } else
+        return reject(
+          new Error(
+            `FK Constraint 'checkObjectsExists' for '${key.toString()}' failed`
+          )
+        );
+    });
+  });
 };
 module.exports = {
   validate,
   isEmpty,
   filterProps,
   getSelectionFromPhase,
-  FKHelper
+  FKHelper,
 };

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
-require("./config/Mongoose")();
+require("./config/Mongoose")(false);
 const { swaggerServe, swaggetSetup } = require("./config/Swagger");
 const {
   labs,

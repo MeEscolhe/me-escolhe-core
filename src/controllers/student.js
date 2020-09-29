@@ -1,6 +1,10 @@
 "use strict";
 
-const { Student, valStudent, getStudentWithSelections } = require("../models/student");
+const {
+  Student,
+  valStudent,
+  getStudentWithSelections,
+} = require("../models/student");
 
 const getAll = () => Student.find().sort("registration");
 
@@ -17,7 +21,8 @@ const getByRegistration = (registration) =>
  */
 const getByRegistrationWithSelections = (registration) =>
   Student.findOne({ registration: registration }).then((student) => {
-    if (student && student.error === null) return student.getStudentWithSelections();
+    if (student && student.error === null)
+      return student.getStudentWithSelections();
     return null;
   });
 const create = async ({
@@ -43,9 +48,13 @@ const create = async ({
 };
 
 const update = (registration, updateData) => {
-  return Student.findOneAndUpdate(registration, updateData, {
-    new: true,
-  });
+  return Student.findOneAndUpdate(
+    { registration: registration },
+    { registration: registration, ...updateData },
+    {
+      new: true,
+    }
+  );
 };
 /**
  * remove student by registration
@@ -66,5 +75,5 @@ module.exports = {
   update,
   remove,
   validate,
-  getByRegistrationWithSelections
+  getByRegistrationWithSelections,
 };

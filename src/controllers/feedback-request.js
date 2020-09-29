@@ -11,12 +11,7 @@ const getAll = async () => {
   return feedbackRequests;
 };
 
-const getById = async (id) => {
-  const feedbackRequest = await FeedbackRequest.findById(
-    mongoose.Types.ObjectId(id)
-  );
-  return feedbackRequest;
-};
+const getById = async (id) => FeedbackRequest.findById(id);
 
 const create = async ({ studentId, phaseId }) => {
   let feedbackRequest = new FeedbackRequest({
@@ -26,24 +21,17 @@ const create = async ({ studentId, phaseId }) => {
   return feedbackRequest.save();
 };
 
-const update = async (id, { studentId, phaseId }) => {
-  const feedbackRequest = await FeedbackRequest.findByIdAndUpdate(
-    mongoose.Types.ObjectId(id),
+const update = (id, { studentId, phaseId }) =>
+  FeedbackRequest.findByIdAndUpdate(
+    id,
     {
       studentId: studentId,
       phaseId: phaseId,
     },
     { new: true }
   );
-  return feedbackRequest;
-};
 
-const remove = async (id) => {
-  const feedbackRequest = await FeedbackRequest.findByIdAndRemove(
-    mongoose.Types.ObjectId(id)
-  );
-  return feedbackRequest;
-};
+const remove = async (id) => FeedbackRequest.findByIdAndRemove(id);
 
 const validate = (object) => {
   const { error } = valFeedbackRequest(object);

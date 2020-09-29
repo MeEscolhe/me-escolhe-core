@@ -6,13 +6,13 @@ const PhaseSchema = mongoose.model(
   new mongoose.Schema({
     students: {
       type: [Number],
-      ref: "StudentSchema",
+      ref: "Student",
       required: true,
       default: [],
     },
     selectionId: {
       type: ObjectId,
-      ref: "SelectionSchema",
+      ref: "Selection",
       required: true,
     },
   })

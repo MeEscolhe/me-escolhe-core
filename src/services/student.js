@@ -31,28 +31,29 @@ router
   });
 
 router.get("/:registration", async (request, response) => {
-  StudentController.getByRegistrationWithSelections(request.params.registration).then(
-    (student) => {
-      if (!student) {
-        response
-          .status(404)
-          .send("The student with the given ID was not found.");
-      } else {
-        response.send(student);
-      }
+  StudentController.getByRegistrationWithSelections(
+    request.params.registration
+  ).then((student) => {
+    if (!student) {
+      response.status(404).send("The student with the given ID was not found.");
+    } else {
+      response.send(student);
     }
-  );
+  });
 });
-
-router.put("/:id", async (request, response) => {
-  const { error, message } = validate(request.body, StudentController);
+router.put("/:id", (request, response) => {
+  const registration = request.params.id;
+  const { error, message } = validate(
+    { registration, ...request.body },
+    StudentController
+  );
   if (error) {
     response.status(400).send(message);
   } else {
     const { name, email, cra, description, skills, experiences } = request.body;
 
     StudentController.update(
-      request.params.registration,
+      request.params.id,
       filterProps({ name, email, cra, description, skills, experiences })
     ).then((student) => {
       if (!student) {
