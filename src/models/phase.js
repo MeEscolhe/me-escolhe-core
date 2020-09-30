@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-
+/**
+ *
+ *  @typedef {{students: array, selectionId: ObjectId}} PhaseSchema
+ */
 const PhaseSchema = mongoose.model(
   "Phase",
   new mongoose.Schema({

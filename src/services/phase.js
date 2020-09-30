@@ -1,17 +1,13 @@
 "use strict";
 
-const phaseCtrl = require("../controllers/phase");
+const PhaseController = require("../controllers/phase");
+const SelectionController = require("../controllers/selection");
 const express = require("express");
 const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
-
-const validate = (body) => {
-  const { error } = languageCtrl.validate(body);
-  if (error) return res.status(400).send(error.details[0].message);
-};
+const { isEmpty, validate } = require("../middlewares/util");
 
 router.get("/", async (req, res) => {
-  const phases = phaseCtrl.getAll();
+  const phases = PhaseController.getAll();
   if (isEmpty(phases)) {
     return res.status(404).send("No phases to show.");
   }
@@ -19,22 +15,36 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const phase = phaseCtrl.getById(req.params.id);
+  const phase = PhaseController.getById(req.params.id);
   if (!phase) {
     return res.status(404).send("The phases with the given ID was not found.");
   }
   res.send(phase);
 });
 
-router.post("/", async (req, res) => {
-  validate(req.body);
-  const phase = phaseCtrl.create(req.body);
-  res.send(phases);
+router.post("/", async (request, response) => {
+  const { error, message } = validate(request.body, PhaseController);
+  if (error) {
+    response.status(400).send(message);
+  } else {
+    const phase = PhaseController.create(request.body);
+    SelectionController.getById(phase.selectionId).then((selection) => {
+      if (!selection) {
+        return response
+          .status(404)
+          .send("The selection with the given selectionId was not found.");
+      } else {
+        selection.phases.push(phase._id);
+        SelectionController.update(selection._id, selection);
+        response.send(phase);
+      }
+    });
+  }
 });
 
 router.put("/:id", async (req, res) => {
   validate(req.body);
-  const phase = phaseCtrl.update(req.params.id, req.body);
+  const phase = PhaseController.update(req.params.id, req.body);
   if (!phase) {
     return res.status(404).send("The phases with the given ID was not found.");
   }
@@ -42,7 +52,7 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const phases = phaseCtrl.remove(req.params.id);
+  const phases = PhaseController.remove(req.params.id);
   if (!phases) {
     return res.status(404).send("The phases with the given ID was not found.");
   }

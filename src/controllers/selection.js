@@ -1,17 +1,13 @@
 "use strict";
 
-const { Selection } = require("../models/selection");
+const { Selection, valSelection } = require("../models/selection");
 const mongoose = require("mongoose");
 
-const getAll = async () => {
-  const selections = await Selection.find().sort("role");
-  return selections;
-};
+const getAll = async ({ page, limit }) =>
+  await Selection.paginate({}, { page, limit });
 
-const getById = async (id) => {
-  const selection = await Selection.findById(mongoose.Types.ObjectId(id));
-  return selection;
-};
+const getById = async (id) =>
+  await Selection.findById(mongoose.Types.ObjectId(id));
 
 const create = async ({ role, description, phases, current }) => {
   let selection = new Selection({
@@ -24,26 +20,17 @@ const create = async ({ role, description, phases, current }) => {
   return selection;
 };
 
-const update = async (id, { role, description, phases, current }) => {
+const update = async (id, updateData) => {
   const selection = await Selection.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
-    {
-      role: role,
-      description: description,
-      phases: phases,
-      current: current,
-    },
+    updateData,
     { new: true }
   );
   return selection;
 };
 
-const remove = async (id) => {
-  const selection = await Selection.findByIdAndRemove(
-    mongoose.Types.ObjectId(id)
-  );
-  return selection;
-};
+const remove = async (id) =>
+  await Selection.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
 const validate = (object) => {
   const { error } = valSelection(object);
