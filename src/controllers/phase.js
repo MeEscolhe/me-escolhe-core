@@ -1,6 +1,6 @@
 "use strict";
 
-const { Phase } = require("../models/phase");
+const { Phase, valPhase } = require("../models/phase");
 const mongoose = require("mongoose");
 
 const getAll = async () => {
@@ -14,12 +14,12 @@ const getById = async (id) => {
 };
 
 const create = async ({ students, selectionId }) => {
-  let Phase = new Phase({
+  let phase = new Phase({
     students: students,
     selectionId: selectionId,
   });
-  Phase = await Phase.save();
-  return Phase;
+  phase = await phase.save();
+  return phase;
 };
 
 const update = async (id, { students, selectionId }) => {

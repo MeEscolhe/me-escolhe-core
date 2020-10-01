@@ -8,10 +8,8 @@ const getAll = async () => {
   return teachers;
 };
 
-const getById = async (id) => {
-  const teacher = await Teacher.findById(mongoose.Types.ObjectId(id));
-  return teacher;
-};
+const getById = async (id) =>
+  await Teacher.findById(mongoose.Types.ObjectId(id));
 
 const create = async ({
   name,

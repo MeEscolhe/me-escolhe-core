@@ -8,10 +8,8 @@ const getAll = async () => {
   return projects;
 };
 
-const getById = async (id) => {
-  const project = await Project.findById(mongoose.Types.ObjectId(id));
-  return project;
-};
+const getById = async (id) =>
+  await Project.findById(mongoose.Types.ObjectId(id));
 
 const create = async ({ name, description, selections }) => {
   let project = new Project({
