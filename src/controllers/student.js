@@ -10,8 +10,8 @@ const getAll = () => Student.find().sort("registration");
 
 /**
  * get student by registration
- * @param {string} registration student registration
- * @typedef {{registration: number,name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
+ * @param {number} registration student registration
+ * @typedef {{registration: number, name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
  * @returns {StudentSchema}
  */
 const getByRegistration = (registration) =>
