@@ -2,12 +2,12 @@
 
 const { Selection, valSelection } = require("../models/selection");
 const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 const getAll = async ({ page, limit }) =>
   await Selection.paginate({}, { page, limit });
 
-const getById = async (id) =>
-  await Selection.findById(mongoose.Types.ObjectId(id));
+const getById = async (id) => await Selection.findById(id);
 
 const create = async ({ role, description, phases, current }) => {
   let selection = new Selection({
@@ -22,15 +22,14 @@ const create = async ({ role, description, phases, current }) => {
 
 const update = async (id, updateData) => {
   const selection = await Selection.findByIdAndUpdate(
-    mongoose.Types.ObjectId(id),
+    ObjectId(id),
     updateData,
     { new: true }
   );
   return selection;
 };
 
-const remove = async (id) =>
-  await Selection.findByIdAndRemove(mongoose.Types.ObjectId(id));
+const remove = async (id) => await Selection.findByIdAndRemove(ObjectId(id));
 
 const validate = (object) => {
   const { error } = valSelection(object);

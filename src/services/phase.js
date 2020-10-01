@@ -27,14 +27,15 @@ router.post("/", async (request, response) => {
   if (error) {
     response.status(400).send(message);
   } else {
-    const phase = PhaseController.create(request.body);
-    SelectionController.getById(phase.selectionId).then((selection) => {
+    const phase = await PhaseController.create(request.body);
+    const { selectionId } = request.body;
+    SelectionController.getById(selectionId).then((selection) => {
       if (!selection) {
         return response
           .status(404)
           .send("The selection with the given selectionId was not found.");
       } else {
-        selection.phases.push(phase._id);
+        selection.phases.push(phase.id);
         SelectionController.update(selection._id, selection);
         response.send(phase);
       }

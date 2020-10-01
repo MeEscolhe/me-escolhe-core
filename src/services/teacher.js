@@ -8,7 +8,6 @@ const SelectionController = require("../controllers/selection");
 const express = require("express");
 const router = express.Router();
 const { isEmpty } = require("../middlewares/util");
-const selection = require("../models/selection");
 
 router.get("/", async (req, res) => {
   const teachers = TeacherController.getAll();
@@ -27,29 +26,31 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/selections/:id", async (request, response) => {
-  TeacherController.getById(request.params.id).then((teacher) => {
+  TeacherController.getById(request.params.id).then(async (teacher) => {
     if (!teacher) {
       return response
         .status(404)
         .send("The teacher with the given ID was not found.");
     } else {
-      let selections = [];
-      teacher.managements.forEach((projectId) => {
-        ProjectController.getById(projectId).then((project) => {
-          project.selections.forEach((selectionId) => {
-            SelectionController.getById(selectionId).then((selection) => {
-              selections.push(selection);
-            });
-          });
-        });
-      });
-      response.send(selections);
+      let selectionsByTeacher = [];
+      const managements = teacher.managements;
+      for (let i = 0; i < managements.length; i++) {
+        const projectId = managements[i];
+        const project = await ProjectController.getById(projectId);
+        const selections = project.selections;
+        for (let j = 0; j < selections.length; j++) {
+          const selectionId = selections[j];
+          const selection = await SelectionController.getById(selectionId);
+          selectionsByTeacher.push(selection);
+        }
+      }
+      response.send(selectionsByTeacher);
     }
   });
 });
 
 router.post("/", async (req, res) => {
-  const teacher = TeacherController.create(req.body);
+  const teacher = await TeacherController.create(req.body);
   res.send(teacher);
 });
 

@@ -9,7 +9,7 @@ const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
 router.get("/", async (request, response) => {
   const { page = 1, limit = 10 } = request.body;
-  const selections = SelectionController.getAll({ page, limit });
+  const selections = await SelectionController.getAll({ page, limit });
   if (isEmpty(selections)) {
     return response.status(404).send("No selections to show.");
   }
@@ -31,7 +31,7 @@ router.post("/", async (request, response) => {
   if (error) {
     response.status(400).send(message);
   } else {
-    const selection = SelectionController.create(request.body);
+    const selection = await SelectionController.create(request.body);
     response.send(selection);
   }
 });
