@@ -28,7 +28,7 @@ router
   });
 
 router.get("/:id", async (request, response) => {
-  SoftController.getByID(
+  SoftController.getByI(
     request.params.id
   ).then((soft) => {
     if (!soft) {
@@ -39,9 +39,9 @@ router.get("/:id", async (request, response) => {
   });
 });
 router.put("/:id", (request, response) => {
-  const registration = request.params.id;
+  const identifier = request.params.id;
   const { error, message } = validate(
-    { registration, ...request.body },
+    { identifier, ...request.body },
     SoftController
   );
   if (error) {

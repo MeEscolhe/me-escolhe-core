@@ -32,8 +32,6 @@ const create = async ({
 }) => {
   let soft = new Soft({
     name: name
-
-  
   });
   soft = await soft.save();
   return soft;

@@ -3,49 +3,77 @@
 const ProjectController = require("../controllers/project");
 const express = require("express");
 const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
+const { isEmpty, validate, filterProps  } = require("../middlewares/util");
 
-const validate = (body) => {
-  const { error } = ProjectController.validate(body);
-  if (error) return res.status(400).send(error.details[0].message);
-};
+router
+  .route("/")
+  .get((request, response) => {
+    ProjectController.getAll().then((projects) => {
+      if (isEmpty(projects)) {
+        response.status(404).send("No projects to show.");
+      } else {
+        response.send(projects);
+      }
+    });
+  })
+  .post(async (request, response) => {
+    const { error, message } = validate(request.body, ProjectController);
 
-router.get("/", async (req, res) => {
-  const projects = ProjectController.getAll();
-  if (isEmpty(projects)) {
-    return res.status(404).send("No projects to show.");
+    if (error) {
+      response.status(400).send(message);
+    } else {
+      const project = ProjectController.create(request.body);
+      response.send(project);
+    }
+  });
+
+router.get("/:id", async (request, response) => {
+  ProjectController.getByID(
+    request.params.id
+  ).then((project) => {
+    if (!project) {
+      response.status(404).send("The project with the given ID was not found.");
+    } else {
+      response.send(project);
+    }
+  });
+});
+router.put("/:id", (request, response) => {
+  const identifier = request.params.id;
+  const { error, message } = validate(
+    { identifier, ...request.body },
+    ProjectController
+  );
+  if (error) {
+    response.status(400).send(message);
+  } else {
+    const { name, description, selections } = request.body;
+
+    ProjectController.update(
+      request.params.id,
+      filterProps({ name, description, selections })
+    ).then((project) => {
+      if (!project) {
+        response
+          .status(404)
+          .send("The project with the given ID was not found.");
+      } else {
+        response.send(project);
+      }
+    });
   }
-  res.send(projects);
 });
 
-router.get("/:id", async (req, res) => {
-  const project = ProjectController.getById(req.params.id);
-  if (!project) {
-    return res.status(404).send("The project with the given ID was not found.");
-  }
-  res.send(project);
-});
-
-router.post("/", async (req, res) => {
-  validate(req.body);
-  let project = await ProjectController.create(req.body);
-  res.send(project);
-});
-
-router.put("/:id", async (req, res) => {
-  const project = ProjectController.update(req.params.id, req.body.name);
-  if (!project) {
-    return res.status(404).send("The project with the given ID was not found.");
-  }
-  res.send(project);
-});
-
-router.delete("/:id", async (req, res) => {
-  const project = ProjectController.remove(req.params.id);
-  if (!project) {
-    return res.status(404).send("The project with the given ID was not found.");
-  }
-  res.send(project);
+router.delete("/:registration", async (request, response) => {
+  ProjectController.remove(request.params.registration).then((project) => {
+    if (!project) {
+      response
+        .status(404)
+        .send("The project with the given registration was not found.");
+    } else {
+      response.send(project);
+    }
+  });
 });
 
 module.exports = router;
