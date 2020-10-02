@@ -15,7 +15,7 @@ const getAll = () => Student.find().sort("registration");
  * @returns {StudentSchema}
  */
 const getByRegistration = (registration) =>
-  Student.findOne({ registration: registration });
+  Student.findOne(registration );
 /**
  * get student by registration with selections
  */

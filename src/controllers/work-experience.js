@@ -1,56 +1,74 @@
+const mongoose = require('mongoose');
 "use strict";
 
+const { ObjectId } = require("mongodb");
 const {
   WorkExperience,
   valWorkExperience,
+  //getWorkExperienceWithSelections,
 } = require("../models/work-experience");
-const mongoose = require("mongoose");
 
-const getAll = async () => {
-  const workExperiences = await WorkExperience.find().sort("role");
-  return workExperiences;
-};
+const getAll = () => WorkExperience.find().sort("name");
 
-const getById = async (id) => {
-  const workExperience = await WorkExperience.findById(
-    mongoose.Types.ObjectId(id)
-  );
-  return workExperience;
-};
-
-const create = async ({ role, institution, durationInMonths }) => {
-  let workExperience = new WorkExperience({
+/**
+ * get workexperience by name
+ * @param {ObjectId} id workexperience name
+ * @typedef {{name: string}} WorkExperienceSchema
+ * @returns {WorkExperienceSchema}
+ */
+const getByID = (id) =>
+  WorkExperience.findById((mongoose.Types.ObjectId(id)));
+/**
+ * get workexperience by name with selections
+ */
+// const getByRegistrationWithSelections = (registration) =>
+//   WorkExperience.findOne({ registration: registration }).then((workexperience) => {
+//     if (workexperience && workexperience.error === null)
+//       return workexperience.getWorkExperienceWithSelections();
+//     return null;
+//   });
+const create = async ({
+  role,
+  institution,
+  durationInMonths
+}) => {
+  let workexperience = new WorkExperience({
     role: role,
     institution: institution,
     durationInMonths: durationInMonths,
+
   });
-  workExperience = await workExperience.save();
-  return workExperience;
+  workexperience = await workexperience.save();
+  return workexperience;
 };
 
-const update = async (id, { role, institution, durationInMonths }) => {
-  const workExperience = await WorkExperience.findByIdAndUpdate(
-    mongoose.Types.ObjectId(id),
+const update = ( updateData) => {
+  return WorkExperience.findOneAndUpdate(
+
+    { updateData },
     {
-      role: role,
-      institution: institution,
-      durationInMonths: durationInMonths,
-    },
-    { new: true }
+      new: true,
+    }
   );
-  return workExperience;
 };
-
-const remove = async (id) => {
-  const workExperience = await WorkExperience.findByIdAndRemove(
-    mongoose.Types.ObjectId(id)
-  );
-  return workExperience;
-};
+/**
+ * remove workexperience by registration
+ * @param {ObjectId} id workexperience registration
+ * @returns {WorkExperienceSchema}
+ */
+const remove = async (id) => WorkExperience.findByIdAndRemove((mongoose.Types.ObjectId(id)));
 
 const validate = (object) => {
   const { error } = valWorkExperience(object);
   return error;
 };
 
-module.exports = { getAll, getById, create, update, remove, validate };
+module.exports = {
+  getAll,
+  getByID,
+  create,
+  update,
+  remove,
+  validate
+  //getByRegistrationWithSelections,
+};
