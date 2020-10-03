@@ -44,14 +44,21 @@ router.post("/", async (request, response) => {
 });
 
 router.put("/:id", async (req, res) => {
-  validate(req.body);
-  const phase = PhaseController.update(req.params.id, req.body);
+  // validate(req.body);
+  PhaseController.addStudent(req.params.id, req.body.studentId)
+    .then((phase) => {
+      res.send(phase);
+    })
+    .catch((error) => res.status(400).send(error));
+});
+router.delete("/:id/student/:studentId", async (req, res) => {
+  // validate(req.body);
+  const phase = PhaseController.update(req.params.id, req.params.studentId);
   if (!phase) {
     return res.status(404).send("The phases with the given ID was not found.");
   }
   res.send(phases);
 });
-
 router.delete("/:id", async (req, res) => {
   const phases = PhaseController.remove(req.params.id);
   if (!phases) {

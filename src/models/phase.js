@@ -20,6 +20,10 @@ const PhaseSchema = mongoose.model(
       ref: "Selection",
       required: true,
     },
+    description: {
+      type: String,
+      default: "",
+    },
   })
 );
 

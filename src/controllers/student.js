@@ -5,7 +5,7 @@ const {
   valStudent,
   getStudentWithSelections,
 } = require("../models/student");
-
+const { filterProps } = require("../middlewares/util");
 const getAll = () => Student.find().sort("registration");
 
 /**
@@ -21,8 +21,8 @@ const getByRegistration = (registration) =>
  */
 const getByRegistrationWithSelections = (registration) =>
   Student.findOne({ registration: registration }).then((student) => {
-    if (student && student.error === null)
-      return student.getStudentWithSelections();
+    if (student && student.error === undefined)
+      return getStudentWithSelections(student);
     return null;
   });
 const create = async ({
@@ -47,10 +47,23 @@ const create = async ({
   return student;
 };
 
-const update = (registration, updateData) => {
+const update = async (registration, updateData) => {
+  const {
+    _id,
+    name,
+    email,
+    cra,
+    description,
+    skills,
+    experiences,
+    __v,
+  } = updateData;
   return Student.findOneAndUpdate(
     { registration: registration },
-    { registration: registration, ...updateData },
+    {
+      registration: registration,
+      ...filterProps({ name, email, cra, description, skills, experiences }),
+    },
     {
       new: true,
     }

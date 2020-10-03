@@ -71,9 +71,11 @@ const valStudent = (student) => {
  * get student with selections
  *
  */
-const getStudentWithSelections = () => {
+const getStudentWithSelections = (student) => {
   const { getSelectionFromPhase } = require("../middlewares/util");
-  return Promise.all(this.phases.map((phase) => getSelectionFromPhase(phase)))
+  return Promise.all(
+    student.phases.map((phase) => getSelectionFromPhase(phase))
+  )
     .then((selections) => {
       const catchError = selections.filter((selections) => selection.error);
       if (catchError.length === 0) {
@@ -89,14 +91,24 @@ const getStudentWithSelections = () => {
             },
           };
         });
+        const {
+          registration,
+          name,
+          email,
+          cra,
+          description,
+          skills,
+          experiences,
+        } = student;
+
         return {
-          registration: this.registration,
-          name: this.name,
-          email: this.email,
-          cra: this.cra,
-          description: this.description,
-          skills: this.skills,
-          experiences: this.experiences,
+          registration,
+          name,
+          email,
+          cra,
+          description,
+          skills,
+          experiences,
           selections: selectionsData,
         };
       } else {
