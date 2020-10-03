@@ -28,7 +28,7 @@ router
   });
 
 router.get("/:id", async (request, response) => {
-  SoftController.getByI(
+  SoftController.getById(
     request.params.id
   ).then((soft) => {
     if (!soft) {
