@@ -1,69 +1,47 @@
-const mongoose = require('mongoose');
 "use strict";
 
-const { ObjectId } = require("mongodb");
-const {
-  Soft,
-  valSoft,
-  //getSoftWithSelections,
-} = require("../models/soft");
+const { Soft, valSoft } = require("../models/soft");
+const mongoose = require("mongoose");
 
-const getAll = () => Soft.find().sort("name");
+const getAll = async () => {
+  const softs = await Soft.find().sort("name");
+  return softs;
+};
 
-/**
- * get soft by name
- * @param {ObjectId} id soft name
- * @typedef {{name: string}} SoftSchema
- * @returns {SoftSchema}
- */
-const getByID = (id) =>
-  Soft.findById((mongoose.Types.ObjectId(id)));
-/**
- * get soft by name with selections
- */
-// const getByRegistrationWithSelections = (registration) =>
-//   Soft.findOne({ registration: registration }).then((soft) => {
-//     if (soft && soft.error === null)
-//       return soft.getSoftWithSelections();
-//     return null;
-//   });
-const create = async ({
-  name
-}) => {
+const getById = async (id) => {
+  const soft = await Soft.findById(mongoose.Types.ObjectId(id));
+  return soft;
+};
+
+const create = async ({ name }) => {
   let soft = new Soft({
-    name: name
+    name: name,
   });
   soft = await soft.save();
   return soft;
 };
 
-const update = (name, updateData) => {
-  return Soft.findOneAndUpdate(
-    { name: name },
-    { name: name, ...updateData },
+const update = async (id, { name }) => {
+  const soft = await Soft.findByIdAndUpdate(
+    mongoose.Types.ObjectId(id),
     {
-      new: true,
-    }
+      name: name,
+    },
+    { new: true }
   );
+  return soft;
 };
-/**
- * remove soft by registration
- * @param {ObjectId} id soft registration
- * @returns {SoftSchema}
- */
-const remove = async (id) => Soft.findByIdAndRemove((mongoose.Types.ObjectId(id)));
+
+const remove = async (id) => {
+  const soft = await Soft.findByIdAndRemove(
+    mongoose.Types.ObjectId(id)
+  );
+  return soft;
+};
 
 const validate = (object) => {
   const { error } = valSoft(object);
   return error;
 };
 
-module.exports = {
-  getAll,
-  getByID,
-  create,
-  update,
-  remove,
-  validate
-  //getByRegistrationWithSelections,
-};
+module.exports = { getAll, getById, create, update, remove, validate };
