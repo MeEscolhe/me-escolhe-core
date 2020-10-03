@@ -1,53 +1,121 @@
 "use strict";
 
-const workExperienceCtrl = require("../controllers/work-experience");
+/**
+ * @author @KelvinCL
+ * @author @amintasvrp
+ */
+const workExperienceController = require("../controllers/work-experience");
 const express = require("express");
 const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
-const validate = (body) => {
-  const { error } = workExperienceCtrl.validate(body);
-  if (error) return res.status(400).send(error.details[0].message);
-};
+router
+  .route("/")
+  .get((request, response) => 
+  {
+    workExperienceController.getAll().then
+    (
+      (workExperiences) => 
+    {
+      if (isEmpty(workExperiences)) 
+      {
+        response.status(404).send("No work experiences to show.");
+      } else 
+      {
+        response.send(workExperiences);
+      }
+    });
+  })
 
-router.get("/", async (req, res) => {
-  const workExperiences = workExperienceCtrl.getAll();
-  if (isEmpty(workExperiences)) {
-    return res.status(404).send("No workExperiences to show.");
-  }
-  res.send(workExperiences);
-});
+  .post(async (request, response) => {
+    const { error, message } = validate(request.body, workExperienceController);
 
-router.get("/:id", async (req, res) => {
-  const workExperience = workExperienceCtrl.getById(req.params.id);
-  if (!workExperience) {
-    return res
-      .status(404)
-      .send("The workExperience with the given ID was not found.");
-  }
-  res.send(workExperience);
-});
+    if (error) 
+    {
+      response.status(400).send("This work experience cannot be created.");
+    } 
+    else 
+    {
+      const workExperience = workExperienceController.create(request.body);
+      response.send(workExperience);
+    }
+  });
 
-router.post("/", async (req, res) => {
-  validate(req.body);
-  const workExperience = workExperienceCtrl.create(req.body);
-  res.send(workExperience);
-});
+router
+  .route("/:id")
+  .get(async (request, response) => 
+  {
+    workExperienceController.getById(request.params.id).then
+    (
+      (workExperience) => 
+    {
+      if (!workExperience) 
+      {
+        response.status(404).send("The work experience with the given ID was not found.");
+      } else 
+      {
+        response.send(workExperience);
+      }
+    }
+    );
+  })
 
-router.put("/:id", async (req, res) => {
-  validate(req.body);
-  const workExperience = workExperienceCtrl.update(req.params.id, req.body);
-  res.send(workExperience);
-});
+  .delete(async (request, response) => 
+  {
+    workExperienceController.remove(request.params.id).then
+    (
+      (workExperience) => 
+    {
+      if (!workExperience) 
+      {
+        response
+          .status(404)
+          .send("The work experience with the given id was not found.");
+      } 
+      
+      else 
+      {
+        response.send(workExperience);
+      }
+    }
+    );
+  })
 
-router.delete("/:id", async (req, res) => {
-  const workExperience = workExperienceCtrl.remove(req.params.id);
-  if (!workExperience) {
-    return res
-      .status(404)
-      .send("The workExperience with the given ID was not found.");
-  }
-  res.send(workExperience);
-});
+  //bug: ao atualizar apenas alguns parâmetros, os não atualizados se tornam 'null'.
+  .put((request, response) => 
+  {
+    const id = request.params.id;
+    const { error, message } = validate({ id, ...request.body }, workExperienceController);
+    if (error) 
+    {
+      response.status(400).send(message);
+    } 
+    
+    else 
+    {
+      const { role, institution, durationInMonths } = request.body;
+
+      workExperienceController.update
+      (
+        request.params.id,
+        filterProps({ role, institution, durationInMonths })
+      )
+
+      .then((workExperience) => 
+      {
+        if (!workExperience) 
+        {
+          response
+            .status(404)
+            .send("The work experience with the given ID was not found.");
+        } 
+        
+        else 
+        {
+          response.send(workExperience);
+        }
+      });
+    }
+  });
 
 module.exports = router;
