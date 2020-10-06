@@ -47,22 +47,29 @@ const create = async ({
   return student;
 };
 
-const update = async (registration, updateData) => {
-  const {
-    _id,
-    name,
-    email,
-    cra,
-    description,
-    skills,
-    experiences,
-    __v,
-  } = updateData;
+const update = (registration, updateData, updatePhase) => {
+  console.log(updateData);
+  let propsToUpdate = [
+    "name",
+    "email",
+    "cra",
+    "description",
+    "skills",
+    "experiences",
+  ];
+  if (updatePhase) propsToUpdate.push("phases");
+
   return Student.findOneAndUpdate(
     { registration: registration },
     {
       registration: registration,
-      ...filterProps({ name, email, cra, description, skills, experiences }),
+      ...filterProps(
+        updateData,
+        propsToUpdate,
+        (key, value) =>
+          (key !== "registration" && value) ||
+          (key === "description" && value === "")
+      ),
     },
     {
       new: true,

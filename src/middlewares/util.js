@@ -25,19 +25,17 @@ const validate = (body, controller) => {
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
  * filter null props from request body
- * @typedef {{registration: number,name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
- * @param {StudentSchema} props request body
  *
+ * @param {Object} data request body
+ * @param {Array.<String>} propsToFilter props Tto filter
+ * @param {Boolean} conditionFunction function to apply more conditions in filter
  * @returns {object}
  */
-const filterProps = (props) =>
-  Object.entries(props).reduce((accumulate, [key, value]) => {
-    if (
-      (key !== "registration" && value) ||
-      (key === "description" && value === "")
-    )
+const filterProps = (data, propsToFilter, conditionFunction) =>
+  Object.entries(data).reduce((accumulate, [key, value]) => {
+    console.log(key, conditionFunction(key, value));
+    if (propsToFilter.includes(key) && conditionFunction(key, value))
       accumulate[key] = value;
-
     return accumulate;
   }, {});
 /**
@@ -46,7 +44,7 @@ const filterProps = (props) =>
  *
  */
 const getSelectionFromPhase = (phaseId) => {
-  const Phase = require("../models/phase");
+  const Phase = require("../models/phase").Phase;
   const Selection = require("../models/selection");
 
   return Phase.findById(phaseId).then((phase) =>

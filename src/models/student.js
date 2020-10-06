@@ -79,6 +79,7 @@ const getStudentWithSelections = (student) => {
     .then((selections) => {
       const catchError = selections.filter((selections) => selection.error);
       if (catchError.length === 0) {
+        console.log(student.phases);
         const selectionsData = selections.map((selection) => {
           const indexOfPhase = selection.phases.indexOf(selection.phaseId);
           const currentPhase = selection.phases.length;

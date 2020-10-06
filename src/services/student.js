@@ -6,7 +6,7 @@
 const StudentController = require("../controllers/student");
 const express = require("express");
 const router = express.Router();
-const { isEmpty, validate, filterProps } = require("../middlewares/util");
+const { isEmpty, validate } = require("../middlewares/util");
 
 router
   .route("/")
@@ -50,20 +50,17 @@ router.put("/:id", (request, response) => {
   if (error) {
     response.status(400).send(message);
   } else {
-    const { name, email, cra, description, skills, experiences } = request.body;
-
-    StudentController.update(
-      request.params.id,
-      filterProps({ name, email, cra, description, skills, experiences })
-    ).then((student) => {
-      if (!student) {
-        response
-          .status(404)
-          .send("The student with the given ID was not found.");
-      } else {
-        response.send(student);
+    StudentController.update(request.params.id, request.body, false).then(
+      (student) => {
+        if (!student) {
+          response
+            .status(404)
+            .send("The student with the given ID was not found.");
+        } else {
+          response.send(student);
+        }
       }
-    });
+    );
   }
 });
 
