@@ -5,7 +5,19 @@ function isEmpty(obj) {
 
   return true;
 }
-
+/**
+ * @author Diego Amancio <diego.amancio1998@gmail.com>
+ * abstract to find by id and update
+ * @param {Object} schema
+ * @param {String} dataId
+ * @param {Object} data
+ */
+const updateObject = (schema, dataId, data) => {
+  const mongoose = require("mongoose");
+  return schema.findByIdAndUpdate(mongoose.Types.ObjectId(dataId), data, {
+    new: true,
+  });
+};
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
  * checks if the requisition body is invalid according to the given controller
@@ -84,4 +96,5 @@ module.exports = {
   filterProps,
   getSelectionFromPhase,
   FKHelper,
+  updateObject,
 };

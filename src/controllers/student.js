@@ -48,7 +48,6 @@ const create = async ({
 };
 
 const update = (registration, updateData, updatePhase) => {
-  console.log(updateData);
   let propsToUpdate = [
     "name",
     "email",

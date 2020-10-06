@@ -43,9 +43,17 @@ router.post("/", async (request, response) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/student/:id", async (req, res) => {
   // validate(req.body);
   PhaseController.addStudent(req.params.id, req.body.studentId)
+    .then((phase) => {
+      res.send(phase);
+    })
+    .catch((error) => res.status(400).send(error));
+});
+router.delete("/student/:id", async (req, res) => {
+  // validate(req.body);
+  PhaseController.removeStudent(req.params.id, req.body.studentId)
     .then((phase) => {
       res.send(phase);
     })
