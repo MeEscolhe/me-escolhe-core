@@ -1,29 +1,31 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
-const LabSchema = mongoose.model(
-  "Lab",
+const HardSchema = mongoose.model(
+  "Hard",
   new mongoose.Schema({
     name: {
       type: String,
       required: true,
     },
-    description: {
-      type: String,
+    level: {
+      type: Number,
+      enum: [0, 1, 2, 3, 4],
+      default: 2,
       required: true,
       default: "",
     },
   })
 );
 
-function validateLab(lab) {
-  const schemaLab = Joi.object().keys({
+function validateHard(hard) {
+  const schemaHard = Joi.object().keys({
     name: Joi.string().min(4).max(30).required(),
     description: Joi.string().min(4).max(50).required(),
   });
 
-  return schemaLab.validate(lab.body);
+  return schemaHard.validate(hard.body);
 }
 
-exports.Lab = LabSchema;
-exports.valLab = validateLab;
+exports.Hard = HardSchema;
+exports.valHard = validateHard;

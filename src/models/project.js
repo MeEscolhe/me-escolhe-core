@@ -1,22 +1,23 @@
-// Importing dependences
 const mongoose = require("mongoose");
+const ObjectId = require("mongodb").ObjectID;
 
-// Creating schema
-const ProjectSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  selections: {
-    type: [String],
-    required: true,
-    default: [],
-  },
-});
+const ProjectSchema = mongoose.model(
+  "Project",
+  new mongoose.Schema({
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    selections: {
+      type: [ObjectId],
+      ref: "SelectionSchema",
+      default: [],
+    },
+  })
+);
 
-// Exporting to controllers
-mongoose.model("Project", ProjectSchema);
+exports.Project = ProjectSchema;

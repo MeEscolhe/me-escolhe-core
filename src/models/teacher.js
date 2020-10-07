@@ -1,36 +1,36 @@
-// Importing dependences
 const mongoose = require("mongoose");
+const ObjectId = require("mongodb").ObjectID;
 
-// Creating schema
-const TeacherSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-    default: "",
-  },
-  labId: {
-    type: String,
-    required: true,
-  },
-  managements: {
-    type: [String],
-    required: true,
-    default: [],
-  },
-  feedbackRequests: {
-    type: [String],
-    required: true,
-    default: [],
-  },
-});
+const TeacherSchema = mongoose.model(
+  "Teacher",
+  new mongoose.Schema({
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      default: "",
+    },
+    labId: {
+      type: ObjectId,
+      ref: "LabSchema",
+    },
+    managements: {
+      type: [ObjectId],
+      ref: "ProjectSchema",
+      default: [],
+    },
+    feedbackRequests: {
+      type: [ObjectId],
+      ref: "FeedbackRequestSchema",
+      default: [],
+    },
+  })
+);
 
-// Exporting to controllers
-mongoose.model("Teacher", TeacherSchema);
+exports.Teacher = TeacherSchema;

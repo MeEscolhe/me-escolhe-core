@@ -1,17 +1,20 @@
-// Importing dependences
 const mongoose = require("mongoose");
+const ObjectId = require("mongodb").ObjectID;
 
-// Creating schema
-const ExperienceSchema = new mongoose.Schema({
-  academic: {
-    type: [String],
-    required: true,
-  },
-  work: {
-    type: [String],
-    required: true,
-  },
-});
+const ExperienceSchema = mongoose.model(
+  "Experience",
+  new mongoose.Schema({
+    academic: {
+      type: [ObjectId],
+      ref: "AcademicExperienceSchema",
+      required: true,
+    },
+    work: {
+      type: [ObjectId],
+      ref: "WorkExperienceSchema",
+      required: true,
+    },
+  })
+);
 
-// Exporting to controllers
-mongoose.model("Experience", ExperienceSchema);
+exports.Experience = ExperienceSchema;

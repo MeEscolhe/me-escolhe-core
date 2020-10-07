@@ -1,50 +1,28 @@
-// Importing dependences
 const mongoose = require("mongoose");
+const ObjectId = require("mongodb").ObjectID;
 
-// Creating schema
-const SkillSchema = new mongoose.Schema({
-  languages: {
-    type: [
-      {
-        name: {
-          type: String,
-          required: true,
-        },
-        level: {
-          type: Number,
-          min: 0,
-          max: 2,
-          required: true,
-        },
-      },
-    ],
-    required: true,
-    default: [],
-  },
-  soft: {
-    type: [String],
-    required: true,
-    default: [],
-  },
-  hard: {
-    type: [
-      {
-        name: {
-          type: String,
-          required: true,
-        },
-        level: {
-          type: Number,
-          min: 0,
-          max: 4,
-          required: true,
-        },
-      },
-    ],
-    required: true,
-    default: [],
-  },
-});
+const SkillSchema = mongoose.model(
+  "Skill",
+  new mongoose.Schema({
+    languages: {
+      type: [ObjectId],
+      ref: "LanguageSchema",
+      required: true,
+      default: [],
+    },
+    soft: {
+      type: [ObjectId],
+      ref: "SoftSchema",
+      required: true,
+      default: [],
+    },
+    hard: {
+      type: [ObjectId],
+      ref: "HardSchema",
+      required: true,
+      default: [],
+    },
+  })
+);
 
-// Exporting to controllers
-mongoose.model("Skill", SkillSchema);
+exports.Skill = SkillSchema;

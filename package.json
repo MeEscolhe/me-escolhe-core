@@ -1,31 +1,36 @@
 {
-  "name": "me-escolhe",
+  "name": "me-escolhe-core",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "prod": "node server.js",
-    "dev": "nodemon server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/amintasvrp/me-escolhe.git"
-  },
-  "keywords": [],
+  "main": "app.js",
+  "repository": "https://github.com/MeEscolhe/me-escolhe-core.git",
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/amintasvrp/me-escolhe/issues"
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
-  "homepage": "https://github.com/amintasvrp/me-escolhe#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.9.7",
+    "joi": "^17.2.1",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.6",
     "mongoose-paginate": "^5.0.3",
-    "require-dir": "^1.2.0"
+    "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }

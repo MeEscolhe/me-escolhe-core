@@ -6,11 +6,11 @@ WORKDIR /usr/app
 
 # Configurando dependências do projeto
 COPY package*.json ./
-RUN npm install
+RUN yarn
 COPY . .
 
 # Porta a ser utilizada
 EXPOSE 3000
 
 # Comando de inicialização da aplicação
-ENTRYPOINT npm run prod
+ENTRYPOINT yarn run start
