@@ -27,6 +27,11 @@ const SelectionModel = new mongoose.Schema({
     required: true,
     default: true,
   },
+  skills: {
+    type: [ObjectId],
+    ref: "SkillSchema",
+    default: [],
+  },
 });
 
 SelectionModel.plugin(mongoosePaginate);
@@ -43,6 +48,7 @@ const valSelection = (selection) => {
     description: Joi.string().optional().allow("").min(0).max(50),
     phases: Joi.array().items(Joi.string()).min(0),
     current: Joi.boolean().required(),
+    skills: Joi.array().items(Joi.string()).min(0),
   });
 
   return selectionSchema.validate(selection);

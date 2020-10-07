@@ -9,12 +9,13 @@ const getAll = async ({ page, limit }) =>
 
 const getById = async (id) => await Selection.findById(id);
 
-const create = async ({ role, description, phases, current }) => {
+const create = async ({ role, description, phases, current, skills }) => {
   let selection = new Selection({
     role: role,
     description: description,
     phases: phases,
     current: current,
+    skills: skills,
   });
   selection = await selection.save();
   return selection;

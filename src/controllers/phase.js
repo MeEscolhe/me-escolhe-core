@@ -13,21 +13,23 @@ const getById = async (id) => {
   return phase;
 };
 
-const create = async ({ students, selectionId }) => {
+const create = async ({ students, selectionId, description }) => {
   let phase = new Phase({
     students: students,
     selectionId: selectionId,
+    description: description,
   });
   phase = await phase.save();
   return phase;
 };
 
-const update = async (id, { students, selectionId }) => {
+const update = async (id, { students, selectionId, description }) => {
   const Phase = await Phase.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       students: students,
       selectionId: selectionId,
+      description: description,
     },
     { new: true }
   );
