@@ -45,7 +45,6 @@ const validate = (body, controller) => {
  */
 const filterProps = (data, propsToFilter, conditionFunction) =>
   Object.entries(data).reduce((accumulate, [key, value]) => {
-    console.log(key, conditionFunction(key, value));
     if (propsToFilter.includes(key) && conditionFunction(key, value))
       accumulate[key] = value;
     return accumulate;
@@ -57,17 +56,24 @@ const filterProps = (data, propsToFilter, conditionFunction) =>
  */
 const getSelectionFromPhase = (phaseId) => {
   const Phase = require("../models/phase").Phase;
-  const Selection = require("../models/selection");
-
-  return Phase.findById(phaseId).then((phase) =>
-    phase
-      ? Selection.findById(phase.selectionId).then((selection) =>
-          selection
-            ? { phaseId, ...selection }
-            : { error: "selection " + phase.selectionId + " not found" }
-        )
-      : { error: "phase " + phaseId + " not found" }
-  );
+  const Selection = require("../models/selection").Selection;
+  return Phase.findById(phaseId).then((phase) => {
+    return phase
+      ? Selection.findById(phase.selectionId).then((selection) => {
+          const { _id, role, description, phases, current } = selection;
+          return selection
+            ? {
+                phaseId: phaseId,
+                selectionId: _id,
+                role,
+                description,
+                phases,
+                current,
+              }
+            : { error: "selection " + phase.selectionId + " not found" };
+        })
+      : { error: "phase " + phaseId + " not found" };
+  });
 };
 /**
  * Validate foreing key to model

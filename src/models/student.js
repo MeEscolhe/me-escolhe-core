@@ -77,16 +77,24 @@ const getStudentWithSelections = (student) => {
     student.phases.map((phase) => getSelectionFromPhase(phase))
   )
     .then((selections) => {
-      const catchError = selections.filter((selections) => selection.error);
+      const catchError = selections.filter((selection) => selection.error);
       if (catchError.length === 0) {
-        console.log(student.phases);
         const selectionsData = selections.map((selection) => {
-          const indexOfPhase = selection.phases.indexOf(selection.phaseId);
-          const currentPhase = selection.phases.length;
-          delete selection.phases;
+          const {
+            phaseId,
+            selectionId,
+            role,
+            description,
+            phases,
+            current,
+          } = selection;
+          const indexOfPhase = phases.indexOf(phaseId);
+          const currentPhase = phases.length;
+
           return {
-            ...selections,
+            selection: { selectionId, role, description, current },
             phase: {
+              phaseId: phaseId,
               current: currentPhase,
               studentIsParticipating: indexOfPhase + 1 === currentPhase,
             },
@@ -118,7 +126,9 @@ const getStudentWithSelections = (student) => {
         };
       }
     })
-    .catch((e) => ({ error: e }));
+    .catch((e) => {
+      return { error: e };
+    });
 };
 
 module.exports = {
