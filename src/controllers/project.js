@@ -11,18 +11,15 @@ const getAll = async () => {
 const getById = async (id) =>
   await Project.findById(mongoose.Types.ObjectId(id));
 
-  const create = async ({
-    name, description, selections
-  }) => {
-    let project = new Project({
-      name: name,
-      description: description,
-      selections: selections,
-    });
-    project = await project.save();
-    return project;
-  };
-
+const create = async ({ name, description, selections }) => {
+  let project = new Project({
+    name: name,
+    description: description,
+    selections: selections,
+  });
+  project = await project.save();
+  return project;
+};
 
 const update = async (id, { name, description, selections }) => {
   const project = await Project.findByIdAndUpdate(

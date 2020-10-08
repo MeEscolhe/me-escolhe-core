@@ -13,7 +13,7 @@ const getById = async (id) => {
   return soft;
 };
 
-const create = async ({ name }) => {
+const create = async (id, { name }) => {
   let soft = new Soft({
     name: name,
   });
@@ -34,7 +34,7 @@ const update = async (id, { name }) => {
 
 const remove = async (id) => {
   const soft = await Soft.findByIdAndRemove(
-    mongoose.Types.ObjectId(id)
+    mongoose.Types.ObjectId(req.params.id)
   );
   return soft;
 };

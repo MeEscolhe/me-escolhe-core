@@ -10,12 +10,12 @@ const getAll = () => Student.find().sort("registration");
 
 /**
  * get student by registration
- * @param {number} registration student registration
- * @typedef {{registration: number, name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
+ * @param {string} registration student registration
+ * @typedef {{registration: number,name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
  * @returns {StudentSchema}
  */
 const getByRegistration = (registration) =>
-  Student.findOne(registration );
+  Student.findOne({ registration: registration });
 /**
  * get student by registration with selections
  */

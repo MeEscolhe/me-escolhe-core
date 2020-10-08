@@ -34,7 +34,7 @@ const update = async (id, { role, institution, durationInMonths }) => {
     {
       role: role,
       institution: institution,
-      durationInMonths: durationInMonths
+      durationInMonths: durationInMonths,
     },
     { new: true }
   );
