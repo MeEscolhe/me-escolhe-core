@@ -39,18 +39,18 @@ router.put("/:id", async (req, res) =>
     .catch((e) => res.status(400).send(e.message))
 );
 
-router.delete("/:id", async (req, res) =>
+router.delete("/:id/:teacherId", async (req, res) =>
   feedbackRequestCtrl
-    .remove(req.params.id)
+    .remove(req.params.id, req.params.teacherId)
     .then((feedbackRequest) => {
       if (!feedbackRequest) {
         return res
-          .status(404)
+          .status(400)
           .send("The feedbackRequest with the given ID was not found.");
       }
       res.send(feedbackRequest);
     })
-    .catch((e) => res.status(400).send(e.message))
+    .catch((e) => res.status(400).send(e))
 );
 
 module.exports = router;
