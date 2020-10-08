@@ -54,5 +54,9 @@ const remove = async (id) => {
   const teacher = await Teacher.findByIdAndRemove(mongoose.Types.ObjectId(id));
   return teacher;
 };
+const validate = async (object) => {
+  const { error } = valTeacher(object);
+  return error;
+};
 
-module.exports = { getAll, getById, create, update, remove };
+module.exports = { getAll, getById, create, update, remove, validate };
