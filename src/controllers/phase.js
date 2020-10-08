@@ -15,10 +15,11 @@ const getById = async (id) => {
   return phase;
 };
 
-const create = async ({ students, selectionId }) => {
+const create = async ({ students, selectionId, description }) => {
   let phase = new Phase({
     students: students,
     selectionId: selectionId,
+    description: description ? description : "",
   });
   phase = await phase.save();
   return phase;
