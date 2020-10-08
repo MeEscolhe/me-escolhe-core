@@ -35,6 +35,7 @@ const valPhase = (phase) => {
   const phaseSchema = Joi.object().keys({
     selectionId: Joi.string().min(3).max(30).required(),
     students: Joi.array().items(Joi.string()).min(0),
+    description: Joi.string().optional().allow("").min(0).max(50),
   });
 
   return phaseSchema.validate(phase);

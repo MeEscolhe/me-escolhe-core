@@ -85,7 +85,18 @@ const remove = async (id) => {
   const Phase = await Phase.findByIdAndRemove(mongoose.Types.ObjectId(id));
   return Phase;
 };
-
+const update = async (id, { students, selectionId, description }) => {
+  const Phase = await Phase.findByIdAndUpdate(
+    mongoose.Types.ObjectId(id),
+    {
+      students: students,
+      selectionId: selectionId,
+      description: description,
+    },
+    { new: true }
+  );
+  return Phase;
+};
 const validate = (object) => {
   const { error } = valPhase(object);
   return error;
@@ -124,4 +135,5 @@ module.exports = {
   removeStudent,
   remove,
   validate,
+  update,
 };
