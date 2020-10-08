@@ -1,61 +1,111 @@
 "use strict";
-
-const academicExperienceCtrl = require("../controllers/academic-experience");
+/**
+ * @author Kelvin Cirne <kelvin.cirne.custodio@ccc.ufcg.edu.br>
+ */
+const academicExperienceController = require("../controllers/academic-experience");
 const express = require("express");
 const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
-const validate = (body) => {
-  const { error } = academicExperienceCtrl.validate(body);
-  if (error) return res.status(400).send(error.details[0].message);
-};
+router
+  .route("/")
+  .get((request, response) => 
+  {
+    academicExperienceController.getAll().then((academicExperiences) => 
+    {
+      if (isEmpty(academicExperiences)) 
+      {
+        response.status(404).send("No academic experiences to show.");
+      } else 
+      {
+        response.send(academicExperiences);
+      }
+    });
+  })
 
-router.get("/", async (req, res) => {
-  const academicExperiences = academicExperienceCtrl.getAll();
-  if (isEmpty(academicExperiences)) {
-    return res.status(404).send("No academicExperiences to show.");
-  }
-  res.send(academicExperiences);
-});
+  .post(async (request, response) => {
+    const { error, message } = validate(request.body, academicExperienceController);
 
-router.get("/:id", async (req, res) => {
-  const academicExperience = academicExperienceCtrl.getById(req.params.id);
-  if (!academicExperience) {
-    return res
-      .status(404)
-      .send("The academicExperiences with the given ID was not found.");
-  }
-  res.send(academicExperience);
-});
+    if (error) 
+    {
+      response.status(400).send("This academic experience cannot be created.");
+    } 
+    else 
+    {
+      const academicExperience = academicExperienceController.create(request.body);
+      response.send(academicExperience);
+    }
+  });
 
-router.post("/", async (req, res) => {
-  validate(req.body);
-  const academicExperience = academicExperienceCtrl.create(req.body);
-  res.send(academicExperience);
-});
+router
+  .route("/:id")
+  .get(async (request, response) => 
+  {
+    academicExperienceController.getById(request.params.id).then((academicExperience) => 
+    {
+      if (!academicExperience) 
+      {
+        response.status(404).send("The academic experience with the given ID was not found.");
+      } else 
+      {
+        response.send(academicExperience);
+      }
+    });
+  })
 
-router.put("/:id", async (req, res) => {
-  validate(req.body);
-  const academicExperience = academicExperienceCtrl.update(
-    req.params.id,
-    req.body
-  );
-  if (!academicExperience) {
-    return res
-      .status(404)
-      .send("The academicExperiences with the given ID was not found.");
-  }
-  res.send(academicExperience);
-});
+  .delete(async (request, response) => 
+  {
+    academicExperienceController.remove(request.params.id).then((academicExperience) => 
+    {
+      if (!academicExperience) 
+      {
+        response
+          .status(404)
+          .send("The academic experience with the given id was not found.");
+      } 
+      
+      else 
+      {
+        response.send(academicExperience);
+      }
+    });
+  })
 
-router.delete("/:id", async (req, res) => {
-  const academicExperience = academicExperienceCtrl.remove(req.params.id);
-  if (!academicExperience) {
-    return res
-      .status(404)
-      .send("The academicExperiences with the given ID was not found.");
-  }
-  res.send(academicExperience);
-});
+  //bug: ao atualizar apenas alguns parâmetros, os não atualizados se tornam 'null'.
+  .put((request, response) => 
+  {
+    const id = request.params.id;
+    const { error, message } = validate({ id, ...request.body }, academicExperienceController);
+    if (error) 
+    {
+      response.status(400).send(message);
+    } 
+    
+    else 
+    {
+      const { title, category, institution } = request.body;
+
+      academicExperienceController.update
+      (
+        request.params.id,
+        filterProps({ title, category, institution })
+      )
+
+      .then((academicExperience) => 
+      {
+        if (!academicExperience) 
+        {
+          response
+            .status(404)
+            .send("The academic experience with the given ID was not found.");
+        } 
+        
+        else 
+        {
+          response.send(academicExperience);
+        }
+      });
+    }
+  });
 
 module.exports = router;

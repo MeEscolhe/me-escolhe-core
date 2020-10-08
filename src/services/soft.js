@@ -1,58 +1,112 @@
 "use strict";
-
-const softCtrl = require("../controllers/soft");
+/**
+ * @author @KelvinCL
+ * @author @amintasvrp
+ */
+const softSkillController = require("../controllers/soft");
 const express = require("express");
 const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
-const validate = (body) => {
-  const { error } = softCtrl.validate(body);
-  if (error) return res.status(400).send(error.details[0].message);
-};
+router
+  .route("/")
+  .get((request, response) => 
+  {
+    softSkillController.getAll().then((softSkills) => 
+    {
+      if (isEmpty(softSkills)) 
+      {
+        response.status(404).send("No soft skills to show.");
+      } else 
+      {
+        response.send(softSkills);
+      }
+    });
+  })
 
-router.get("/", async (req, res) => {
-  const softs = softCtrl.getAll();
-  if (isEmpty(softs)) {
-    return res.status(404).send("No soft skills to show.");
-  }
-  res.send(softs);
-});
+  .post(async (request, response) => {
+    const { error, message } = validate(request.body, softSkillController);
 
-router.get("/:id", async (req, res) => {
-  const soft = softCtrl.getById();
-  if (!soft) {
-    return res
-      .status(404)
-      .send("The soft skill with the given ID was not found.");
-  }
-  res.send(soft);
-});
+    if (error) 
+    {
+      response.status(400).send("This soft skill cannot be created.");
+    } 
+    else 
+    {
+      const softSkill = softSkillController.create(request.body);
+      response.send(softSkill);
+    }
+  });
 
-router.post("/", async (req, res) => {
-  validate(req.body);
-  const soft = softCtrl.create(req.body);
-  res.send(soft);
-});
+router
+  .route("/:id")
+  .get(async (request, response) => 
+  {
+    softSkillController.getById(request.params.id).then((softSkill) => 
+    {
+      if (!softSkill) 
+      {
+        response.status(404).send("The soft skill with the given ID was not found.");
+      } else 
+      {
+        response.send(softSkill);
+      }
+    });
+  })
 
-router.put("/:id", async (req, res) => {
-  validate(req.body);
-  const soft = softCtrl.update(req.params.id, req.body);
-  if (!soft) {
-    return res
-      .status(404)
-      .send("The soft skill with the given ID was not found.");
-  }
-  res.send(soft);
-});
+  .delete(async (request, response) => 
+  {
+    softSkillController.remove(request.params.id).then((softSkill) => 
+    {
+      if (!softSkill) 
+      {
+        response
+          .status(404)
+          .send("The soft skill with the given id was not found.");
+      } 
+      
+      else 
+      {
+        response.send(softSkill);
+      }
+    });
+  })
 
-router.delete("/:id", async (req, res) => {
-  const soft = softCtrl.remove(req.params.id);
-  if (!soft) {
-    return res
-      .status(404)
-      .send("The soft skill with the given ID was not found.");
-  }
-  res.send(soft);
-});
+  //bug: ao atualizar apenas alguns parâmetros, os não atualizados se tornam 'null'.
+  .put((request, response) => 
+  {
+    const id = request.params.id;
+    const { error, message } = validate({ id, ...request.body }, softSkillController);
+    if (error) 
+    {
+      response.status(400).send(message);
+    } 
+    
+    else 
+    {
+      const { name } = request.body;
+
+      softSkillController.update
+      (
+        request.params.id,
+        filterProps({ name})
+      )
+
+      .then((softSkill) => 
+      {
+        if (!softSkill) 
+        {
+          response
+            .status(404)
+            .send("The soft skill with the given ID was not found.");
+        } 
+        
+        else 
+        {
+          response.send(softSkill);
+        }
+      });
+    }
+  });
 
 module.exports = router;
