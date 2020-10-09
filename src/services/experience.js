@@ -1,9 +1,6 @@
 "use strict";
 
-/**
- * @author Kelvin Cirne <kelvin.cirne.custodio@ccc.ufcg.edu.br>
- * @author Amintas 
- */
+
 const experienceController = require("../controllers/experience");
 const express = require("express");
 const router = express.Router();
@@ -81,7 +78,6 @@ router
     );
   })
 
-  //bug: ao atualizar apenas alguns parâmetros, os não atualizados se tornam 'null'.
   .put((request, response) => 
   {
     const id = request.params.id;
