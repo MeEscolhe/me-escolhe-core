@@ -1,7 +1,5 @@
 "use strict";
-/**
- * @author Kelvin Cirne <kelvin.cirne.custodio@ccc.ufcg.edu.br>
- */
+
 const academicExperienceController = require("../controllers/academic-experience");
 const express = require("express");
 const router = express.Router();
