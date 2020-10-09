@@ -1,9 +1,5 @@
 "use strict";
 
-/**
- * @author @KelvinCL
- * @author @amintasvrp
- */
 const workExperienceController = require("../controllers/work-experience");
 const express = require("express");
 const router = express.Router();
@@ -80,8 +76,6 @@ router
     }
     );
   })
-
-  //bug: ao atualizar apenas alguns parâmetros, os não atualizados se tornam 'null'.
   .put((request, response) => 
   {
     const id = request.params.id;
