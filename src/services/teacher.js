@@ -7,13 +7,6 @@ const express = require("express");
 const router = express.Router();
 const { validate, isEmpty, filterProps } = require("../middlewares/util");
 
-// router.get("/", async (req, res) => {
-//   const teachers = TeacherController.getAll();
-//   if (isEmpty(teachers)) {
-//     return res.status(404).send("No teachers to show.");
-//   }
-//   res.send(teachers);
-// });
 router
   .route("/")
   .get((request, response) => {
@@ -36,13 +29,7 @@ router
     }
   });
 
-// router.get("/:id", async (req, res) => {
-//   const teacher = TeacherController.getById(req.params.id);
-//   if (!teacher) {
-//     return res.status(404).send("The teacher with the given ID was not found.");
-//   }
-//   res.send(teacher);
-// });
+
 router.get("/:id", async (request, response) => {
   TeacherController.getById(
     request.params.id
@@ -79,18 +66,6 @@ router.get("/selections/:id", async (request, response) => {
   });
 });
 
-// router.post("/", async (req, res) => {
-//   const teacher = await TeacherController.create(req.body);
-//   res.send(teacher);
-// });
-
-// router.put("/:id", async (req, res) => {
-//   const teacher = TeacherController.update(req.params.id, req.body);
-//   if (!teacher) {
-//     return res.status(404).send("The teacher with the given ID was not found.");
-//   }
-//   res.send(teacher);
-// });
 
 router.put("/:id", (request, response) => {
   const identifier = request.params.id;
