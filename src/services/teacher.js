@@ -80,7 +80,7 @@ router.put("/:id", (request, response) => {
 
     TeacherController.update(
       request.params.id,
-      filterProps({name, email, description, labId, managements, feedbackRequests})//editar
+      filterProps({name, email, description, labId, managements, feedbackRequests})
     ).then((teacher) => {
       if (!teacher) {
         response
