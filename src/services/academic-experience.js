@@ -71,7 +71,6 @@ router
     });
   })
 
-  //bug: ao atualizar apenas alguns parâmetros, os não atualizados se tornam 'null'.
   .put((request, response) => 
   {
     const id = request.params.id;
