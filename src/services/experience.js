@@ -1,51 +1,117 @@
 "use strict";
 
-const experienceCtrl = require("../controllers/experience");
+
+const experienceController = require("../controllers/experience");
 const express = require("express");
 const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
-  const experiences = experienceCtrl.getAll();
-  if (isEmpty(experiences)) {
-    return res.status(404).send("No experiences to show.");
-  }
-  res.send(experiences);
-});
+router
+  .route("/")
+  .get((request, response) => 
+  {
+    experienceController.getAll().then
+    (
+      (experiences) => 
+    {
+      if (isEmpty(experiences)) 
+      {
+        response.status(404).send("No experience to show.");
+      } else 
+      {
+        response.send(experiences);
+      }
+    });
+  })
 
-router.get("/:id", async (req, res) => {
-  const experience = experienceCtrl.getById(req.params.id);
-  if (!experience) {
-    return res
-      .status(404)
-      .send("The experience with the given ID was not found.");
-  }
-  res.send(experience);
-});
+  .post(async (request, response) => {
+    const { error, message } = validate(request.body, experienceController);
 
-router.post("/", async (req, res) => {
-  const experience = experienceCtrl.create(req.body);
-  res.send(experience);
-});
+    if (error) 
+    {
+      response.status(400).send("This experience cannot be created.");
+    } 
+    else 
+    {
+      const experience = experienceController.create(request.body);
+      response.send(experience);
+    }
+  });
 
-router.put("/:id", async (req, res) => {
-  const experience = experienceCtrl.update(req.params.id, req.body);
-  if (!experience) {
-    return res
-      .status(404)
-      .send("The experience with the given ID was not found.");
-  }
-  res.send(experience);
-});
+router
+  .route("/:id")
+  .get(async (request, response) => 
+  {
+    experienceController.getById(request.params.id).then
+    (
+      (experience) => 
+    {
+      if (!experience) 
+      {
+        response.status(404).send("The experience with the given ID was not found.");
+      } else 
+      {
+        response.send(experience);
+      }
+    }
+    );
+  })
 
-router.delete("/:id", async (req, res) => {
-  const experience = experienceCtrl.remove(req.params.id);
-  if (!experience) {
-    return res
-      .status(404)
-      .send("The experience with the given ID was not found.");
-  }
-  res.send(experience);
-});
+  .delete(async (request, response) => 
+  {
+    experienceController.remove(request.params.id).then
+    (
+      (experience) => 
+    {
+      if (!experience) 
+      {
+        response
+          .status(404)
+          .send("The experience with the given id was not found.");
+      } 
+      
+      else 
+      {
+        response.send(experience);
+      }
+    }
+    );
+  })
+
+  .put((request, response) => 
+  {
+    const id = request.params.id;
+    const { error, message } = validate({ ...request.body }, experienceController);
+    if (error) 
+    {
+      response.status(400).send(message);
+    } 
+    
+    else 
+    {
+      const { academic, work } = request.body;
+
+      experienceController.update
+      (
+        request.params.id,
+        filterProps({ academic, work })
+      )
+
+      .then((experience) => 
+      {
+        if (!experience) 
+        {
+          response
+            .status(404)
+            .send("The experience with the given ID was not found.");
+        } 
+        
+        else 
+        {
+          response.send(experience);
+        }
+      });
+    }
+  });
 
 module.exports = router;

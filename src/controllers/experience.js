@@ -1,7 +1,8 @@
 "use strict";
 
-const { Experience } = require("../models/experience");
+const { Experience, valExperience} = require("../models/experience");
 const mongoose = require("mongoose");
+
 
 const getAll = async () => {
   const experience = await Experience.find();
@@ -41,4 +42,11 @@ const remove = async (id) => {
   return experience;
 };
 
-module.exports = { getAll, getById, create, update, remove };
+const validate = (object) => {
+  const { error } = valExperience(object);
+  return error;
+};
+
+
+module.exports = { getAll, getById, create, update, remove, validate };
+
