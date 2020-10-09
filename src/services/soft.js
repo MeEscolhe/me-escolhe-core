@@ -1,8 +1,5 @@
 "use strict";
-/**
- * @author @KelvinCL
- * @author @amintasvrp
- */
+
 const softSkillController = require("../controllers/soft");
 const express = require("express");
 const router = express.Router();
@@ -72,7 +69,6 @@ router
     });
   })
 
-  //bug: ao atualizar apenas alguns parâmetros, os não atualizados se tornam 'null'.
   .put((request, response) => 
   {
     const id = request.params.id;
