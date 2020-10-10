@@ -25,11 +25,6 @@ const TeacherSchema = mongoose.model(
       ref: "ProjectSchema",
       default: [],
     },
-    feedbackRequests: {
-      type: [ObjectId],
-      ref: "FeedbackRequestSchema",
-      default: [],
-    },
   })
 );
 
