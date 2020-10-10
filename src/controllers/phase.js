@@ -32,7 +32,7 @@ const addStudent = (phaseId, studentId) =>
 
     return Phase.findByIdAndUpdate(phaseId, phase, { new: true }).then(
       (phase) => {
-        if (!phase) throw "Fase não encontrada";
+        if (!phase) throw "Phase not found";
         else {
           student.phases.push(phaseId);
           return StudentController.update(
@@ -41,7 +41,7 @@ const addStudent = (phaseId, studentId) =>
             true
           ).then((student) => {
             if (student) {
-              return "Student add";
+              return "Added to Student";
             } else {
               phase.students = phase.students.filter(
                 (registration) => registration !== student.registration
@@ -51,7 +51,7 @@ const addStudent = (phaseId, studentId) =>
                 phase,
                 { new: true }
               ).then(() => {
-                throw "Erro ao salvar o estudante";
+                throw "Error when save student";
               });
             }
           });
@@ -73,9 +73,13 @@ const removeStudent = (phaseId, studentId) =>
       true
     ).then((student) => {
       if (student) {
-        Phase.findByIdAndUpdate(mongoose.Types.ObjectId(phaseId), phase, {
-          new: true,
-        }).then(() => "Estudante removido");
+        return Phase.findByIdAndUpdate(
+          mongoose.Types.ObjectId(phaseId),
+          phase,
+          {
+            new: true,
+          }
+        ).then(() => "Estudante removido");
       } else {
         throw "Estudante não encontrado";
       }
@@ -86,7 +90,7 @@ const remove = async (id) => {
   return Phase;
 };
 const update = async (id, { students, selectionId, description }) => {
-  const Phase = await Phase.findByIdAndUpdate(
+  const phase = await Phase.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       students: students,
@@ -95,7 +99,7 @@ const update = async (id, { students, selectionId, description }) => {
     },
     { new: true }
   );
-  return Phase;
+  return phase;
 };
 const validate = (object) => {
   const { error } = valPhase(object);

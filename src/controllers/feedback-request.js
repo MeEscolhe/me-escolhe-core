@@ -47,7 +47,7 @@ const update = (id, { studentId, phaseId }) =>
     { new: true }
   );
 
-const remove = async (feedbackRequestId, teacherId) =>
+const remove = (feedbackRequestId, teacherId) =>
   Promise.all([
     Teacher.findById(mongoose.Types.ObjectId(teacherId)),
     FeedbackRequest.findById(mongoose.Types.ObjectId(feedbackRequestId)),
@@ -63,12 +63,12 @@ const remove = async (feedbackRequestId, teacherId) =>
         return FeedbackRequest.findByIdAndRemove(
           mongoose.Types.ObjectId(feedbackRequestId)
         ).then((feedbackRequestDelete) => {
-          if (feedbackRequestDelete) return "Feedback deletado";
-          throw "Erro ao deletar o feedback";
+          if (feedbackRequestDelete) return "Feedback deleted";
+          throw "Error to delete feedback";
         });
       }
 
-      throw "Erro ao atualizar o prof para deletar o feedback";
+      throw "Error to update teacher when delete feedback";
     });
   });
 
@@ -79,11 +79,11 @@ const remove = async (feedbackRequestId, teacherId) =>
  */
 const verifyFeedBackAndTeacher = (feedbackRequest, teacher) => {
   if (!feedbackRequest && !teacher) {
-    throw "Professor e feedback não encontrados";
+    throw "Teacher and feedback not found";
   } else if (!teacher) {
-    throw "Professor não encontrado";
+    throw "Teacher not found";
   } else if (!feedbackRequest) {
-    throw "Feedback não encontrado";
+    throw "Feedback not found";
   }
 };
 const validate = (object) => {
