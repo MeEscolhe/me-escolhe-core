@@ -22,25 +22,22 @@ const create = ({ studentId, phaseId, teacherId }) => {
   return feedbackRequest.save().then((feedback) => feedback);
 };
 
-const update = (id, { studentId, phaseId }) =>
-  FeedbackRequest.findByIdAndUpdate(
-    id,
-    {
-      studentId: studentId,
-      phaseId: phaseId,
-    },
-    { new: true }
-  );
-const remove = (feedbackRequestId, teacherId) =>
-  FeedbackRequest.findByIdAndRemove(feedbackRequestId).then(
-    (feedbackRequestDelete) => {
-      if (feedbackRequestDelete) return "Feedback deleted";
-      throw "Error delete feedback";
-    }
-  );
+/**
+ * remove feedback-request
+ * @param {string} feedbackRequestId
+ * @throws {InvalidArgumentException} mongoose id invalid or feedback not found
+ * @returns {string} confirm message
+ */
+const remove = (feedbackRequestId) =>
+  FeedbackRequest.findByIdAndRemove(
+    mongoose.Types.ObjectId(feedbackRequestId)
+  ).then((feedbackRequestDelete) => {
+    if (feedbackRequestDelete) return "Feedback deleted";
+    throw "Error delete feedback";
+  });
 const validate = (object) => {
   const { error } = valFeedbackRequest(object);
   return error;
 };
 
-module.exports = { getAll, getById, create, update, remove, validate };
+module.exports = { getAll, getById, create, remove, validate };
