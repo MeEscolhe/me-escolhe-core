@@ -2,7 +2,6 @@
 
 const { Phase, valPhase } = require("../models/phase");
 const mongoose = require("mongoose");
-const { Student } = require("../models/student");
 const StudentController = require("./student");
 
 const getAll = async () => {
