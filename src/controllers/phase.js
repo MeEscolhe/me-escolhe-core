@@ -79,9 +79,9 @@ const removeStudent = (phaseId, studentId) =>
           {
             new: true,
           }
-        ).then(() => "Estudante removido");
+        ).then(() => "Student removed");
       } else {
-        throw "Estudante não encontrado";
+        throw "Student not found";
       }
     });
   });
@@ -122,13 +122,13 @@ const getPhaseAndStudent = (phaseId, studentId) =>
  */
 const verifyAddOrRemoveStudent = (phase, student, addStudent) => {
   if (!phase && !student) {
-    throw "fase e estudante não encontrados";
+    throw "Phase and student not found";
   } else if (!phase) {
-    throw "Fase não encontrada";
+    throw "Phase not found";
   } else if (!student) {
-    throw "Estudante não encontrado";
+    throw "Estudante not found";
   } else if (addStudent && phase.students.includes(student.registration)) {
-    throw "Estudante já cadastrado na fase";
+    throw "Student already registered in the phase";
   }
 };
 module.exports = {
