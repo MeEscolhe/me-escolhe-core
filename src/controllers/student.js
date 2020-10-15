@@ -14,8 +14,7 @@ const getAll = () => Student.find().sort("registration");
  * @typedef {{registration: number, name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
  * @returns {StudentSchema}
  */
-const getByRegistration = (registration) =>
-  Student.findOne(registration );
+const getByRegistration = (registration) => Student.findOne(registration);
 /**
  * get student by registration with selections
  */
@@ -23,7 +22,7 @@ const getByRegistrationWithSelections = (registration) =>
   Student.findOne({ registration: registration }).then((student) => {
     if (student && student.error === undefined)
       return getStudentWithSelections(student);
-    return null;
+    throw "The student with the given ID was not found.";
   });
 const create = async ({
   registration,
