@@ -5,7 +5,7 @@ const express = require("express");
 const router = express.Router();
 const { isEmpty } = require("../middlewares/util");
 
-router.get("/", async (req, res) =>
+router.get("/", (req, res) =>
   feedbackRequestCtrl
     .getAll()
     .then((feedbackRequests) => res.send(feedbackRequests))
@@ -22,35 +22,28 @@ router.get("/:id", (req, res) =>
         res.send(feedbackRequest);
       }
     })
-    .catch((e) => res.status(400).send(e.message))
+    .catch((e) => res.status(400).send(e))
 );
 
-router.post("/", async (req, res) =>
+router.post("/", (req, res) =>
   feedbackRequestCtrl
     .create(req.body)
     .then((feedback) => res.send(feedback))
-    .catch((e) => res.status(400).send(e.message))
+    .catch((e) => res.status(400).send(e))
 );
 
-router.put("/:id", async (req, res) =>
-  feedbackRequestCtrl
-    .update(req.params.id, req.body)
-    .then((feedback) => res.send(feedback))
-    .catch((e) => res.status(400).send(e.message))
-);
-
-router.delete("/:id", async (req, res) =>
+router.delete("/:id/", (req, res) =>
   feedbackRequestCtrl
     .remove(req.params.id)
     .then((feedbackRequest) => {
       if (!feedbackRequest) {
         return res
-          .status(404)
+          .status(400)
           .send("The feedbackRequest with the given ID was not found.");
       }
       res.send(feedbackRequest);
     })
-    .catch((e) => res.status(400).send(e.message))
+    .catch((e) => res.status(400).send(e))
 );
 
 module.exports = router;

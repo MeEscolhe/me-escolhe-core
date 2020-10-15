@@ -5,7 +5,7 @@ const {
   valStudent,
   getStudentWithSelections,
 } = require("../models/student");
-
+const { filterProps } = require("../middlewares/util");
 const getAll = () => Student.find().sort("registration");
 
 /**
@@ -14,16 +14,15 @@ const getAll = () => Student.find().sort("registration");
  * @typedef {{registration: number, name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
  * @returns {StudentSchema}
  */
-const getByRegistration = (registration) =>
-  Student.findOne(registration );
+const getByRegistration = (registration) => Student.findOne(registration);
 /**
  * get student by registration with selections
  */
 const getByRegistrationWithSelections = (registration) =>
   Student.findOne({ registration: registration }).then((student) => {
-    if (student && student.error === null)
-      return student.getStudentWithSelections();
-    return null;
+    if (student && student.error === undefined)
+      return getStudentWithSelections(student);
+    throw "The student with the given ID was not found.";
   });
 const create = async ({
   registration,
@@ -47,10 +46,29 @@ const create = async ({
   return student;
 };
 
-const update = (registration, updateData) => {
+const update = (registration, updateData, updatePhase) => {
+  let propsToUpdate = [
+    "name",
+    "email",
+    "cra",
+    "description",
+    "skills",
+    "experiences",
+  ];
+  if (updatePhase) propsToUpdate.push("phases");
+
   return Student.findOneAndUpdate(
     { registration: registration },
-    { registration: registration, ...updateData },
+    {
+      registration: registration,
+      ...filterProps(
+        updateData,
+        propsToUpdate,
+        (key, value) =>
+          (key !== "registration" && value) ||
+          (key === "description" && value === "")
+      ),
+    },
     {
       new: true,
     }

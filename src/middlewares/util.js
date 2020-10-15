@@ -5,7 +5,19 @@ function isEmpty(obj) {
 
   return true;
 }
-
+/**
+ * @author Diego Amancio <diego.amancio1998@gmail.com>
+ * abstract to find by id and update
+ * @param {Object} schema
+ * @param {String} dataId
+ * @param {Object} data
+ */
+const updateObject = (schema, dataId, data) => {
+  const mongoose = require("mongoose");
+  return schema.findByIdAndUpdate(mongoose.Types.ObjectId(dataId), data, {
+    new: true,
+  });
+};
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
  * checks if the requisition body is invalid according to the given controller
@@ -25,19 +37,16 @@ const validate = (body, controller) => {
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
  * filter null props from request body
- * @typedef {{registration: number,name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
- * @param {StudentSchema} props request body
  *
+ * @param {Object} data request body
+ * @param {Array.<String>} propsToFilter props Tto filter
+ * @param {Boolean} conditionFunction function to apply more conditions in filter
  * @returns {object}
  */
-const filterProps = (props) =>
-  Object.entries(props).reduce((accumulate, [key, value]) => {
-    if (
-      (key !== "registration" && value) ||
-      (key === "description" && value === "")
-    )
+const filterProps = (data, propsToFilter, conditionFunction) =>
+  Object.entries(data).reduce((accumulate, [key, value]) => {
+    if (propsToFilter.includes(key) && conditionFunction(key, value))
       accumulate[key] = value;
-
     return accumulate;
   }, {});
 /**
@@ -46,18 +55,25 @@ const filterProps = (props) =>
  *
  */
 const getSelectionFromPhase = (phaseId) => {
-  const Phase = require("../models/phase");
-  const Selection = require("../models/selection");
-
-  return Phase.findById(phaseId).then((phase) =>
-    phase
-      ? Selection.findById(phase.selectionId).then((selection) =>
-          selection
-            ? { phaseId, ...selection }
-            : { error: "selection " + phase.selectionId + " not found" }
-        )
-      : { error: "phase " + phaseId + " not found" }
-  );
+  const Phase = require("../models/phase").Phase;
+  const Selection = require("../models/selection").Selection;
+  return Phase.findById(phaseId).then((phase) => {
+    return phase
+      ? Selection.findById(phase.selectionId).then((selection) => {
+          const { _id, role, description, phases, current } = selection;
+          return selection
+            ? {
+                phaseId: phaseId,
+                selectionId: _id,
+                role,
+                description,
+                phases,
+                current,
+              }
+            : { error: "selection " + phase.selectionId + " not found" };
+        })
+      : { error: "phase " + phaseId + " not found" };
+  });
 };
 /**
  * Validate foreing key to model
@@ -86,4 +102,5 @@ module.exports = {
   filterProps,
   getSelectionFromPhase,
   FKHelper,
+  updateObject,
 };

@@ -71,32 +71,53 @@ const valStudent = (student) => {
  * get student with selections
  *
  */
-const getStudentWithSelections = () => {
+const getStudentWithSelections = (student) => {
   const { getSelectionFromPhase } = require("../middlewares/util");
-  return Promise.all(this.phases.map((phase) => getSelectionFromPhase(phase)))
+  return Promise.all(
+    student.phases.map((phase) => getSelectionFromPhase(phase))
+  )
     .then((selections) => {
-      const catchError = selections.filter((selections) => selection.error);
+      const catchError = selections.filter((selection) => selection.error);
       if (catchError.length === 0) {
         const selectionsData = selections.map((selection) => {
-          const indexOfPhase = selection.phases.indexOf(selection.phaseId);
-          const currentPhase = selection.phases.length;
-          delete selection.phases;
+          const {
+            phaseId,
+            selectionId,
+            role,
+            description,
+            phases,
+            current,
+          } = selection;
+          const indexOfPhase = phases.indexOf(phaseId);
+          const currentPhase = phases.length;
+
           return {
-            ...selections,
+            selection: { selectionId, role, description, current },
             phase: {
+              phaseId: phaseId,
               current: currentPhase,
               studentIsParticipating: indexOfPhase + 1 === currentPhase,
             },
           };
         });
+        const {
+          registration,
+          name,
+          email,
+          cra,
+          description,
+          skills,
+          experiences,
+        } = student;
+
         return {
-          registration: this.registration,
-          name: this.name,
-          email: this.email,
-          cra: this.cra,
-          description: this.description,
-          skills: this.skills,
-          experiences: this.experiences,
+          registration,
+          name,
+          email,
+          cra,
+          description,
+          skills,
+          experiences,
           selections: selectionsData,
         };
       } else {
@@ -105,7 +126,9 @@ const getStudentWithSelections = () => {
         };
       }
     })
-    .catch((e) => ({ error: e }));
+    .catch((e) => {
+      return { error: e };
+    });
 };
 
 module.exports = {

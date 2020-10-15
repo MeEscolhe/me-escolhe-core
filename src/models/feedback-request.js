@@ -24,6 +24,15 @@ const FeedbackRequestSchema = mongoose.model(
         message: `PhaseSchema doesn't exist`,
       },
     },
+    teacherId: {
+      type: ObjectId,
+      ref: "Teacher",
+      required: true,
+      validate: {
+        validator: (v) => FKHelper(mongoose.model("Teacher"), "_id", v),
+        message: `Teacher id doesn't exist`,
+      },
+    },
   })
 );
 exports.FeedbackRequest = FeedbackRequestSchema;
