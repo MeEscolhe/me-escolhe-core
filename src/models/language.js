@@ -18,14 +18,15 @@ const LanguageSchema = mongoose.model(
   })
 );
 
-function validateLanguage(language) {
+function valLanguage(language) {
   const schemaLanguage = Joi.object().keys({
     name: Joi.string().min(4).max(30).required(),
-    description: Joi.string().min(4).max(50).required(),
+    level: Joi.number().min(0).max(2).required(),
   });
-
-  return schemaLanguage.validate(language.body);
+  return schemaLanguage.validate(language);
 }
 
-exports.Language = LanguageSchema;
-exports.valLanguage = validateLanguage;
+module.exports = {
+  Language: LanguageSchema,
+  valLanguage,
+};
