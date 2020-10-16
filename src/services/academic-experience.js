@@ -7,101 +7,82 @@ const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
 router
   .route("/")
-  .get((request, response) => 
-  {
-    academicExperienceController.getAll().then((academicExperiences) => 
-    {
-      if (isEmpty(academicExperiences)) 
-      {
+  .get((request, response) => {
+    academicExperienceController.getAll().then((academicExperiences) => {
+      if (isEmpty(academicExperiences)) {
         response.status(404).send("No academic experiences to show.");
-      } else 
-      {
+      } else {
         response.send(academicExperiences);
       }
     });
   })
 
   .post(async (request, response) => {
-    const { error, message } = validate(request.body, academicExperienceController);
+    const { error, message } = validate(
+      request.body,
+      academicExperienceController
+    );
 
-    if (error) 
-    {
+    if (error) {
       response.status(400).send("This academic experience cannot be created.");
-    } 
-    else 
-    {
-      const academicExperience = academicExperienceController.create(request.body);
+    } else {
+      const academicExperience = academicExperienceController.create(
+        request.body
+      );
       response.send(academicExperience);
     }
   });
 
 router
   .route("/:id")
-  .get(async (request, response) => 
-  {
-    academicExperienceController.getById(request.params.id).then((academicExperience) => 
-    {
-      if (!academicExperience) 
-      {
-        response.status(404).send("The academic experience with the given ID was not found.");
-      } else 
-      {
-        response.send(academicExperience);
-      }
-    });
-  })
-
-  .delete(async (request, response) => 
-  {
-    academicExperienceController.remove(request.params.id).then((academicExperience) => 
-    {
-      if (!academicExperience) 
-      {
-        response
-          .status(404)
-          .send("The academic experience with the given id was not found.");
-      } 
-      
-      else 
-      {
-        response.send(academicExperience);
-      }
-    });
-  })
-
-  .put((request, response) => 
-  {
-    const id = request.params.id;
-    const { error, message } = validate({ id, ...request.body }, academicExperienceController);
-    if (error) 
-    {
-      response.status(400).send(message);
-    } 
-    
-    else 
-    {
-      const { title, category, institution } = request.body;
-
-      academicExperienceController.update
-      (
-        request.params.id,
-        filterProps({ title, category, institution })
-      )
-
-      .then((academicExperience) => 
-      {
-        if (!academicExperience) 
-        {
+  .get(async (request, response) => {
+    academicExperienceController
+      .getById(request.params.id)
+      .then((academicExperience) => {
+        if (!academicExperience) {
           response
             .status(404)
             .send("The academic experience with the given ID was not found.");
-        } 
-        
-        else 
-        {
+        } else {
           response.send(academicExperience);
         }
       });
+  })
+
+  .delete(async (request, response) => {
+    academicExperienceController
+      .remove(request.params.id)
+      .then((academicExperience) => {
+        if (!academicExperience) {
+          response
+            .status(404)
+            .send("The academic experience with the given id was not found.");
+        } else {
+          response.send(academicExperience);
+        }
+      });
+  })
+
+  .put((request, response) => {
+    const { error, message } = validate(
+      request.body,
+      academicExperienceController
+    );
+    if (error) {
+      response.status(400).send(message);
+    } else {
+      const propsToUpdate = ["title", "category", "institution"];
+      academicExperienceController
+        .update(request.params.id, filterProps(request.body, propsToUpdate))
+        .then((academicExperience) => {
+          if (!academicExperience) {
+            response
+              .status(404)
+              .send("The academic experience with the given ID was not found.");
+          } else {
+            response.send(academicExperience);
+          }
+        });
     }
   });
 
