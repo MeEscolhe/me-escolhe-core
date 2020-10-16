@@ -3,52 +3,64 @@
 const hardCtrl = require("../controllers/hard");
 const express = require("express");
 const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
+const { validate, isEmpty, filterProps } = require("../middlewares/util");
 
-const validate = (body) => {
-  const { error } = hardCtrl.validate(body);
-  if (error) return res.status(400).send(error.details[0].message);
-};
-
-router.get("/", async (req, res) => {
+router.get("/", async (request, response) => {
   const hards = hardCtrl.getAll();
   if (isEmpty(hards)) {
-    return res.status(404).send("No hard skills to show.");
+    return response.status(404).send("No hard skills to show.");
   }
-  res.send(hards);
+  response.send(hards);
 });
 
-router.get("/:id", async (req, res) => {
-  const hard = hardCtrl.getById(req.params.id);
+router.get("/:id", async (request, response) => {
+  const hard = hardCtrl.getById(request.params.id);
   if (!hard) {
-    return res.status(404).send("The hard with the given ID was not found.");
+    return response
+      .status(404)
+      .send("The hard with the given ID was not found.");
   }
-  res.send(hard);
+  response.send(hard);
 });
 
-router.post("/", async (req, res) => {
-  validate(req.body);
-  const hard = hardCtrl.create(req.body);
-  res.send(hard);
-});
-
-router.put("/:id", async (req, res) => {
-  validate(req.body);
-  const hard = hardCtrl.update(req.params.id, req.body);
-  if (!hard) {
-    return res.status(404).send("The hard with the given ID was not found.");
+router.post("/", async (request, response) => {
+  const { error } = validate(request.body, hardCtrl);
+  if (error) {
+    response.status(400).send("This hard skill cannot be created.");
+  } else {
+    const hard = await hardCtrl.create(request.body);
+    response.send(hard);
   }
-  res.send(hard);
 });
 
-router.delete("/:id", async (req, res) => {
-  const hard = hardCtrl.remove(req.params.id);
+router.put("/:id", async (request, response) => {
+  const { error, message } = validate(request.body, hardCtrl);
+  if (error) {
+    response.status(400).send(message);
+  } else {
+    const propsToUpdate = ["name", "level"];
+    hardCtrl
+      .update(request.params.id, filterProps(request.body, propsToUpdate))
+      .then((hard) => {
+        if (!hard) {
+          response
+            .status(404)
+            .send("The hard with the given ID was not found.");
+        } else {
+          response.send(hard);
+        }
+      });
+  }
+});
+
+router.delete("/:id", async (request, response) => {
+  const hard = hardCtrl.remove(request.params.id);
   if (!hard) {
-    return res
+    return response
       .status(404)
       .send("The hard skills with the given ID was not found.");
   }
-  res.send(hard);
+  response.send(hard);
 });
 
 module.exports = router;

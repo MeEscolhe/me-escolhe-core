@@ -18,10 +18,7 @@ router
   })
 
   .post(async (request, response) => {
-    const { error, message } = validate(
-      request.body,
-      academicExperienceController
-    );
+    const { error } = validate(request.body, academicExperienceController);
 
     if (error) {
       response.status(400).send("This academic experience cannot be created.");
