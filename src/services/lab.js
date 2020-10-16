@@ -7,27 +7,24 @@ const ProjectController = require("../controllers/project");
 const SelectionController = require("../controllers/selection");
 const express = require("express");
 const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
-const validate = (body) => {
-  const { error } = LabController.validate(body);
-  if (error) return res.status(400).send(error.details[0].message);
-};
-
-router.get("/", async (req, res) => {
+router.get("/", async (request, response) => {
   const labs = LabController.getAll();
   if (isEmpty(labs)) {
-    return res.status(404).send("No labs to show.");
+    return response.status(404).send("No labs to show.");
   }
-  res.send(labs);
+  response.send(labs);
 });
 
-router.get("/:id", async (req, res) => {
-  const lab = LabController.getById(req.params.id);
+router.get("/:id", async (request, response) => {
+  const lab = LabController.getById(request.params.id);
   if (!lab) {
-    return res.status(404).send("The lab with the given ID was not found.");
+    return response
+      .status(404)
+      .send("The lab with the given ID was not found.");
   }
-  res.send(lab);
+  response.send(lab);
 });
 
 router.get("/selections/:id", async (request, response) => {
@@ -52,27 +49,44 @@ router.get("/selections/:id", async (request, response) => {
   });
 });
 
-router.post("/", async (req, res) => {
-  validate(req.body);
-  const lab = LabController.create(req.body);
-  res.send(lab);
+router.post("/", async (request, response) => {
+  const { error, message } = validate(request.body, LabController);
+  if (error) {
+    response.status(400).send(message);
+  } else {
+    const lab = await LabController.create(request.body);
+    response.send(lab);
+  }
 });
 
-router.put("/:id", async (req, res) => {
-  validate(req.body);
-  const lab = LabController.update(req.params.id, req.body);
-  if (!lab) {
-    return res.status(404).send("The lab with the given ID was not found.");
+router.put("/:id", async (request, response) => {
+  const { error, message } = validate(request.body, LabController);
+  if (error) {
+    response.status(400).send(message);
+  } else {
+    const propsToUpdate = ["name", "description"];
+    const lab = await LabController.update(
+      request.params.id,
+      filterProps(request.body, propsToUpdate)
+    );
+    if (!lab) {
+      return response
+        .status(404)
+        .send("The lab with the given ID was not found.");
+    } else {
+      response.send(lab);
+    }
   }
-  res.send(lab);
 });
 
-router.delete("/:id", async (req, res) => {
-  const lab = await LabController.remove(req.params.id);
+router.delete("/:id", async (request, response) => {
+  const lab = await LabController.remove(request.params.id);
   if (!lab) {
-    return res.status(404).send("The lab with the given ID was not found.");
+    return response
+      .status(404)
+      .send("The lab with the given ID was not found.");
   }
-  res.send(lab);
+  response.send(lab);
 });
 
 module.exports = router;
