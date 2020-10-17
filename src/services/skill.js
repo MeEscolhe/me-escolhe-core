@@ -3,12 +3,7 @@
 const skillCtrl = require("../controllers/skill");
 const express = require("express");
 const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
-
-const validate = (body) => {
-  const { error } = skillCtrl.validate(body);
-  if (error) return res.status(400).send(error.details[0].message);
-};
+const { isEmpty, filterProps, validate } = require("../middlewares/util");
 
 router.get("/", async (req, res) => {
   const skills = skillCtrl.getAll();

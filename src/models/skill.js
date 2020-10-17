@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
+const Joi = require("joi");
 
 const SkillSchema = mongoose.model(
   "Skill",
@@ -25,14 +26,16 @@ const SkillSchema = mongoose.model(
   })
 );
 
-function validateSkill(skill) {
+function valSkill(skill) {
   const SkillSchema = Joi.object().keys({
-    languages: Joi.array().items(Joi.string()).min(0),
-    soft: Joi.array().items(Joi.string()).min(0),
-    hard: Joi.array().items(Joi.string()).min(0),
+    languages: Joi.array().items(Joi.string()).min(0).required(),
+    soft: Joi.array().items(Joi.string()).min(0).required(),
+    hard: Joi.array().items(Joi.string()).min(0).required(),
   });
-
-  return SkillSchema.validate(skill.body);
+  return SkillSchema.validate(skill);
 }
 
-exports.Skill = SkillSchema;
+module.exports = {
+  Skill: SkillSchema,
+  valSkill,
+};

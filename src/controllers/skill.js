@@ -1,4 +1,4 @@
-const { Skill } = require("../models/skill");
+const { Skill, valSkill } = require("../models/skill");
 const mongoose = require("mongoose");
 
 const getAll = async () => {
