@@ -1,0 +1,50 @@
+{
+    "type": "object",
+    "required": ["id", "name", "email",  "description", "labId", "managements"],
+    "properties": 
+    {
+      "id": 
+      {
+        "type": "string"
+      },
+
+      "name": 
+      {
+        "type": "string",
+        "example": "Jonas"
+          
+      },
+
+      "email": 
+      {
+        "type": "string",
+        "example": "jonas.alcantara@ccc.ufcg.edu.br"
+          
+      },
+
+
+      "description": 
+      {
+        "type": "string",
+        "example" : "otimo professor"
+          
+      },
+
+      "labId": 
+      {
+        "type": "string"
+         
+      },
+
+      "managements": 
+      {
+        "type": "array",
+         "items":
+         {
+          "type": "string"
+         }
+      }
+
+    }
+  }
+  

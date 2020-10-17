@@ -1,0 +1,67 @@
+{
+    "type": "object",
+    "required": ["registration", "name", "email", "cra", "description", "skills", "experiences", "phases"],
+    "properties": 
+    {
+      "registration": 
+      {
+        "type": "number",
+        "example": 116230897
+      },
+
+      "name": 
+      {
+        "type": "string"
+          
+      },
+
+      "email": 
+      {
+        "type": "string"
+          
+      },
+
+      "cra": 
+      {
+        "type": "number",
+        "example" : 8.5
+          
+      },
+
+      "description": 
+      {
+        "type": "string",
+        "example" : "otimo profissional"
+          
+      },
+
+      "skills": 
+      {
+        "type": "array",
+         "items":
+         {
+          "type": "string"
+         }
+      },
+
+      "experiences": 
+      {
+        "type": "array",
+         "items":
+         {
+          "type": "string"
+         }
+      },
+
+      "phases: ": 
+      {
+        "type": "array",
+         "items":
+         {
+          "type": "string"
+         }
+      }
+
+    }
+  }
+  

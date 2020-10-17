@@ -1,0 +1,42 @@
+{
+    "type": "object",
+    "required": ["id", "languages", "soft", "hard"],
+    "properties": 
+    {
+      "id": 
+      {
+        "type": "string",
+        "example": "5f5d1fa6dccfa335d03fdd3e"
+      },
+
+      "languages": 
+      {
+        "type": "array",
+        "items":
+        {
+         "type": "string"
+        }
+      },
+
+      "soft": 
+      {
+        "type": "array",
+        "items":
+        {
+         "type": "string"
+        }
+      },
+
+      "hard": 
+      {
+        "type": "array",
+        "items":
+        {
+         "type": "string"
+        }
+      }
+
+      
+    }
+  }
+  

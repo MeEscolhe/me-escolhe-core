@@ -1,0 +1,97 @@
+{
+    "get": 
+    {
+      "tags": ["Selection"],
+      "description": "",
+      "parameters": [],
+      "responses": 
+      {
+        "200": 
+        {
+          "description": "Success message",
+          "content": 
+          {
+            "application/json": 
+            {
+              "schema": 
+              {
+                "type": "array",
+                "items": 
+                {
+                  "type": "object",
+                  "properties": 
+                  {
+
+                    "id": 
+                    {
+                      "type": "string",
+                      "example": "5f5d1fa6dccfa335d03fdd3e"
+                    },
+                    
+                    "role":
+                    {
+                        "type" : "string"
+                    },
+
+                    "description":
+                    {
+                        "type" : "string"
+                    },
+
+                     
+                    "phases": 
+                    {
+                      "type": "array",
+
+                      "items":
+                      {
+                       "type": "string"
+                      }
+                      
+                    },
+
+                    "current":
+                    {
+                        "type" : "boolean"
+                    },
+
+                    "skills": 
+                    {
+                      "type": "array",
+
+                      "items":
+                      {
+                       "type": "string"
+                      }
+                      
+                    }
+
+            
+            
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "400": 
+        {
+          "description": "Error",
+          "content": 
+          {
+            "application/json": 
+            {
+              "schema": 
+              {
+                "type": "string",
+                "example": "No selections to show.",
+                "enum": ["No selections to show."]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

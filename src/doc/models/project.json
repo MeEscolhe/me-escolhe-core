@@ -1,0 +1,36 @@
+{
+    "type": "object",
+    "required": ["id", "name", "description", "selections"],
+    "properties": 
+    {
+      "id": 
+      {
+        "type": "string",
+        "example": "5f5d1fa6dccfa335d03fdd3e"
+      },
+
+      "name": 
+      {
+        "type": "string"
+        
+      },
+
+      "description: ": 
+      {
+        "type": "string"
+        
+      },
+
+      "selections": 
+      {
+        "type": "array",
+        "items":
+        {
+         "type": "string"
+        }
+      }
+
+      
+    }
+  }
+  

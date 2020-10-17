@@ -1,0 +1,32 @@
+{
+    "type": "object",
+    "required": ["id", "role", "institution", "durationInMonths"],
+    "properties": 
+    {
+      "id": 
+      {
+        "type": "string",
+        "example": "5f5d1fa6dccfa335d03fdd3e"
+      },
+
+      "role: ": 
+      {
+        "type": "string",
+        "example": "Developer"
+      },
+
+      "institution: ": 
+      {
+        "type": "string",
+        "example": "UFCG"
+      },
+
+      "durationInMonths: ": 
+      {
+        "type": "number",
+        "example": 5
+      }
+      
+    }
+  }
+  

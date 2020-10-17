@@ -1,0 +1,26 @@
+{
+    "type": "object",
+    "required": ["id", "name", "level"],
+    "properties": 
+    {
+      "id": 
+      {
+        "type": "string",
+        "example": "5f5d1fa6dccfa335d03fdd3e"
+      },
+
+      "name: ": 
+      {
+        "type": "string",
+        "example": "English"
+      },
+
+      "level: ": 
+      {
+        "type": "number",
+        "example": 2
+      }
+      
+    }
+  }
+  

@@ -1,20 +1,28 @@
 {
   "type": "object",
   "required": ["id", "title", "category", "institution"],
-  "properties": {
-    "id": {
+  "properties": 
+  {
+    "id": 
+    {
       "type": "string",
       "example": "5f5d1fa6dccfa335d03fdd3e"
     },
-    "title: ": {
+
+    "title: ": 
+    {
       "type": "string",
       "example": "teste"
     },
-    "category: ": {
+
+    "category: ": 
+    {
       "type": "string",
       "example": "teste"
     },
-    "institution: ": {
+
+    "institution: ": 
+    {
       "type": "string",
       "example": "ufcg"
     }

@@ -1,0 +1,35 @@
+{
+    "type": "object",
+    "required": ["id", "academic", "work"],
+    "properties": 
+    {
+      "id": 
+      {
+        "type": "string",
+        "example": "5f5d1fa6dccfa335d03fdd3e"
+      },
+
+      "academic: ": 
+      {
+        "type": "array",
+         "items":
+         {
+          "type": "string"
+         }
+         
+         
+      },
+
+      "work: ": 
+      {
+        "type": "array",
+         "items":
+         {
+          "type": "string"
+         }
+      }
+
+      
+    }
+  }
+  

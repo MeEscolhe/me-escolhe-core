@@ -1,0 +1,68 @@
+{
+    "get": 
+    {
+      "tags": ["Lab"],
+      "description": "",
+      "parameters": [],
+      "responses": {
+        "200": 
+        {
+          "description": "Success message",
+          "content": 
+          {
+            "application/json": 
+            {
+              "schema": 
+              {
+                "type": "array",
+                "items": 
+                {
+                  "type": "object",
+                  "properties": 
+                  {
+
+                    "id": 
+                    {
+                      "type": "string",
+                      "example": "5f5d1fa6dccfa335d03fdd3e"
+                    },
+
+                    "name: ": 
+                    {
+                      "type": "string",
+                      "example": "SPLAB"
+                    },
+
+                    "description: ": 
+                    {
+                      "type": "string",
+                      "example": "Laboratório de práticas"
+                    }
+            
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "400": 
+        {
+          "description": "Error",
+          "content": 
+          {
+            "application/json": 
+            {
+              "schema": 
+              {
+                "type": "string",
+                "example": "No labs to show.",
+                "enum": ["No labs to show."]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
