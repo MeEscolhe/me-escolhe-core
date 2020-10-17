@@ -34,8 +34,8 @@ const PhaseSchema = mongoose.model(
 const valPhase = (phase) => {
   const phaseSchema = Joi.object().keys({
     selectionId: Joi.string().min(3).max(30).required(),
-    students: Joi.array().items(Joi.string()).min(0),
-    description: Joi.string().optional().allow("").min(0).max(50),
+    students: Joi.array().items(Joi.string()).min(0).required(),
+    description: Joi.string().allow("").min(0).max(50).required(),
   });
 
   return phaseSchema.validate(phase);

@@ -4,7 +4,7 @@ const PhaseController = require("../controllers/phase");
 const SelectionController = require("../controllers/selection");
 const express = require("express");
 const router = express.Router();
-const { isEmpty, validate } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
 router.get("/", async (req, res) => {
   const phases = PhaseController.getAll();
@@ -54,9 +54,7 @@ router.put("/:id", (request, response) => {
       filterProps(request.body, propsToUpdate)
     ).then((phase) => {
       if (!phase) {
-        response
-          .status(404)
-          .send("The phase with the given ID was not found.");
+        response.status(404).send("The phase with the given ID was not found.");
       } else {
         response.send(phase);
       }
