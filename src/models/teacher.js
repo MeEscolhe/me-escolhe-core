@@ -37,9 +37,9 @@ const valTeacher = (teacher) => {
   const teacherSchema = Joi.object().keys({
     name: Joi.string().min(3).max(50).required(),
     email: Joi.string().min(10).required(),
-    description: Joi.string().required().allow("").min(0).max(50),
+    description: Joi.string().allow("").min(0).max(50).required(),
     labId: Joi.string().required(),
-    managements: Joi.string().required(),
+    managements: Joi.array().items(Joi.string()).min(0),
   });
 
   return teacherSchema.validate(teacher);
