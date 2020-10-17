@@ -29,11 +29,8 @@ const TeacherSchema = mongoose.model(
   })
 );
 
-exports.Teacher = TeacherSchema;
-
-
 /**
- * validade student from request
+ * validade teacher from request
  * @param {TeacherSchema} teacher
  */
 const valTeacher = (teacher) => {
@@ -46,4 +43,9 @@ const valTeacher = (teacher) => {
   });
 
   return teacherSchema.validate(teacher);
+};
+
+module.exports = {
+  Teacher: TeacherSchema,
+  valTeacher,
 };

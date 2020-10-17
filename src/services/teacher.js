@@ -66,30 +66,51 @@ router.get("/selections/:id", async (request, response) => {
   });
 });
 
+// router.put("/:id", (request, response) => {
+//   const identifier = request.params.id;
+//   const { error, message } = validate(
+//     { identifier, ...request.body },
+//     TeacherController
+//   );
+//   if (error) {
+//     response.status(400).send(message);
+//   } else {
+//     const {name, email, description, labId, managements, feedbackRequests} = request.body;
 
-router.put("/:id", (request, response) => {
-  const identifier = request.params.id;
+//     TeacherController.update(
+//       request.params.id,
+//       filterProps({name, email, description, labId, managements, feedbackRequests})
+//     ).then((teacher) => {
+//       if (!teacher) {
+//         response
+//           .status(404)
+//           .send("The teacher with the given ID was not found.");
+//       } else {
+//         response.send(teacher);
+//       }
+//     });
+//   }
+// });
+router.put((request, response) => {
   const { error, message } = validate(
-    { identifier, ...request.body },
+    request.body,
     TeacherController
   );
   if (error) {
     response.status(400).send(message);
   } else {
-    const {name, email, description, labId, managements, feedbackRequests} = request.body;
-
-    TeacherController.update(
-      request.params.id,
-      filterProps({name, email, description, labId, managements, feedbackRequests})
-    ).then((teacher) => {
-      if (!teacher) {
-        response
-          .status(404)
-          .send("The teacher with the given ID was not found.");
-      } else {
-        response.send(teacher);
-      }
-    });
+    const propsToUpdate = ["name", "email", "description", "labId", "managements", "feedbackRequests"];
+    TeacherController
+      .update(request.params.id, filterProps(request.body, propsToUpdate))
+      .then((teacher) => {
+        if (!teacher) {
+          response
+            .status(404)
+            .send("The teacher with the given ID was not found.");
+        } else {
+          response.send(teacher);
+        }
+      });
   }
 });
 
