@@ -33,9 +33,7 @@ const update = async (id, { name }) => {
 };
 
 const remove = async (id) => {
-  const soft = await Soft.findByIdAndRemove(
-    mongoose.Types.ObjectId(id)
-  );
+  const soft = await Soft.findByIdAndRemove(mongoose.Types.ObjectId(id));
   return soft;
 };
 

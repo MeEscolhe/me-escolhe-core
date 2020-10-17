@@ -11,15 +11,14 @@ const SoftSchema = mongoose.model(
   })
 );
 
-function validateSoft(soft) {
+function valSoft(soft) {
   const schemaSoft = Joi.object().keys({
     name: Joi.string().min(4).max(50).required(),
   });
-
-  return schemaSoft.validate(soft.body);
+  return schemaSoft.validate(soft);
 }
 
 module.exports = {
   Soft: SoftSchema,
-  validateSoft,
+  valSoft,
 };
