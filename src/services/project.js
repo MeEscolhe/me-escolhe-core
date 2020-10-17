@@ -39,28 +39,22 @@ router.get("/:id", async (request, response) => {
   });
 });
 router.put("/:id", (request, response) => {
-  const identifier = request.params.id;
-  const { error, message } = validate(
-    { identifier, ...request.body },
-    ProjectController
-  );
+  const { error, message } = validate(request.body, ProjectController);
   if (error) {
     response.status(400).send(message);
   } else {
-    const { name, description, selections } = request.body;
-
-    ProjectController.update(
-      request.params.id,
-      filterProps({ name, description, selections })
-    ).then((project) => {
-      if (!project) {
-        response
-          .status(404)
-          .send("The project with the given ID was not found.");
-      } else {
-        response.send(project);
-      }
-    });
+    const propsToUpdate = ["name", "description", "selections"];
+    ProjectController
+      .update(request.params.id, filterProps(request.body, propsToUpdate))
+      .then((project) => {
+        if (!project) {
+          response
+            .status(404)
+            .send("The project with the given ID was not found.");
+        } else {
+          response.send(project);
+        }
+      });
   }
 });
 
