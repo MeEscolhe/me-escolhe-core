@@ -25,4 +25,14 @@ const SkillSchema = mongoose.model(
   })
 );
 
+function validateSkill(skill) {
+  const SkillSchema = Joi.object().keys({
+    languages: Joi.array().items(Joi.string()).min(0),
+    soft: Joi.array().items(Joi.string()).min(0),
+    hard: Joi.array().items(Joi.string()).min(0),
+  });
+
+  return SkillSchema.validate(skill.body);
+}
+
 exports.Skill = SkillSchema;

@@ -32,12 +32,24 @@ router.post("/", async (req, res) => {
   res.send(skill);
 });
 
-router.put("/:id", async (req, res) => {
-  const skill = skillCtrl.update(req.params.id, req.body);
-  if (!skill) {
-    return res.status(404).send("The skill with the given ID was not found.");
+router.put("/:id", (request, response) => {
+  const { error, message } = validate(request.body, skillCtrl);
+  if (error) {
+    response.status(400).send(message);
+  } else {
+    const propsToUpdate = ["languages", "soft", "hard"];
+    skillCtrl
+      .update(request.params.id, filterProps(request.body, propsToUpdate))
+      .then((skill) => {
+        if (!skill) {
+          response
+            .status(404)
+            .send("The skill with the given ID was not found.");
+        } else {
+          response.send(skill);
+        }
+      });
   }
-  res.send(skill);
 });
 
 router.delete("/:id", async (req, res) => {
