@@ -13,19 +13,20 @@ const HardSchema = mongoose.model(
       enum: [0, 1, 2, 3, 4],
       default: 2,
       required: true,
-      default: "",
+      default: 0,
     },
   })
 );
 
-function validateHard(hard) {
+function valHard(hard) {
   const schemaHard = Joi.object().keys({
     name: Joi.string().min(4).max(30).required(),
-    description: Joi.string().min(4).max(50).required(),
+    level: Joi.number().min(0).max(4).required(),
   });
-
-  return schemaHard.validate(hard.body);
+  return schemaHard.validate(hard);
 }
 
-exports.Hard = HardSchema;
-exports.valHard = validateHard;
+module.exports = {
+  Hard: HardSchema,
+  valHard,
+};

@@ -19,15 +19,17 @@ const AcademicExperienceSchema = mongoose.model(
   })
 );
 
-function validateAcademicExperience(academicExperience) {
+function valAcademicExperience(academicExperience) {
   const schemaAcademicExperience = Joi.object().keys({
-    type: Joi.string().min(4).max(30).required(),
+    title: Joi.string().min(4).max(30).required(),
     category: Joi.string().min(4).max(50).required(),
-    institution: Joi.string().min(4).max(50).required(),
+    institution: Joi.string().min(3).max(50).required(),
   });
 
-  return schemaAcademicExperience.validate(academicExperience.body);
+  return schemaAcademicExperience.validate(academicExperience);
 }
 
-exports.AcademicExperience = AcademicExperienceSchema;
-exports.valAcademicExperience = validateAcademicExperience;
+module.exports = {
+  AcademicExperience: AcademicExperienceSchema,
+  valAcademicExperience,
+};

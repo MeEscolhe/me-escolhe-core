@@ -56,7 +56,7 @@ const StudentSchema = mongoose.model(
 const valStudent = (student) => {
   const studentSchema = Joi.object().keys({
     registration: Joi.number().min(0).required(),
-    name: Joi.string().min(3).max(30).required(),
+    name: Joi.string().min(3).max(50).required(),
     description: Joi.string().optional().allow("").min(0).max(50),
     email: Joi.string().min(10).required(),
     cra: Joi.number().min(0).max(10).required(),

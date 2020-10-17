@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
+const Joi = require("joi");
 
 const ProjectSchema = mongoose.model(
   "Project",
@@ -19,5 +20,17 @@ const ProjectSchema = mongoose.model(
     },
   })
 );
+function valProject(project) {
+  const ProjectSchema = Joi.object().keys({
+    name: Joi.string().min(4).max(50).required(),
+    description: Joi.string().allow("").min(0).max(50).required(),
+    selections: Joi.array().items(Joi.string()).min(0).required(),
+  });
 
-exports.Project = ProjectSchema;
+  return ProjectSchema.validate(project);
+}
+
+module.exports = {
+  Project: ProjectSchema,
+  valProject,
+};

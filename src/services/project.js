@@ -3,7 +3,7 @@
 const ProjectController = require("../controllers/project");
 const express = require("express");
 const router = express.Router();
-const { isEmpty, validate, filterProps  } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
 router
   .route("/")
@@ -28,9 +28,7 @@ router
   });
 
 router.get("/:id", async (request, response) => {
-  ProjectController.getByID(
-    request.params.id
-  ).then((project) => {
+  ProjectController.getByID(request.params.id).then((project) => {
     if (!project) {
       response.status(404).send("The project with the given ID was not found.");
     } else {
@@ -38,20 +36,16 @@ router.get("/:id", async (request, response) => {
     }
   });
 });
+
 router.put("/:id", (request, response) => {
-  const identifier = request.params.id;
-  const { error, message } = validate(
-    { identifier, ...request.body },
-    ProjectController
-  );
+  const { error, message } = validate(request.body, ProjectController);
   if (error) {
     response.status(400).send(message);
   } else {
-    const { name, description, selections } = request.body;
-
+    const propsToUpdate = ["name", "description", "selections"];
     ProjectController.update(
       request.params.id,
-      filterProps({ name, description, selections })
+      filterProps(request.body, propsToUpdate)
     ).then((project) => {
       if (!project) {
         response

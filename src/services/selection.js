@@ -1,7 +1,5 @@
 "use strict";
-/**
- * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
- */
+
 const SelectionController = require("../controllers/selection");
 const express = require("express");
 const router = express.Router();
@@ -36,18 +34,18 @@ router.post("/", async (request, response) => {
   }
 });
 
-router.put("/:id", async (request, response) => {
+router.put("/:id", (request, response) => {
   const { error, message } = validate(request.body, SelectionController);
   if (error) {
     response.status(400).send(message);
   } else {
-    const { role, description, phases, current } = request.body;
+    const propsToUpdate = ["role", "description", "phases", "current", "skills"];
     SelectionController.update(
       request.params.id,
-      filterProps({ role, description, phases, current })
+      filterProps(request.body, propsToUpdate)
     ).then((selection) => {
       if (!selection) {
-        return response
+        response
           .status(404)
           .send("The selection with the given ID was not found.");
       } else {
@@ -56,7 +54,6 @@ router.put("/:id", async (request, response) => {
     });
   }
 });
-
 router.delete("/:id", async (request, response) => {
   SelectionController.remove(request.params.id).then((selection) => {
     if (!selection) {

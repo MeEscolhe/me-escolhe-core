@@ -45,10 +45,10 @@ const SelectionSchema = mongoose.model("Selection", SelectionModel);
 const valSelection = (selection) => {
   const selectionSchema = Joi.object().keys({
     role: Joi.string().min(3).max(30).required(),
-    description: Joi.string().optional().allow("").min(0).max(50),
-    phases: Joi.array().items(Joi.string()).min(0),
+    description: Joi.string().allow("").min(0).max(50).required(),
+    phases: Joi.array().items(Joi.string()).min(0).required(),
     current: Joi.boolean().required(),
-    skills: Joi.array().items(Joi.string()).min(0),
+    skills: Joi.array().items(Joi.string()).min(0).required(),
   });
 
   return selectionSchema.validate(selection);

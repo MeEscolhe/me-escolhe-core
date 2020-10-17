@@ -29,11 +29,8 @@ router
     }
   });
 
-
 router.get("/:id", async (request, response) => {
-  TeacherController.getById(
-    request.params.id
-  ).then((teacher) => {
+  TeacherController.getById(request.params.id).then((teacher) => {
     if (!teacher) {
       response.status(404).send("The teacher with the given ID was not found.");
     } else {
@@ -66,21 +63,21 @@ router.get("/selections/:id", async (request, response) => {
   });
 });
 
-
 router.put("/:id", (request, response) => {
-  const identifier = request.params.id;
-  const { error, message } = validate(
-    { identifier, ...request.body },
-    TeacherController
-  );
+  const { error, message } = validate(request.body, TeacherController);
   if (error) {
     response.status(400).send(message);
   } else {
-    const {name, email, description, labId, managements, feedbackRequests} = request.body;
-
+    const propsToUpdate = [
+      "name",
+      "email",
+      "description",
+      "labId",
+      "managements",
+    ];
     TeacherController.update(
       request.params.id,
-      filterProps({name, email, description, labId, managements, feedbackRequests})
+      filterProps(request.body, propsToUpdate)
     ).then((teacher) => {
       if (!teacher) {
         response
