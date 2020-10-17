@@ -36,7 +36,7 @@ exports.Teacher = TeacherSchema;
  * validade student from request
  * @param {TeacherSchema} teacher
  */
-const valStudent = (teacher) => {
+const valTeacher = (teacher) => {
   const teacherSchema = Joi.object().keys({
     name: Joi.string().min(3).max(50).required(),
     email: Joi.string().min(10).required(),
