@@ -30,5 +30,10 @@ function validateWorkExperience(workExperience) {
   return schemaWorkExperience.validate(workExperience.body);
 }
 
+module.exports = {
+  WorkExperience: WorkExperienceSchema,
+  validateWorkExperience,
+};
+
 exports.WorkExperience = WorkExperienceSchema;
 exports.valWorkExperience = validateWorkExperience;

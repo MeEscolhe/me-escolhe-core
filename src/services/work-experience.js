@@ -76,39 +76,61 @@ router
     }
     );
   })
-  .put((request, response) => 
-  {
-    const id = request.params.id;
-    const { error, message } = validate({ id, ...request.body }, workExperienceController);
-    if (error) 
-    {
-      response.status(400).send(message);
-    } 
+  // .put((request, response) => 
+  // {
+  //   const id = request.params.id;
+  //   const { error, message } = validate({ id, ...request.body }, workExperienceController);
+  //   if (error) 
+  //   {
+  //     response.status(400).send(message);
+  //   } 
     
-    else 
-    {
-      const { role, institution, durationInMonths } = request.body;
+  //   else 
+  //   {
+  //     const { role, institution, durationInMonths } = request.body;
 
-      workExperienceController.update
-      (
-        request.params.id,
-        filterProps({ role, institution, durationInMonths })
-      )
+  //     workExperienceController.update
+  //     (
+  //       request.params.id,
+  //       filterProps({ role, institution, durationInMonths })
+  //     )
 
-      .then((workExperience) => 
-      {
-        if (!workExperience) 
-        {
-          response
-            .status(404)
-            .send("The work experience with the given ID was not found.");
-        } 
+  //     .then((workExperience) => 
+  //     {
+  //       if (!workExperience) 
+  //       {
+  //         response
+  //           .status(404)
+  //           .send("The work experience with the given ID was not found.");
+  //       } 
         
-        else 
-        {
-          response.send(workExperience);
-        }
-      });
+  //       else 
+  //       {
+  //         response.send(workExperience);
+  //       }
+  //     });
+  //   }
+  // });
+  .put((request, response) => {
+    const { error, message } = validate(
+      request.body,
+      workExperienceController
+    );
+    if (error) {
+      response.status(400).send(message);
+    } else {
+      const propsToUpdate = ["role", "institution", "durationInMonths"];
+      workExperienceController
+        .update(request.params.id, filterProps(request.body, propsToUpdate))
+        .then((workExperience) => {
+          if (!workExperience) {
+            response
+              .status(404)
+              .send("The academic experience with the given ID was not found.");
+          } else {
+            response.send(workExperience);
+          }
+        });
     }
   });
 
