@@ -20,18 +20,17 @@ const ProjectSchema = mongoose.model(
     },
   })
 );
-function validateProject(project) {
+function valProject(project) {
   const ProjectSchema = Joi.object().keys({
     name: Joi.string().min(4).max(50).required(),
-    description: Joi.string().optional().allow("").min(0).max(50),
-    selections: Joi.array().items(Joi.string()).min(0),
+    description: Joi.string().allow("").min(0).max(50).required(),
+    selections: Joi.array().items(Joi.string()).min(0).required(),
   });
-  
-  return ProjectSchema.validate(project.body);
+
+  return ProjectSchema.validate(project);
 }
 
 module.exports = {
   Project: ProjectSchema,
-  validateProject,
+  valProject,
 };
-

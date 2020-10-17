@@ -1,6 +1,6 @@
 "use strict";
 
-const { Project } = require("../models/project");
+const { Project, valProject } = require("../models/project");
 const mongoose = require("mongoose");
 
 const getAll = async () => {
@@ -11,18 +11,15 @@ const getAll = async () => {
 const getById = async (id) =>
   await Project.findById(mongoose.Types.ObjectId(id));
 
-  const create = async ({
-    name, description, selections
-  }) => {
-    let project = new Project({
-      name: name,
-      description: description,
-      selections: selections,
-    });
-    project = await project.save();
-    return project;
-  };
-
+const create = async ({ name, description, selections }) => {
+  let project = new Project({
+    name: name,
+    description: description,
+    selections: selections,
+  });
+  project = await project.save();
+  return project;
+};
 
 const update = async (id, { name, description, selections }) => {
   const project = await Project.findByIdAndUpdate(
@@ -42,7 +39,7 @@ const remove = async (id) => {
   return project;
 };
 
-const validate = async (object) => {
+const validate = (object) => {
   const { error } = valProject(object);
   return error;
 };
