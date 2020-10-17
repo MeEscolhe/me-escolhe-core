@@ -69,39 +69,61 @@ router
     });
   })
 
-  .put((request, response) => 
-  {
-    const id = request.params.id;
-    const { error, message } = validate({ id, ...request.body }, softSkillController);
-    if (error) 
-    {
-      response.status(400).send(message);
-    } 
+  // .put((request, response) => 
+  // {
+  //   const id = request.params.id;
+  //   const { error, message } = validate({ id, ...request.body }, softSkillController);
+  //   if (error) 
+  //   {
+  //     response.status(400).send(message);
+  //   } 
     
-    else 
-    {
-      const { name } = request.body;
+  //   else 
+  //   {
+  //     const { name } = request.body;
 
-      softSkillController.update
-      (
-        request.params.id,
-        filterProps({ name})
-      )
+  //     softSkillController.update
+  //     (
+  //       request.params.id,
+  //       filterProps({ name})
+  //     )
 
-      .then((softSkill) => 
-      {
-        if (!softSkill) 
-        {
-          response
-            .status(404)
-            .send("The soft skill with the given ID was not found.");
-        } 
+  //     .then((softSkill) => 
+  //     {
+  //       if (!softSkill) 
+  //       {
+  //         response
+  //           .status(404)
+  //           .send("The soft skill with the given ID was not found.");
+  //       } 
         
-        else 
-        {
-          response.send(softSkill);
-        }
-      });
+  //       else 
+  //       {
+  //         response.send(softSkill);
+  //       }
+  //     });
+  //   }
+  // });
+  .put((request, response) => {
+    const { error, message } = validate(
+      request.body,
+      softSkillController
+    );
+    if (error) {
+      response.status(400).send(message);
+    } else {
+      const propsToUpdate = ["name"];
+      softSkillController
+        .update(request.params.id, filterProps(request.body, propsToUpdate))
+        .then((softSkill) => {
+          if (!softSkill) {
+            response
+              .status(404)
+              .send("The soft skill with the given ID was not found.");
+          } else {
+            response.send(softSkill);
+          }
+        });
     }
   });
 

@@ -19,5 +19,7 @@ function validateSoft(soft) {
   return schemaSoft.validate(soft.body);
 }
 
-exports.Soft = SoftSchema;
-exports.valSoft = validateSoft;
+module.exports = {
+  Soft: SoftSchema,
+  validateSoft,
+};
