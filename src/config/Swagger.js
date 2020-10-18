@@ -39,7 +39,10 @@ const swaggerSpecs = {
     },
   ],
   paths: {
-    "/academicExperiences": require("../doc/controllers/academic-experience"),
+    "/academicExperiences": require("../doc/controllers/academic-experience")
+      .withoutParameters,
+    "/academicExperiences/{id}": require("../doc/controllers/academic-experience")
+      .withParameters,
   },
 };
 module.exports = {
