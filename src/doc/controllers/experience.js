@@ -1,119 +1,92 @@
-const withoutParameters = 
-{
-  get: 
-  {
+const withoutParameters = {
+  get: {
     tags: ["Experience"],
     description: "",
     parameters: [],
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "GET: successful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "array",
-              items: 
-              {
+              items: {
                 $ref: "#/components/schemas/experience",
               },
             },
           },
         },
-        
       },
 
-      400: 
-      {
+      400: {
         description: "GET: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "No experiences to show.",
               enum: ["No experiences to show."],
             },
           },
         },
-        
       },
     },
   },
 
-  post: 
-  {
+  post: {
     tags: ["Experience"],
     description: "",
     parameters: [],
-    requestBody: 
-    {
-      content: 
-      {
-        "application/json": 
-        {
-          schema: 
-          {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
             type: "object",
-            properties: 
-            {
-              "academic": 
-              {
+            properties: {
+              academic: {
                 type: "array",
-                items: 
-                {
-                  type: "objectId",
-                  $ref: "#/components/schemas/experience",
+                items: {
+                  type: "string",
+                  example: [
+                    "5f28ac7082e88b35448255e8",
+                    "5f28ba7011e35b35448255e8",
+                  ],
                 },
               },
 
-              "work": 
-              {
+              work: {
                 type: "array",
-                items: 
-                {
-                  type: "objectId",
+                items: {
+                  type: "string",
+                  example: [
+                    "3a28ac7082e88b35448255e8",
+                    "3a36ty9019e36g1356785e8",
+                  ],
                 },
               },
-
             },
           },
         },
       },
     },
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "POST: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/experience",
             },
           },
         },
       },
 
-      400: 
-      {
+      400: {
         description: "POST: unsuccessful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "This experience cannot be created.",
             },
@@ -124,68 +97,51 @@ const withoutParameters =
   },
 };
 
-const withParameters = 
-{
-  put: 
-  {
+const withParameters = {
+  put: {
     tags: ["Experience"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         name: "id",
         in: "path",
         description: "ID of experience",
         required: true,
-        schema: 
-        {
+        schema: {
           type: "string",
         },
       },
     ],
 
-    requestBody: 
-    {
-      content: 
-      {
-        "application/json": 
-        {
-          schema: 
-          {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
             $ref: "#/components/schemas/experience",
           },
         },
       },
     },
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "PUT: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/experience",
             },
           },
         },
       },
 
-      400: 
-      {
+      400: {
         description: "PUT: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
-              example: "This experience cannot be created.",
+              example: "This experience cannot be updated.",
             },
           },
         },
@@ -193,34 +149,26 @@ const withParameters =
     },
   },
 
-  delete: 
-  {
+  delete: {
     tags: ["Experience"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         in: "path",
         name: "_id",
-        schema: 
-        {
+        schema: {
           type: "string",
           example: "5f28ac7082e88b35448255e8",
         },
         required: true,
       },
     ],
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "DELETE: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/experience",
             },
           },
@@ -230,12 +178,9 @@ const withParameters =
 
       404: {
         description: "DELETE: unsuccessful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "The experience with the given id was not found.",
             },

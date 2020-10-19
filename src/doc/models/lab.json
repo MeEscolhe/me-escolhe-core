@@ -12,13 +12,13 @@
       "name: ": 
       {
         "type": "string",
-        "example": "teste"
+        "example": "IQuanta"
       },
 
       "description: ": 
       {
         "type": "string",
-        "example": "teste"
+        "example": "Laboratório de computação quântica"
       }
       
     }

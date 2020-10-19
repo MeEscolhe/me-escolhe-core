@@ -18,7 +18,7 @@
       "institution: ": 
       {
         "type": "string",
-        "example": "UFCG"
+        "example": "Microsoft"
       },
 
       "durationInMonths: ": 

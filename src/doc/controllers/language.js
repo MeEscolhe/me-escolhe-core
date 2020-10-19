@@ -1,41 +1,28 @@
-const withoutParameters = 
-{
-  get: 
-  {
+const withoutParameters = {
+  get: {
     tags: ["Language"],
     description: "",
     parameters: [],
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "GET: successful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "array",
-              items: 
-              {
+              items: {
                 $ref: "#/components/schemas/language",
               },
             },
           },
         },
-        
       },
 
-      400: 
-      {
+      400: {
         description: "GET: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "No languages to show.",
               enum: ["No languages to show."],
@@ -43,55 +30,39 @@ const withoutParameters =
           },
         },
       },
-
     },
   },
 
-  post: 
-  {
+  post: {
     tags: ["Language"],
     description: "",
     parameters: [],
-    requestBody: 
-    {
-      content: 
-      {
-        "application/json": 
-        {
-          schema: 
-          {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
             type: "object",
-            properties: 
-            {
-              "name": 
-              {
+            properties: {
+              name: {
                 type: "string",
-                example: "Ingles",
+                example: "English",
               },
-              "level": 
-              {
+              level: {
                 type: "number",
-                example: 3,
+                example: 2,
               },
             },
           },
         },
-
       },
-
     },
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "POST: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/language",
             },
           },
@@ -100,104 +71,79 @@ const withoutParameters =
 
       400: {
         description: "POST: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "This language cannot be created.",
             },
           },
         },
       },
-
     },
   },
 };
 
-const withParameters = 
-{
-  put: 
-  {
+const withParameters = {
+  put: {
     tags: ["Language"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         name: "id",
         in: "path",
         description: "ID of language",
         required: true,
-        schema: 
-        {
+        schema: {
           type: "string",
         },
       },
     ],
 
-    requestBody: 
-    {
-      content: 
-      {
-        "application/json": 
-        {
-          schema: 
-          {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
             $ref: "#/components/schemas/language",
           },
         },
       },
     },
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "PUT: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/language",
             },
           },
         },
       },
 
-      400: 
-      {
+      400: {
         description: "PUT: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
-              example: "This language cannot be created.",
+              example: "This language cannot be updated.",
             },
           },
         },
       },
-
     },
   },
 
-  delete: 
-  {
+  delete: {
     tags: ["Language"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         in: "path",
         name: "_id",
-        schema: 
-        {
+        schema: {
           type: "string",
           example: "5f28ac7082e88b35448255e8",
         },
@@ -205,17 +151,12 @@ const withParameters =
       },
     ],
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "DELETE: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/language",
             },
           },
@@ -223,22 +164,17 @@ const withParameters =
         },
       },
 
-      404: 
-      {
+      404: {
         description: "DELETE: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "The language with the given id was not found.",
             },
           },
         },
       },
-      
     },
   },
 };

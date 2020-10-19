@@ -1,189 +1,140 @@
-const withoutParameters = 
-{
-  get: 
-  {
+const withoutParameters = {
+  get: {
     tags: ["Feedback request"],
     description: "",
     parameters: [],
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "GET: successful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "array",
-              items: 
-              {
+              items: {
                 $ref: "#/components/schemas/feedback-request",
               },
             },
           },
-          
         },
       },
 
-      400: 
-      {
+      400: {
         description: "GET: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "No feedback requests to show.",
               enum: ["No feedback requests to show."],
             },
           },
         },
-
       },
     },
   },
 
-  post: 
-  {
+  post: {
     tags: ["Feedback request"],
     description: "",
     parameters: [],
-    requestBody: 
-    {
-      content: 
-      {
-        "application/json": 
-        {
-          schema: 
-          {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
             type: "object",
-            properties: 
-            {
-              studentId: 
-              {
+            properties: {
+              studentId: {
                 type: "number",
                 example: 116210877,
               },
 
-              "phaseId": 
-              {
-                type: "objectId",
+              phaseId: {
+                type: "string",
+                example: "5t5d1fb8dccfa665d03fdd3e",
               },
 
-              "teacherId": 
-              {
-                type: "objectId",
+              teacherId: {
+                type: "string",
+                example: "5t5d1fa6dccfa665d03fdd3e",
               },
-
             },
           },
         },
       },
     },
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "POST: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/feedback-request",
             },
           },
         },
       },
 
-      400: 
-      {
+      400: {
         description: "POST: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "This feedback request cannot be created.",
             },
           },
         },
       },
-
     },
   },
 };
 
-const withParameters = 
-{
-  put: 
-  {
+const withParameters = {
+  put: {
     tags: ["Feedback request"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         name: "id",
         in: "path",
         description: "ID of feedback-request",
         required: true,
-        schema: 
-        {
+        schema: {
           type: "string",
         },
       },
     ],
 
-    requestBody: 
-    {
-      content: 
-      {
-        "application/json": 
-        {
-          schema: 
-          {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
             $ref: "#/components/schemas/feedback-request",
           },
         },
       },
     },
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "PUT: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/feedback-request",
             },
           },
         },
       },
 
-      400: 
-      {
+      400: {
         description: "PUT: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
-              example: "This feedback request cannot be created.",
+              example: "This feedback request cannot be updated.",
             },
           },
         },
@@ -191,12 +142,10 @@ const withParameters =
     },
   },
 
-  delete: 
-  {
+  delete: {
     tags: ["Feedback request"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         in: "path",
         name: "_id",
@@ -208,42 +157,30 @@ const withParameters =
       },
     ],
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "DELETE: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/feedback-request",
             },
           },
           required: true,
         },
-
       },
 
-      404: 
-      {
+      404: {
         description: "DELETE: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "The feedback request with the given id was not found.",
             },
           },
         },
-
       },
-      
     },
   },
 };

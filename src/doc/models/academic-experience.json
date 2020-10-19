@@ -12,19 +12,19 @@
     "title: ": 
     {
       "type": "string",
-      "example": "teste"
+      "example": "Developer"
     },
 
     "category: ": 
     {
       "type": "string",
-      "example": "teste"
+      "example": "Backend"
     },
 
     "institution: ": 
     {
       "type": "string",
-      "example": "ufcg"
+      "example": "UFCG"
     }
   }
 }

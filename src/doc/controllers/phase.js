@@ -1,23 +1,16 @@
 const withoutParameters = {
-  get: 
-  {
+  get: {
     tags: ["Phase"],
     description: "",
     parameters: [],
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "GET: successful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "array",
-              items: 
-              {
+              items: {
                 $ref: "#/components/schemas/phase",
               },
             },
@@ -25,15 +18,11 @@ const withoutParameters = {
         },
       },
 
-      400: 
-      {
+      400: {
         description: "GET: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "No phases to show.",
               enum: ["No phases to show."],
@@ -44,168 +33,125 @@ const withoutParameters = {
     },
   },
 
-  post: 
-  {
+  post: {
     tags: ["Phase"],
     description: "",
     parameters: [],
-    requestBody: 
-    {
-      content: 
-      {
-        "application/json": 
-        {
-          schema: 
-          {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
             type: "object",
-            properties: 
-            {
-              "students": 
-              {
+            properties: {
+              students: {
                 type: "array",
-                items: 
-                {
+                items: {
                   type: "number",
+                  example: [116210887, 112130765],
                 },
               },
 
-              "selectionId": 
-              {
-                type: "objectId",
+              selectionId: {
+                type: "string",
+                example: "5f28ac7082e88b35448255e8",
               },
 
-              "description": 
-              {
+              description: {
                 type: "string",
                 example: "Fase de seleção de currículo",
               },
             },
-
           },
         },
       },
-
     },
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "POST: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/phase",
             },
           },
         },
-
       },
 
-      400: 
-      {
+      400: {
         description: "POST: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "This phase cannot be created.",
             },
           },
         },
       },
-
     },
   },
 };
 
-const withParameters = 
-{
-  put: 
-  {
+const withParameters = {
+  put: {
     tags: ["Phase"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         name: "id",
         in: "path",
         description: "ID of phase",
         required: true,
-        schema: 
-        {
+        schema: {
           type: "string",
         },
       },
-
     ],
 
-    requestBody: 
-    {
-      content: 
-      {
-        "application/json": 
-        {
-          schema: 
-          {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
             $ref: "#/components/schemas/phase",
           },
         },
       },
     },
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "PUT: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/phase",
             },
           },
         },
       },
 
-      400: 
-      {
+      400: {
         description: "PUT: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
-              example: "This phase cannot be created.",
+              example: "This phase cannot be updated.",
             },
           },
         },
       },
-
     },
   },
-  delete: 
-  {
+  delete: {
     tags: ["Phase"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         in: "path",
         name: "_id",
-        schema: 
-        {
+        schema: {
           type: "string",
           example: "5f28ac7082e88b35448255e8",
         },
@@ -213,17 +159,12 @@ const withParameters =
       },
     ],
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "DELETE: successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/phase",
             },
           },
@@ -231,22 +172,17 @@ const withParameters =
         },
       },
 
-      404: 
-      {
+      404: {
         description: "DELETE: unsuccessful",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "The phase with the given id was not found.",
             },
           },
         },
       },
-
     },
   },
 };

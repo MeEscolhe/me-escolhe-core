@@ -6,18 +6,20 @@
       "registration": 
       {
         "type": "number",
-        "example": 116230897
+        "example": 116133454
       },
 
       "name": 
       {
-        "type": "string"
+        "type": "string",
+        "example": "Thomas"
           
       },
 
       "email": 
       {
-        "type": "string"
+        "type": "string",
+        "example": "thomas.lopes@ccc.ufcg.edu.br"
           
       },
 
@@ -31,7 +33,7 @@
       "description": 
       {
         "type": "string",
-        "example" : "otimo profissional"
+        "example" : "Developer"
           
       },
 
@@ -40,7 +42,8 @@
         "type": "array",
          "items":
          {
-          "type": "string"
+          "type": "string",
+          "examples": ["4a14bg8357c32u09875565b7", "6u74zb0034f65zu435743o0"]
          }
       },
 
@@ -49,7 +52,8 @@
         "type": "array",
          "items":
          {
-          "type": "string"
+          "type": "string",
+          "examples": ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"]
          }
       },
 
@@ -58,7 +62,8 @@
         "type": "array",
          "items":
          {
-          "type": "string"
+          "type": "string",
+          "examples": ["7f78fr3111x97h53779000a1", "7a65hg8755k73s21116789i8"]
          }
       }
 

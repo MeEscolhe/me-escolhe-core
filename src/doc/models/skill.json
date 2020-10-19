@@ -14,7 +14,8 @@
         "type": "array",
         "items":
         {
-         "type": "string"
+         "type": "string",
+         "examples": ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"]
         }
       },
 
@@ -23,7 +24,8 @@
         "type": "array",
         "items":
         {
-         "type": "string"
+         "type": "string",
+         "examples": ["3a28ac7082e88b35448255e8", "3a36ty9019e36g1356785e8"]
         }
       },
 
@@ -32,7 +34,8 @@
         "type": "array",
         "items":
         {
-         "type": "string"
+         "type": "string",
+         "examples": ["4a14bg8357c32u09875565b7", "6u74zb0034f65zu435743o0"]
         }
       }
 
