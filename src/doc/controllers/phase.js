@@ -1,10 +1,13 @@
 const withoutParameters = {
-  get: {
+  get: 
+  {
     tags: ["Phase"],
     description: "",
     parameters: [],
-    responses: {
-      200: {
+    responses: 
+    {
+      200: 
+      {
         description: "GET: successful",
         content: 
         {
@@ -21,7 +24,9 @@ const withoutParameters = {
           },
         },
       },
-      400: {
+
+      400: 
+      {
         description: "GET: unsuccessful",
         content: 
         {
@@ -38,19 +43,24 @@ const withoutParameters = {
       },
     },
   },
-  post: {
+
+  post: 
+  {
     tags: ["Phase"],
     description: "",
     parameters: [],
-    requestBody: {
+    requestBody: 
+    {
       content: 
       {
-        "application/json": {
-          schema: {
+        "application/json": 
+        {
+          schema: 
+          {
             type: "object",
             properties: 
             {
-              "students: ": 
+              "students": 
               {
                 type: "array",
                 items: 
@@ -59,21 +69,24 @@ const withoutParameters = {
                 },
               },
 
-              "selectionId: ": 
+              "selectionId": 
               {
                 type: "objectId",
               },
 
-              "description: ": 
+              "description": 
               {
                 type: "string",
                 example: "Fase de seleção de currículo",
               },
             },
+
           },
         },
       },
+
     },
+
     responses: 
     {
       200: 
@@ -89,10 +102,12 @@ const withoutParameters = {
             },
           },
         },
+
       },
+
       400: 
       {
-        description: "GET: unsuccessful",
+        description: "POST: unsuccessful",
         content: 
         {
           "application/json": 
@@ -105,6 +120,7 @@ const withoutParameters = {
           },
         },
       },
+
     },
   },
 };
@@ -127,7 +143,9 @@ const withParameters =
           type: "string",
         },
       },
+
     ],
+
     requestBody: 
     {
       content: 
@@ -141,6 +159,7 @@ const withParameters =
         },
       },
     },
+
     responses: 
     {
       200: 
@@ -157,6 +176,7 @@ const withParameters =
           },
         },
       },
+
       400: 
       {
         description: "PUT: unsuccessful",
@@ -172,6 +192,7 @@ const withParameters =
           },
         },
       },
+
     },
   },
   delete: 
@@ -191,6 +212,7 @@ const withParameters =
         required: true,
       },
     ],
+
     responses: 
     {
       200: 
@@ -224,7 +246,9 @@ const withParameters =
           },
         },
       },
+
     },
   },
 };
+
 module.exports = { withParameters, withoutParameters };
