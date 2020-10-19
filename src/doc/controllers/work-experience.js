@@ -1,6 +1,6 @@
 const withoutParameters = {
   get: {
-    tags: ["Work Experience"],
+    tags: ["Work experience"],
     description: "",
     parameters: [],
     responses: {
@@ -34,7 +34,7 @@ const withoutParameters = {
   },
 
   post: {
-    tags: ["Work Experience"],
+    tags: ["Work experience"],
     description: "",
     parameters: [],
     requestBody: {
@@ -91,8 +91,50 @@ const withoutParameters = {
 };
 
 const withParameters = {
+  get: {
+    tags: ["Work experience"],
+    description: "",
+    parameters: [
+      {
+        in: "path",
+        name: "_id",
+        schema: {
+          type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
+        },
+        required: true,
+      },
+    ],
+
+    responses: {
+      200: {
+        description: "GET: successful.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/work-experience",
+            },
+          },
+          required: true,
+        },
+      },
+
+      404: {
+        description: "GET: unsuccessful",
+        content: {
+          "application/json": {
+            schema: {
+              type: "string",
+              example: "The work experience with the given id was not found.",
+            },
+          },
+        },
+      },
+    },
+  },
+
   put: {
-    tags: ["Work Experience"],
+    tags: ["Work experience"],
     description: "",
     parameters: [
       {
@@ -143,7 +185,7 @@ const withParameters = {
   },
 
   delete: {
-    tags: ["Work Experience"],
+    tags: ["Work experience"],
     description: "",
     parameters: [
       {

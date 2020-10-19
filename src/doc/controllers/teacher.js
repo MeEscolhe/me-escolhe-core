@@ -107,6 +107,48 @@ const withoutParameters = {
 };
 
 const withParameters = {
+  get: {
+    tags: ["Teacher"],
+    description: "",
+    parameters: [
+      {
+        in: "path",
+        name: "_id",
+        schema: {
+          type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
+        },
+        required: true,
+      },
+    ],
+
+    responses: {
+      200: {
+        description: "GET: successful.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/teacher",
+            },
+          },
+          required: true,
+        },
+      },
+
+      404: {
+        description: "GET: unsuccessful",
+        content: {
+          "application/json": {
+            schema: {
+              type: "string",
+              example: "The teacher with the given id was not found.",
+            },
+          },
+        },
+      },
+    },
+  },
+
   put: {
     tags: ["Teacher"],
     description: "",
