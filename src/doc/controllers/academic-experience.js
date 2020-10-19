@@ -1,167 +1,242 @@
-const withoutParameters = {
-  get: {
+const withoutParameters = 
+{
+  get: 
+  {
     tags: ["Academic experience"],
     description: "",
     parameters: [],
-    responses: {
-      200: {
-        description: "Success message",
-        content: {
-          "application/json": {
-            schema: {
+    responses: 
+    {
+      200: 
+      {
+        description: "GET: successful",
+        content: 
+        {
+          "application/json": 
+          {
+            schema: 
+            {
               type: "array",
-              items: {
+              items: 
+              {
                 $ref: "#/components/schemas/academic-experience",
               },
             },
           },
         },
       },
-      400: {
-        description: "Error",
-        content: {
-          "application/json": {
-            schema: {
+
+      400: 
+      {
+        description: "GET: unsuccessful",
+        content: 
+        {
+          "application/json": 
+          {
+            schema: 
+            {
               type: "string",
-              example: "No academicExperiences to show.",
-              enum: ["No academicExperiences to show."],
+              example: "No academic experiences to show.",
+              enum: ["No academic experiences to show."],
             },
           },
         },
       },
+
     },
   },
-  post: {
+
+  post: 
+  {
     tags: ["Academic experience"],
     description: "",
     parameters: [],
-    requestBody: {
-      content: {
-        "application/json": {
-          schema: {
+    requestBody: 
+    {
+      content: 
+      {
+        "application/json": 
+        {
+          schema: 
+          {
             type: "object",
-            properties: {
-              "title: ": {
+            properties: 
+            {
+              "title": 
+              {
                 type: "string",
-                example: "teste",
+                example: "Developer",
               },
-              "category: ": {
+
+              "category": 
+              {
                 type: "string",
-                example: "teste",
+                example: "Backend",
               },
-              "institution: ": {
+
+              "institution": 
+              {
                 type: "string",
-                example: "ufcg",
+                example: "UFCG",
               },
             },
           },
         },
       },
+
     },
-    responses: {
-      200: {
-        description: "Success message.",
-        content: {
-          "application/json": {
-            schema: {
+
+    responses: 
+    {
+      200: 
+      {
+        description: "POST: successful.",
+        content: 
+        {
+          "application/json": 
+          {
+            schema: 
+            {
               $ref: "#/components/schemas/academic-experience",
             },
           },
         },
       },
-      400: {
-        description: "Error message",
-        content: {
-          "application/json": {
-            schema: {
+
+      400: 
+      {
+        description: "POST: unsuccessful",
+        content: 
+        {
+          "application/json": 
+          {
+            schema: 
+            {
               type: "string",
               example: "This academic experience cannot be created.",
             },
           },
         },
       },
+
     },
   },
 };
-const withParameters = {
-  put: {
+
+const withParameters = 
+{
+  put: 
+  {
     tags: ["Academic experience"],
     description: "",
-    parameters: [
+    parameters: 
+    [
       {
         name: "id",
         in: "path",
         description: "ID of academic-experience",
         required: true,
-        schema: {
+        schema: 
+        {
           type: "string",
         },
       },
     ],
-    requestBody: {
+
+    requestBody: 
+    {
       content: {
-        "application/json": {
-          schema: {
+        "application/json": 
+        {
+          schema: 
+          {
             $ref: "#/components/schemas/academic-experience",
           },
         },
       },
     },
-    responses: {
-      200: {
-        description: "Success message.",
-        content: {
-          "application/json": {
-            schema: {
+
+    responses: 
+    {
+      200: 
+      {
+        description: "PUT: successful.",
+        content: 
+        {
+          "application/json": 
+          {
+            schema: 
+            {
               $ref: "#/components/schemas/academic-experience",
             },
           },
         },
       },
-      400: {
-        description: "Error message",
-        content: {
-          "application/json": {
-            schema: {
+
+      400: 
+      {
+        description: "PUT: unsuccessful",
+        content: 
+        {
+          "application/json": 
+          {
+            schema: 
+            {
               type: "string",
               example: "This academic experience cannot be created.",
             },
           },
         },
       },
+
     },
   },
-  delete: {
+
+  delete: 
+  {
     tags: ["Academic experience"],
     description: "",
-    parameters: [
+    parameters: 
+    [
       {
         in: "path",
         name: "_id",
-        schema: {
+        schema: 
+        {
           type: "string",
           example: "5f28ac7082e88b35448255e8",
         },
         required: true,
       },
     ],
-    responses: {
-      200: {
-        description: "Success message.",
-        content: {
-          "application/json": {
-            schema: {
+
+    responses: 
+    {
+      200: 
+      {
+        description: "DELETE: successful.",
+        content: 
+        {
+          "application/json": 
+          {
+            schema: 
+            {
               $ref: "#/components/schemas/academic-experience",
             },
           },
           required: true,
         },
       },
-      404: {
-        description: "Error message",
-        content: {
-          "application/json": {
-            schema: {
+
+      404: 
+      {
+        description: "DELETE: unsuccessful",
+        content: 
+        {
+          "application/json": 
+          {
+            schema: 
+            {
               type: "string",
               example:
                 "The academic experience with the given id was not found.",
@@ -169,6 +244,7 @@ const withParameters = {
           },
         },
       },
+      
     },
   },
 };
