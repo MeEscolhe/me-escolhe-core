@@ -1,5 +1,9 @@
-const Joi = require("joi");
 const mongoose = require("mongoose");
+const {
+  validate,
+  string,
+  numericRange,
+} = require("../middlewares/model-validator");
 
 const HardSchema = mongoose.model(
   "Hard",
@@ -18,15 +22,21 @@ const HardSchema = mongoose.model(
   })
 );
 
-function valHard(hard) {
-  const schemaHard = Joi.object().keys({
-    name: Joi.string().min(4).max(30).required(),
-    level: Joi.number().min(0).max(4).required(),
-  });
-  return schemaHard.validate(hard);
-}
+/**
+ * Validate hard skill from request
+ * @param {HardSchema} hard
+ */
+const validateHard = (hard) => {
+  return validate(
+    {
+      name: string(),
+      level: numericRange(0, 4),
+    },
+    hard
+  );
+};
 
 module.exports = {
   Hard: HardSchema,
-  valHard,
+  validateHard,
 };

@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const Joi = require("joi");
+const {
+  validate,
+  number,
+  numericRange,
+  string,
+  arrayOfIds,
+} = require("../middlewares/model-validator");
 /**
  *
  *  @typedef {{registration: number,name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
@@ -53,23 +59,25 @@ const StudentSchema = mongoose.model(
  * validade student from request
  * @param {StudentSchema} student
  */
-const valStudent = (student) => {
-  const studentSchema = Joi.object().keys({
-    registration: Joi.number().min(0).required(),
-    name: Joi.string().min(3).max(50).required(),
-    description: Joi.string().optional().allow("").min(0).max(50),
-    email: Joi.string().min(10).required(),
-    cra: Joi.number().min(0).max(10).required(),
-    skills: Joi.array().items(Joi.string()).min(0),
-    experiences: Joi.array().items(Joi.string()).min(0),
-    phases: Joi.array().items(Joi.string()).min(0),
-  });
-
-  return studentSchema.validate(student);
+const validateStudent = (student) => {
+  return validate(
+    {
+      registration: number(),
+      name: string(),
+      description: string(),
+      email: string(),
+      cra: numericRange(0, 10),
+      skills: arrayOfIds(),
+      experiences: arrayOfIds(),
+      phases: arrayOfIds(),
+    },
+    student
+  );
 };
+
 /**
- * get student with selections
- *
+ * Get student with his selections
+ * @param {StudentSchema} student
  */
 const getStudentWithSelections = (student) => {
   const { getSelectionFromPhase } = require("../middlewares/util");
@@ -133,6 +141,6 @@ const getStudentWithSelections = (student) => {
 
 module.exports = {
   Student: StudentSchema,
-  valStudent,
+  validateStudent,
   getStudentWithSelections,
 };

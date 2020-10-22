@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate");
 const ObjectId = require("mongodb").ObjectID;
-const Joi = require("joi");
+const {
+  validate,
+  arrayOfIds,
+  boolean,
+} = require("../middlewares/model-validator");
 
 /**
  *
@@ -42,19 +46,20 @@ const SelectionSchema = mongoose.model("Selection", SelectionModel);
  * validade selection from request
  * @param {SelectionSchema} selection
  */
-const valSelection = (selection) => {
-  const selectionSchema = Joi.object().keys({
-    role: Joi.string().min(3).max(30).required(),
-    description: Joi.string().allow("").min(0).max(50).required(),
-    phases: Joi.array().items(Joi.string()).min(0).required(),
-    current: Joi.boolean().required(),
-    skills: Joi.array().items(Joi.string()).min(0).required(),
-  });
-
-  return selectionSchema.validate(selection);
+const validateSelection = (selection) => {
+  return validate(
+    {
+      role: string(),
+      description: string(),
+      phases: arrayOfIds(),
+      current: boolean(),
+      skills: arrayOfIds(),
+    },
+    selection
+  );
 };
 
 module.exports = {
   Selection: SelectionSchema,
-  valSelection,
+  validateSelection,
 };

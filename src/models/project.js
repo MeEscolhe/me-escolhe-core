@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const Joi = require("joi");
+const {
+  validate,
+  string,
+  arrayOfIds,
+} = require("../middlewares/model-validator");
 
 const ProjectSchema = mongoose.model(
   "Project",
@@ -20,17 +24,23 @@ const ProjectSchema = mongoose.model(
     },
   })
 );
-function valProject(project) {
-  const ProjectSchema = Joi.object().keys({
-    name: Joi.string().min(4).max(50).required(),
-    description: Joi.string().allow("").min(0).max(50).required(),
-    selections: Joi.array().items(Joi.string()).min(0).required(),
-  });
 
-  return ProjectSchema.validate(project);
-}
+/**
+ * Validade project from request
+ * @param {ProjectSchema} project
+ */
+const validateProject = (project) => {
+  return validate(
+    {
+      name: string(),
+      description: string(),
+      selections: arrayOfIds(),
+    },
+    project
+  );
+};
 
 module.exports = {
   Project: ProjectSchema,
-  valProject,
+  validateProject,
 };
