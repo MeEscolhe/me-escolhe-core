@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
 const { validate, arrayOfIds } = require("../middlewares/model-validator");
 
+/**
+ *  Skill model
+ *  @typedef {{languages: array, soft: array, hard: array}} SkillSchema
+ */
 const SkillSchema = mongoose.model(
   "Skill",
   new mongoose.Schema({

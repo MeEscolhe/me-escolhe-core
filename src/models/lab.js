@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const { validate, string } = require("../middlewares/model-validator");
 
+/**
+ *  Lab model
+ *  @typedef {{name: string, description: string}} LabSchema
+ */
 const LabSchema = mongoose.model(
   "Lab",
   new mongoose.Schema({

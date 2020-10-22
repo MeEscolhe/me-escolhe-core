@@ -8,8 +8,8 @@ const {
 } = require("../middlewares/model-validator");
 
 /**
- *
- *  @typedef {{role:string,description:string,phases:array,current:boolean}} SelectionSchema
+ *  Selection model
+ *  @typedef {{role:string, description:string, phases:array, current:boolean}} SelectionSchema
  */
 const SelectionModel = new mongoose.Schema({
   role: {
@@ -38,8 +38,8 @@ const SelectionModel = new mongoose.Schema({
   },
 });
 
+// Setting pagination
 SelectionModel.plugin(mongoosePaginate);
-
 const SelectionSchema = mongoose.model("Selection", SelectionModel);
 
 /**

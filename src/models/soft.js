@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const { validate, string } = require("../middlewares/model-validator");
 
+/**
+ *  Soft model
+ *  @typedef {{name: string}} SoftSchema
+ */
 const SoftSchema = mongoose.model(
   "Soft",
   new mongoose.Schema({

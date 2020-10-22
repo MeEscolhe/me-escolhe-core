@@ -5,6 +5,10 @@ const {
   numericRange,
 } = require("../middlewares/model-validator");
 
+/**
+ *  Hard skill model
+ *  @typedef {{name: string, level: number}} HardSchema
+ */
 const HardSchema = mongoose.model(
   "Hard",
   new mongoose.Schema({

@@ -7,6 +7,10 @@ const {
   arrayOfIds,
 } = require("../middlewares/model-validator");
 
+/**
+ *  Teacher model
+ *  @typedef {{name: string, email: string, description: string, labId: string, managements: array}} TeacherSchema
+ */
 const TeacherSchema = mongoose.model(
   "Teacher",
   new mongoose.Schema({

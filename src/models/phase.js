@@ -4,8 +4,8 @@ const ObjectId = require("mongodb").ObjectID;
 const { validate, id, arrayOfIds } = require("../middlewares/model-validator");
 
 /**
- *
- *  @typedef {{students: array, selectionId: ObjectId}} PhaseSchema
+ *  Phase model
+ *  @typedef {{students: array, selectionId: string, description: string}} PhaseSchema
  */
 const PhaseSchema = mongoose.model(
   "Phase",

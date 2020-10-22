@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const { validate, string } = require("../middlewares/model-validator");
 
+/**
+ *  Academic experience model
+ *  @typedef {{title: string, category: string, institution: string}} AcademicExperienceSchema
+ */
 const AcademicExperienceSchema = mongoose.model(
   "AcademicExperience",
   new mongoose.Schema({

@@ -7,9 +7,10 @@ const {
   string,
   arrayOfIds,
 } = require("../middlewares/model-validator");
+
 /**
- *
- *  @typedef {{registration: number,name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
+ *  Student model
+ *  @typedef {{registration: number, name: string, email: string, cra: number, description: string, skills: array, experiences: array, phases: array}} StudentSchema
  */
 const StudentSchema = mongoose.model(
   "Student",

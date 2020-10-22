@@ -5,6 +5,10 @@ const {
   numericRange,
 } = require("../middlewares/model-validator");
 
+/**
+ *  Language model
+ *  @typedef {{name: string, level: number}} LanguageSchema
+ */
 const LanguageSchema = mongoose.model(
   "Language",
   new mongoose.Schema({
