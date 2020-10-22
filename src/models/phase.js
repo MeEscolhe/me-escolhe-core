@@ -1,3 +1,5 @@
+"use strict";
+
 const { string } = require("joi");
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;

@@ -1,3 +1,5 @@
+"use strict";
+
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
 const { FKHelper } = require("../middlewares/util");
@@ -40,4 +42,6 @@ const FeedbackRequestSchema = mongoose.model(
   })
 );
 
-exports.FeedbackRequest = FeedbackRequestSchema;
+module.exports = {
+  FeedbackRequest: FeedbackRequestSchema,
+};

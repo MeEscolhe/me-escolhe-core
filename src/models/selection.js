@@ -1,3 +1,5 @@
+"use strict";
+
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate");
 const ObjectId = require("mongodb").ObjectID;

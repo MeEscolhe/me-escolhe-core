@@ -1,3 +1,5 @@
+"use strict";
+
 const mongoose = require("mongoose");
 const { validate, string, number } = require("../middlewares/model-validator");
 
