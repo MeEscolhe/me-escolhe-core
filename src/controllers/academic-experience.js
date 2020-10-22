@@ -2,15 +2,24 @@
 
 const {
   AcademicExperience,
-  valAcademicExperience,
+  validateAcademicExperience,
 } = require("../models/academic-experience");
 const mongoose = require("mongoose");
 
+/**
+ * Get all academic experiences
+ * @returns {array} list of all academic experiences
+ */
 const getAll = async () => {
   const academicExperiences = await AcademicExperience.find().sort("title");
   return academicExperiences;
 };
 
+/**
+ * Get academic experience by id
+ * @param {string} id
+ * @returns {string} academic experience
+ */
 const getById = async (id) => {
   const academicExperience = await AcademicExperience.findById(
     mongoose.Types.ObjectId(id)
@@ -18,6 +27,13 @@ const getById = async (id) => {
   return academicExperience;
 };
 
+/**
+ * Create academic experience by id
+ * @param {string} title
+ * @param {string} category
+ * @param {string} institution
+ * @returns {string} academic experience created
+ */
 const create = async ({ title, category, institution }) => {
   let academicExperience = new AcademicExperience({
     title: title,
@@ -28,6 +44,14 @@ const create = async ({ title, category, institution }) => {
   return academicExperience;
 };
 
+/**
+ * Update academic experience by id
+ * @param {string} id
+ * @param {string} title
+ * @param {string} category
+ * @param {string} institution
+ * @returns {string} academic experience updated
+ */
 const update = async (id, { title, category, institution }) => {
   const academicExperience = await AcademicExperience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
@@ -41,6 +65,11 @@ const update = async (id, { title, category, institution }) => {
   return academicExperience;
 };
 
+/**
+ * Remove academic experience by id
+ * @param {string} id
+ * @returns {string} academic experience removed
+ */
 const remove = async (id) => {
   const academicExperience = await AcademicExperience.findByIdAndRemove(
     mongoose.Types.ObjectId(id)
@@ -48,8 +77,13 @@ const remove = async (id) => {
   return academicExperience;
 };
 
+/**
+ * Validate academic experience
+ * @param {object} object
+ * @returns {string} error (when it happens)
+ */
 const validate = (object) => {
-  const { error } = valAcademicExperience(object);
+  const { error } = validateAcademicExperience(object);
   return error;
 };
 

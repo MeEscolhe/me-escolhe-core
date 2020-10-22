@@ -1,4 +1,6 @@
-const { Skill, valSkill } = require("../models/skill");
+"use strict";
+
+const { Skill, validateSkill } = require("../models/skill");
 const mongoose = require("mongoose");
 
 const getAll = async () => {
@@ -40,7 +42,7 @@ const remove = async (id) => {
 };
 
 const validate = (object) => {
-  const { error } = valSkill(object);
+  const { error } = validateSkill(object);
   return error;
 };
 

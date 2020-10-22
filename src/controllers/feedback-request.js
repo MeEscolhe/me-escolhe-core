@@ -1,14 +1,13 @@
 "use strict";
 
-const {
-  FeedbackRequest,
-  valFeedbackRequest,
-} = require("../models/feedback-request");
+const { FeedbackRequest } = require("../models/feedback-request");
 const mongoose = require("mongoose");
+
 const getAll = async () => {
   const feedbackRequests = await FeedbackRequest.find();
   return feedbackRequests;
 };
+
 const getById = async (id) => FeedbackRequest.findById(id);
 
 const create = ({ studentId, phaseId, teacherId }) => {
@@ -34,6 +33,7 @@ const remove = (feedbackRequestId) =>
     if (feedbackRequestDelete) return "Feedback deleted";
     throw "Error delete feedback";
   });
+
 const validate = (object) => {
   const { error } = valFeedbackRequest(object);
   return error;

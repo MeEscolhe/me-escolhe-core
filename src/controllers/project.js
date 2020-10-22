@@ -1,6 +1,6 @@
 "use strict";
 
-const { Project, valProject } = require("../models/project");
+const { Project, validateProject } = require("../models/project");
 const mongoose = require("mongoose");
 
 const getAll = async () => {
@@ -40,7 +40,7 @@ const remove = async (id) => {
 };
 
 const validate = (object) => {
-  const { error } = valProject(object);
+  const { error } = validateProject(object);
   return error;
 };
 

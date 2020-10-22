@@ -1,6 +1,6 @@
 "use strict";
 
-const { Teacher, valTeacher } = require("../models/teacher");
+const { Teacher, validateTeacher } = require("../models/teacher");
 const mongoose = require("mongoose");
 
 const getAll = async () => {
@@ -55,7 +55,7 @@ const remove = async (id) => {
   return teacher;
 };
 const validate = (object) => {
-  const { error } = valTeacher(object);
+  const { error } = validateTeacher(object);
   return error;
 };
 

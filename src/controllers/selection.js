@@ -1,6 +1,6 @@
 "use strict";
 
-const { Selection, valSelection } = require("../models/selection");
+const { Selection, validateSelection } = require("../models/selection");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -33,7 +33,7 @@ const update = async (id, updateData) => {
 const remove = async (id) => await Selection.findByIdAndRemove(ObjectId(id));
 
 const validate = (object) => {
-  const { error } = valSelection(object);
+  const { error } = validateSelection(object);
   return error;
 };
 

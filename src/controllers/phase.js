@@ -1,6 +1,6 @@
 "use strict";
 
-const { Phase, valPhase } = require("../models/phase");
+const { Phase, validatePhase } = require("../models/phase");
 const mongoose = require("mongoose");
 const StudentController = require("./student");
 
@@ -101,7 +101,7 @@ const update = async (id, { students, selectionId, description }) => {
   return phase;
 };
 const validate = (object) => {
-  const { error } = valPhase(object);
+  const { error } = validatePhase(object);
   return error;
 };
 /**

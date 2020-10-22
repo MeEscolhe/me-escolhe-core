@@ -2,7 +2,7 @@
 
 const {
   Student,
-  valStudent,
+  validateStudent,
   getStudentWithSelections,
 } = require("../models/student");
 const { filterProps } = require("../middlewares/util");
@@ -82,7 +82,7 @@ const update = (registration, updateData, updatePhase) => {
 const remove = async (registration) => Student.findOneAndDelete(registration);
 
 const validate = (object) => {
-  const { error } = valStudent(object);
+  const { error } = validateStudent(object);
   return error;
 };
 

@@ -1,6 +1,6 @@
 "use strict";
 
-const { Language, valLanguage } = require("../models/language");
+const { Language, validateLanguage } = require("../models/language");
 const mongoose = require("mongoose");
 
 const getAll = async () => {
@@ -42,7 +42,7 @@ const remove = async (id) => {
 };
 
 const validate = (object) => {
-  const { error } = valLanguage(object);
+  const { error } = validateLanguage(object);
   return error;
 };
 

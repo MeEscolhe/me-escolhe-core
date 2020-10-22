@@ -2,7 +2,7 @@
 
 const {
   WorkExperience,
-  valWorkExperience,
+  validateWorkExperience,
 } = require("../models/work-experience");
 const mongoose = require("mongoose");
 
@@ -34,7 +34,7 @@ const update = async (id, { role, institution, durationInMonths }) => {
     {
       role: role,
       institution: institution,
-      durationInMonths: durationInMonths
+      durationInMonths: durationInMonths,
     },
     { new: true }
   );
@@ -49,7 +49,7 @@ const remove = async (id) => {
 };
 
 const validate = (object) => {
-  const { error } = valWorkExperience(object);
+  const { error } = validateWorkExperience(object);
   return error;
 };
 
