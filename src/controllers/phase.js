@@ -81,7 +81,7 @@ const removeStudent = async (phaseId, studentId) => {
     (studentFK) => studentFK !== studentId
   );
   student.phases = student.phases.filter((phase) => !phase.equals(phaseId));
-  student = StudentController.update(
+  student = await StudentController.update(
     student.registration,
     { phases: student.phases },
     true
