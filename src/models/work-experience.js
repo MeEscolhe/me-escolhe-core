@@ -20,15 +20,17 @@ const WorkExperienceSchema = mongoose.model(
   })
 );
 
-function validateWorkExperience(workExperience) {
+function valWorkExperience(workExperience) {
   const schemaWorkExperience = Joi.object().keys({
     role: Joi.string().min(3).max(30).required(),
     institution: Joi.string().min(3).max(50).required(),
     durationInMonths: Joi.number().greater(0),
   });
 
-  return schemaWorkExperience.validate(workExperience.body);
+  return schemaWorkExperience.validate(workExperience);
 }
 
-exports.WorkExperience = WorkExperienceSchema;
-exports.valWorkExperience = validateWorkExperience;
+module.exports = {
+  WorkExperience: WorkExperienceSchema,
+  valWorkExperience,
+};

@@ -16,14 +16,16 @@ const LabSchema = mongoose.model(
   })
 );
 
-function validateLab(lab) {
+function valLab(lab) {
   const schemaLab = Joi.object().keys({
     name: Joi.string().min(4).max(30).required(),
     description: Joi.string().min(4).max(50).required(),
   });
 
-  return schemaLab.validate(lab.body);
+  return schemaLab.validate(lab);
 }
 
-exports.Lab = LabSchema;
-exports.valLab = validateLab;
+module.exports = {
+  Lab: LabSchema,
+  valLab,
+};

@@ -45,7 +45,10 @@ const validate = (body, controller) => {
  */
 const filterProps = (data, propsToFilter, conditionFunction) =>
   Object.entries(data).reduce((accumulate, [key, value]) => {
-    if (propsToFilter.includes(key) && conditionFunction(key, value))
+    if (
+      propsToFilter.includes(key) &&
+      (conditionFunction === undefined || conditionFunction(key, value))
+    )
       accumulate[key] = value;
     return accumulate;
   }, {});

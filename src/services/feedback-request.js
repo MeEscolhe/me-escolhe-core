@@ -3,7 +3,6 @@
 const feedbackRequestCtrl = require("../controllers/feedback-request");
 const express = require("express");
 const router = express.Router();
-const { isEmpty } = require("../middlewares/util");
 
 router.get("/", (req, res) =>
   feedbackRequestCtrl

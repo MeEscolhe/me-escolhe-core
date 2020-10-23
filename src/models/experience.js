@@ -20,8 +20,8 @@ const ExperienceSchema = mongoose.model(
 
 const valExperience = (experience) => {
   const experienceSchema = Joi.object().keys({
-    academic: Joi.array().items(Joi.string()).min(0),
-    work: Joi.array().items(Joi.string()).min(0)
+    academic: Joi.array().items(Joi.string()).min(0).required(),
+    work: Joi.array().items(Joi.string()).min(0).required(),
   });
 
   return experienceSchema.validate(experience);
@@ -31,5 +31,5 @@ exports.Experience = ExperienceSchema;
 
 module.exports = {
   Experience: ExperienceSchema,
-  valExperience
+  valExperience,
 };
