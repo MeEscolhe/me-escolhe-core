@@ -8,20 +8,14 @@ const StudentController = require("./student");
  * Get all phases
  * @returns {array} list of all phases
  */
-const getAll = async () => {
-  const phases = await Phase.find().sort("name");
-  return phases;
-};
+const getAll = async () => await Phase.find().sort("name");
 
 /**
  * Get phase by id
  * @param {string} id
  * @returns {object} phase
  */
-const getById = async (id) => {
-  const phase = await Phase.findById(mongoose.Types.ObjectId(id));
-  return phase;
-};
+const getById = async (id) => await Phase.findById(mongoose.Types.ObjectId(id));
 
 /**
  * Create phase
@@ -31,13 +25,12 @@ const getById = async (id) => {
  * @returns {object} phase created
  */
 const create = async ({ students, selectionId, description }) => {
-  let phase = new Phase({
+  const phase = new Phase({
     students: students,
     selectionId: selectionId,
     description: description ? description : "",
   });
-  phase = await phase.save();
-  return phase;
+  return await phase.save();
 };
 
 /**
@@ -46,40 +39,34 @@ const create = async ({ students, selectionId, description }) => {
  * @param {string} studentId
  * @returns {object} phase updated
  */
-const addStudent = (phaseId, studentId) =>
-  getPhaseAndStudent(phaseId, studentId).then(([phase, student]) => {
-    verifyAddOrRemoveStudent(phase, student, true);
-    phase.students.push(student.registration);
-
-    return Phase.findByIdAndUpdate(phaseId, phase, { new: true }).then(
-      (phase) => {
-        if (!phase) throw "Phase not found";
-        else {
-          student.phases.push(phaseId);
-          return StudentController.update(
-            student.registration,
-            { phases: student.phases },
-            true
-          ).then((student) => {
-            if (student) {
-              return "Added to Student";
-            } else {
-              phase.students = phase.students.filter(
-                (registration) => registration !== student.registration
-              );
-              return Phase.findByIdAndUpdate(
-                mongoose.Types.ObjectId(phaseId),
-                phase,
-                { new: true }
-              ).then(() => {
-                throw "Error when save student";
-              });
-            }
-          });
-        }
-      }
+const addStudent = async (phaseId, studentId) => {
+  const [phase, student] = await getPhaseAndStudent(phaseId, studentId);
+  verifyAddOrRemoveStudent(phase, student, true);
+  phase.students.push(student.registration);
+  phase = await Phase.findByIdAndUpdate(phaseId, phase, { new: true });
+  if (!phase) {
+    throw "Phase not found";
+  } else {
+    student.phases.push(phaseId);
+    student = await StudentController.update(
+      student.registration,
+      { phases: student.phases },
+      true
     );
-  });
+    if (student) {
+      return student;
+    } else {
+      phase.students = phase.students.filter(
+        (registration) => registration !== student.registration
+      );
+      return await Phase.findByIdAndUpdate(
+        mongoose.Types.ObjectId(phaseId),
+        phase,
+        { new: true }
+      );
+    }
+  }
+};
 
 /**
  * Remove student from phase
@@ -87,42 +74,38 @@ const addStudent = (phaseId, studentId) =>
  * @param {string} studentId
  * @returns {object} phase updated
  */
-const removeStudent = (phaseId, studentId) =>
-  getPhaseAndStudent(phaseId, studentId).then(([phase, student]) => {
-    verifyAddOrRemoveStudent(phase, student, false);
-    phase.students = phase.students.filter(
-      (studentFK) => studentFK !== studentId
-    );
-    student.phases = student.phases.filter((phase) => !phase.equals(phaseId));
-
-    return StudentController.update(
-      student.registration,
-      { phases: student.phases },
-      true
-    ).then((student) => {
-      if (student) {
-        return Phase.findByIdAndUpdate(
-          mongoose.Types.ObjectId(phaseId),
-          phase,
-          {
-            new: true,
-          }
-        ).then(() => "Student removed");
-      } else {
-        throw "Student not found";
+const removeStudent = async (phaseId, studentId) => {
+  const [phase, student] = await getPhaseAndStudent(phaseId, studentId);
+  verifyAddOrRemoveStudent(phase, student, false);
+  phase.students = phase.students.filter(
+    (studentFK) => studentFK !== studentId
+  );
+  student.phases = student.phases.filter((phase) => !phase.equals(phaseId));
+  student = StudentController.update(
+    student.registration,
+    { phases: student.phases },
+    true
+  );
+  if (student) {
+    return await Phase.findByIdAndUpdate(
+      mongoose.Types.ObjectId(phaseId),
+      phase,
+      {
+        new: true,
       }
-    });
-  });
+    );
+  } else {
+    throw "Student not found";
+  }
+};
 
 /**
  * Remove phase by id
  * @param {string} id
  * @returns {object} phase removed
  */
-const remove = async (id) => {
-  const Phase = await Phase.findByIdAndRemove(mongoose.Types.ObjectId(id));
-  return Phase;
-};
+const remove = async (id) =>
+  await Phase.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
 /**
  * Update phase by id
@@ -132,8 +115,8 @@ const remove = async (id) => {
  * @param {string} description
  * @returns {object} phase updated
  */
-const update = async (id, { students, selectionId, description }) => {
-  const phase = await Phase.findByIdAndUpdate(
+const update = async (id, { students, selectionId, description }) =>
+  await Phase.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       students: students,
@@ -142,8 +125,6 @@ const update = async (id, { students, selectionId, description }) => {
     },
     { new: true }
   );
-  return phase;
-};
 
 /**
  * Validate phase

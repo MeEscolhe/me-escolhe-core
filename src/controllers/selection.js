@@ -28,15 +28,14 @@ const getById = async (id) => await Selection.findById(id);
  * @returns {object} project created
  */
 const create = async ({ role, description, phases, current, skills }) => {
-  let selection = new Selection({
+  const selection = new Selection({
     role: role,
     description: description,
     phases: phases,
     current: current,
     skills: skills,
   });
-  selection = await selection.save();
-  return selection;
+  return await selection.save();
 };
 
 /**
@@ -45,14 +44,8 @@ const create = async ({ role, description, phases, current, skills }) => {
  * @param {object} updateData, data to update
  * @returns {object} selection updated
  */
-const update = async (id, updateData) => {
-  const selection = await Selection.findByIdAndUpdate(
-    ObjectId(id),
-    updateData,
-    { new: true }
-  );
-  return selection;
-};
+const update = async (id, updateData) =>
+  await Selection.findByIdAndUpdate(ObjectId(id), updateData, { new: true });
 
 /**
  * Remove selection by id

@@ -7,17 +7,14 @@ const mongoose = require("mongoose");
  * Get all feedback requests
  * @returns {array} list of all feedback requests
  */
-const getAll = async () => {
-  const feedbackRequests = await FeedbackRequest.find();
-  return feedbackRequests;
-};
+const getAll = async () => await FeedbackRequest.find();
 
 /**
  * Get feedback request by id
  * @param {string} id
  * @returns {object} feedback request
  */
-const getById = async (id) => FeedbackRequest.findById(id);
+const getById = async (id) => await FeedbackRequest.findById(id);
 
 /**
  * Create feedback request
@@ -26,29 +23,25 @@ const getById = async (id) => FeedbackRequest.findById(id);
  * @param {string} teacherId
  * @returns {object} feedback request created
  */
-const create = ({ studentId, phaseId, teacherId }) => {
+const create = async ({ studentId, phaseId, teacherId }) => {
   const feedbackRequest = new FeedbackRequest({
     studentId: studentId,
     phaseId: phaseId,
     teacherId: teacherId,
   });
-
-  return feedbackRequest.save().then((feedback) => feedback);
+  return await feedbackRequest.save();
 };
 
 /**
  * Remove feedback request
  * @param {string} feedbackRequestId
  * @throws {InvalidArgumentException} mongoose id invalid or feedback not found
- * @returns {string} confirm message
+ * @returns {object} feedback request removed
  */
-const remove = (feedbackRequestId) =>
-  FeedbackRequest.findByIdAndRemove(
+const remove = async (feedbackRequestId) =>
+  await FeedbackRequest.findByIdAndRemove(
     mongoose.Types.ObjectId(feedbackRequestId)
-  ).then((feedbackRequestDelete) => {
-    if (feedbackRequestDelete) return "Feedback deleted";
-    throw "Error delete feedback";
-  });
+  );
 
 /**
  * Validate feedback request

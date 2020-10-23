@@ -10,22 +10,15 @@ const mongoose = require("mongoose");
  * Get all academic experiences
  * @returns {array} list of all academic experiences
  */
-const getAll = async () => {
-  const academicExperiences = await AcademicExperience.find().sort("title");
-  return academicExperiences;
-};
+const getAll = async () => await AcademicExperience.find().sort("title");
 
 /**
  * Get academic experience by id
  * @param {string} id
  * @returns {object} academic experience
  */
-const getById = async (id) => {
-  const academicExperience = await AcademicExperience.findById(
-    mongoose.Types.ObjectId(id)
-  );
-  return academicExperience;
-};
+const getById = async (id) =>
+  await AcademicExperience.findById(mongoose.Types.ObjectId(id));
 
 /**
  * Create academic experience
@@ -35,13 +28,12 @@ const getById = async (id) => {
  * @returns {object} academic experience created
  */
 const create = async ({ title, category, institution }) => {
-  let academicExperience = new AcademicExperience({
+  const academicExperience = new AcademicExperience({
     title: title,
     category: category,
     institution: institution,
   });
-  academicExperience = await academicExperience.save();
-  return academicExperience;
+  return await academicExperience.save();
 };
 
 /**
@@ -52,8 +44,8 @@ const create = async ({ title, category, institution }) => {
  * @param {string} institution
  * @returns {object} academic experience updated
  */
-const update = async (id, { title, category, institution }) => {
-  const academicExperience = await AcademicExperience.findByIdAndUpdate(
+const update = async (id, { title, category, institution }) =>
+  await AcademicExperience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       title: title,
@@ -62,20 +54,14 @@ const update = async (id, { title, category, institution }) => {
     },
     { new: true }
   );
-  return academicExperience;
-};
 
 /**
  * Remove academic experience by id
  * @param {string} id
  * @returns {object} academic experience removed
  */
-const remove = async (id) => {
-  const academicExperience = await AcademicExperience.findByIdAndRemove(
-    mongoose.Types.ObjectId(id)
-  );
-  return academicExperience;
-};
+const remove = async (id) =>
+  await AcademicExperience.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
 /**
  * Validate academic experience

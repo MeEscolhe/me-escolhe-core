@@ -7,20 +7,15 @@ const mongoose = require("mongoose");
  * Get all experiences
  * @returns {array} list of all experiences
  */
-const getAll = async () => {
-  const experience = await Experience.find();
-  return experience;
-};
+const getAll = async () => await Experience.find();
 
 /**
  * Get experience by id
  * @param {string} id
  * @returns {object} experience
  */
-const getById = async (id) => {
-  const experience = await Experience.findById(mongoose.Types.ObjectId(id));
-  return experience;
-};
+const getById = async (id) =>
+  await Experience.findById(mongoose.Types.ObjectId(id));
 
 /**
  * Create experience
@@ -29,12 +24,11 @@ const getById = async (id) => {
  * @returns {object} experience created
  */
 const create = async ({ academic, work }) => {
-  let experience = new Experience({
+  const experience = new Experience({
     academic: academic,
     work: work,
   });
-  experience = await experience.save();
-  return experience;
+  return await experience.save();
 };
 
 /**
@@ -44,8 +38,8 @@ const create = async ({ academic, work }) => {
  * @param {array} work
  * @returns {object} experience updated
  */
-const update = async (id, { academic, work }) => {
-  const experience = await Experience.findByIdAndUpdate(
+const update = async (id, { academic, work }) =>
+  await Experience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       academic: academic,
@@ -53,20 +47,14 @@ const update = async (id, { academic, work }) => {
     },
     { new: true }
   );
-  return experience;
-};
 
 /**
  * Remove experience by id
  * @param {string} id
  * @returns {object} experience removed
  */
-const remove = async (id) => {
-  const experience = await Experience.findByIdAndRemove(
-    mongoose.Types.ObjectId(id)
-  );
-  return experience;
-};
+const remove = async (id) =>
+  await Experience.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
 /**
  * Validate academic experience

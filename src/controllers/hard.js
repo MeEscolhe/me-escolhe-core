@@ -7,20 +7,14 @@ const mongoose = require("mongoose");
  * Get all hard skills
  * @returns {array} list of all hard skills
  */
-const getAll = async () => {
-  const hards = await Hard.find().sort("name");
-  return hards;
-};
+const getAll = async () => await Hard.find().sort("name");
 
 /**
  * Get hard skill by id
  * @param {string} id
  * @returns {object} hard skill
  */
-const getById = async (id) => {
-  const hard = await Hard.findById(mongoose.Types.ObjectId(id));
-  return hard;
-};
+const getById = async (id) => await Hard.findById(mongoose.Types.ObjectId(id));
 
 /**
  * Create hard skill
@@ -29,12 +23,11 @@ const getById = async (id) => {
  * @returns {object} hard skill created
  */
 const create = async ({ name, level }) => {
-  let hard = new Hard({
+  const hard = new Hard({
     name: name,
     level: level,
   });
-  hard = await hard.save();
-  return hard;
+  return await hard.save();
 };
 
 /**
@@ -44,8 +37,8 @@ const create = async ({ name, level }) => {
  * @param {number} level
  * @returns {object} hard skill updated
  */
-const update = async (id, { name, level }) => {
-  const hard = await Hard.findByIdAndUpdate(
+const update = async (id, { name, level }) =>
+  await Hard.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       name: name,
@@ -53,18 +46,14 @@ const update = async (id, { name, level }) => {
     },
     { new: true }
   );
-  return hard;
-};
 
 /**
  * Remove hard skill by id
  * @param {string} id
  * @returns {object} hard skill removed
  */
-const remove = async (id) => {
-  const hard = await Hard.findByIdAndRemove(mongoose.Types.ObjectId(id));
-  return hard;
-};
+const remove = async (id) =>
+  await Hard.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
 /**
  * Validate hard skill

@@ -6,6 +6,11 @@ const {
   getStudentWithSelections,
 } = require("../models/student");
 const { filterProps } = require("../middlewares/util");
+
+/**
+ * Get all students
+ * @returns {array} list of all students
+ */
 const getAll = () => Student.find().sort("registration");
 
 /**
@@ -13,19 +18,20 @@ const getAll = () => Student.find().sort("registration");
  * @param {number} registration
  * @returns {object}
  */
-const getByRegistration = (registration) => Student.findOne(registration);
+const getByRegistration = async (registration) =>
+  await Student.findOne(registration);
 
 /**
  * Get student by registration with selections
  * @param {number} registration
  * @returns {object} student with selections
  */
-const getByRegistrationWithSelections = (registration) =>
-  Student.findOne({ registration: registration }).then((student) => {
-    if (student && student.error === undefined)
-      return getStudentWithSelections(student);
-    throw "The student with the given ID was not found.";
-  });
+const getByRegistrationWithSelections = async (registration) => {
+  const student = await Student.findOne({ registration: registration });
+  if (student && student.error === undefined)
+    return getStudentWithSelections(student);
+  throw "The student with the given ID was not found.";
+};
 
 /**
  * Create student
@@ -47,7 +53,7 @@ const create = async ({
   skills,
   experiences,
 }) => {
-  let student = new Student({
+  const student = new Student({
     registration: registration,
     name: name,
     email: email,
@@ -56,8 +62,7 @@ const create = async ({
     skills: skills,
     experiences: experiences,
   });
-  student = await student.save();
-  return student;
+  return await student.save();
 };
 
 /**
@@ -67,7 +72,7 @@ const create = async ({
  * @param {number} updatePhase, phase to update
  * @returns {object} student updated
  */
-const update = (registration, updateData, updatePhase) => {
+const update = async (registration, updateData, updatePhase) => {
   let propsToUpdate = [
     "name",
     "email",
@@ -77,8 +82,7 @@ const update = (registration, updateData, updatePhase) => {
     "experiences",
   ];
   if (updatePhase) propsToUpdate.push("phases");
-
-  return Student.findOneAndUpdate(
+  return await Student.findOneAndUpdate(
     { registration: registration },
     {
       registration: registration,
@@ -101,7 +105,8 @@ const update = (registration, updateData, updatePhase) => {
  * @param {string} registration
  * @returns {object} student removed
  */
-const remove = async (registration) => Student.findOneAndDelete(registration);
+const remove = async (registration) =>
+  await Student.findOneAndDelete(registration);
 
 /**
  * Validate student

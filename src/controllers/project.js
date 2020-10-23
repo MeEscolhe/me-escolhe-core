@@ -7,10 +7,7 @@ const mongoose = require("mongoose");
  * Get all projects
  * @returns {array} list of all projects
  */
-const getAll = async () => {
-  const projects = await Project.find().sort("name");
-  return projects;
-};
+const getAll = async () => await Project.find().sort("name");
 
 /**
  * Get project by id
@@ -28,13 +25,12 @@ const getById = async (id) =>
  * @returns {object} project created
  */
 const create = async ({ name, description, selections }) => {
-  let project = new Project({
+  const project = new Project({
     name: name,
     description: description,
     selections: selections,
   });
-  project = await project.save();
-  return project;
+  return await project.save();
 };
 
 /**
@@ -45,8 +41,8 @@ const create = async ({ name, description, selections }) => {
  * @param {array} selections
  * @returns {object} project updated
  */
-const update = async (id, { name, description, selections }) => {
-  const project = await Project.findByIdAndUpdate(
+const update = async (id, { name, description, selections }) =>
+  await Project.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       name: name,
@@ -55,18 +51,14 @@ const update = async (id, { name, description, selections }) => {
     },
     { new: true }
   );
-  return project;
-};
 
 /**
  * Remove project by id
  * @param {string} id
  * @returns {object} project removed
  */
-const remove = async (id) => {
-  const project = await Project.findByIdAndRemove(mongoose.Types.ObjectId(id));
-  return project;
-};
+const remove = async (id) =>
+  await Project.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
 /**
  * Validate project

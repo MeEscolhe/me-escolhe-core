@@ -7,10 +7,7 @@ const mongoose = require("mongoose");
  * Get all teachers
  * @returns {array} list of all teachers
  */
-const getAll = async () => {
-  const teachers = await Teacher.find().sort("name");
-  return teachers;
-};
+const getAll = async () => await Teacher.find().sort("name");
 
 /**
  * Get teacher by id
@@ -30,15 +27,14 @@ const getById = async (id) =>
  * @returns {object} teacher created
  */
 const create = async ({ name, email, description, labId, managements }) => {
-  let teacher = new Teacher({
+  const teacher = new Teacher({
     name: name,
     email: email,
     description: description,
     labId: labId,
     managements: managements,
   });
-  teacher = await teacher.save();
-  return teacher;
+  return await teacher.save();
 };
 
 /**
@@ -51,8 +47,8 @@ const create = async ({ name, email, description, labId, managements }) => {
  * @param {array} managements
  * @returns {object} teacher updated
  */
-const update = async (id, { name, email, description, labId, managements }) => {
-  const teacher = await Teacher.findByIdAndUpdate(
+const update = async (id, { name, email, description, labId, managements }) =>
+  await Teacher.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       name: name,
@@ -63,18 +59,14 @@ const update = async (id, { name, email, description, labId, managements }) => {
     },
     { new: true }
   );
-  return teacher;
-};
 
 /**
  * Remove teacher by id
  * @param {string} id
  * @returns {object} teacher removed
  */
-const remove = async (id) => {
-  const teacher = await Teacher.findByIdAndRemove(mongoose.Types.ObjectId(id));
-  return teacher;
-};
+const remove = async (id) =>
+  await Teacher.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
 /**
  * Validate teacher
