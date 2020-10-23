@@ -18,7 +18,7 @@ const getAll = async () => {
 /**
  * Get academic experience by id
  * @param {string} id
- * @returns {string} academic experience
+ * @returns {object} academic experience
  */
 const getById = async (id) => {
   const academicExperience = await AcademicExperience.findById(
@@ -28,11 +28,11 @@ const getById = async (id) => {
 };
 
 /**
- * Create academic experience by id
+ * Create academic experience
  * @param {string} title
  * @param {string} category
  * @param {string} institution
- * @returns {string} academic experience created
+ * @returns {object} academic experience created
  */
 const create = async ({ title, category, institution }) => {
   let academicExperience = new AcademicExperience({
@@ -50,7 +50,7 @@ const create = async ({ title, category, institution }) => {
  * @param {string} title
  * @param {string} category
  * @param {string} institution
- * @returns {string} academic experience updated
+ * @returns {object} academic experience updated
  */
 const update = async (id, { title, category, institution }) => {
   const academicExperience = await AcademicExperience.findByIdAndUpdate(
@@ -68,7 +68,7 @@ const update = async (id, { title, category, institution }) => {
 /**
  * Remove academic experience by id
  * @param {string} id
- * @returns {string} academic experience removed
+ * @returns {object} academic experience removed
  */
 const remove = async (id) => {
   const academicExperience = await AcademicExperience.findByIdAndRemove(
@@ -80,7 +80,7 @@ const remove = async (id) => {
 /**
  * Validate academic experience
  * @param {object} object
- * @returns {string} error (when it happens)
+ * @returns {object} error (when it happens)
  */
 const validate = (object) => {
   const { error } = validateAcademicExperience(object);

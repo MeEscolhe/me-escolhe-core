@@ -9,14 +9,16 @@ const { filterProps } = require("../middlewares/util");
 const getAll = () => Student.find().sort("registration");
 
 /**
- * get student by registration
- * @param {number} registration student registration
- * @typedef {{registration: number, name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
- * @returns {StudentSchema}
+ * Get student by registration
+ * @param {number} registration
+ * @returns {object}
  */
 const getByRegistration = (registration) => Student.findOne(registration);
+
 /**
- * get student by registration with selections
+ * Get student by registration with selections
+ * @param {number} registration
+ * @returns {object} student with selections
  */
 const getByRegistrationWithSelections = (registration) =>
   Student.findOne({ registration: registration }).then((student) => {
@@ -24,6 +26,18 @@ const getByRegistrationWithSelections = (registration) =>
       return getStudentWithSelections(student);
     throw "The student with the given ID was not found.";
   });
+
+/**
+ * Create student
+ * @param {number} registration
+ * @param {string} name
+ * @param {string} email
+ * @param {number} cra
+ * @param {string} description
+ * @param {array} skills
+ * @param {array} experiences
+ * @returns {object} student created
+ */
 const create = async ({
   registration,
   name,
@@ -46,6 +60,13 @@ const create = async ({
   return student;
 };
 
+/**
+ * Update student
+ * @param {number} registration
+ * @param {object} updateData, student to update
+ * @param {number} updatePhase, phase to update
+ * @returns {object} student updated
+ */
 const update = (registration, updateData, updatePhase) => {
   let propsToUpdate = [
     "name",
@@ -74,13 +95,19 @@ const update = (registration, updateData, updatePhase) => {
     }
   );
 };
+
 /**
- * remove student by registration
- * @param {string} registration student registration
- * @returns {StudentSchema}
+ * Remove student by registration
+ * @param {string} registration
+ * @returns {object} student removed
  */
 const remove = async (registration) => Student.findOneAndDelete(registration);
 
+/**
+ * Validate student
+ * @param {object} object
+ * @returns {object} error (when it happens)
+ */
 const validate = (object) => {
   const { error } = validateStudent(object);
   return error;
