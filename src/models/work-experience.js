@@ -17,6 +17,14 @@ const WorkExperienceSchema = mongoose.model(
       type: Number,
       min: 0,
     },
+    initialDate: {
+      type: Date,
+      required: true,
+    },
+    finalDate: {
+      type: Date,
+      required: true,
+    },
   })
 );
 

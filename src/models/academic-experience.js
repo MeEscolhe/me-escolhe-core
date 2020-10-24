@@ -16,6 +16,14 @@ const AcademicExperienceSchema = mongoose.model(
       type: String,
       required: true,
     },
+    initialDate: {
+      type: Date,
+      required: true,
+    },
+    finalDate: {
+      type: Date,
+      required: true,
+    },
   })
 );
 
