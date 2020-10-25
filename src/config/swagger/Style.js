@@ -1,16 +1,41 @@
 module.exports = {
   styleCss: `
-  .swagger-ui .topbar-wrapper img {
+  .swagger-ui .info img {
     content: url(http://localhost:8080/static/images/Logo-me-escolhe-v7.png);
-    width: 118px;
-    height: 57px;
+    width: 169px;
+    height: 76px;
   }   
+  .swagger-ui .info div.renderedMarkdown{
+  
+    height: 80px;
+   
+  }
+  .swagger-ui .response-col_links {
+    display:none;
+  }
+  .swagger-ui .info {
+    display: flex;
+    margin: 50px 0;
+    flex-direction: row-reverse;
+    width: 288px;
+  }
+
+  .swagger-ui .info div.renderedMarkdown p{
+    display:flex;
+    flex-direction:column;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  .swagger-ui .info hgroup.main{
+    display: flex;
+    align-items: center;
+  }
   .swagger-ui .topbar{
-    background: rgb(220,213,233);
-    background: linear-gradient(90deg, rgba(220,213,233,1) 0%, rgba(137,95,205,1) 38%, rgba(95,19,235,1) 87%);
+    display:none;
   }
   .swagger-ui .scheme-container{
     background:none;
+    padding:0px 0px 30px 0px;
   }
   `,
 };

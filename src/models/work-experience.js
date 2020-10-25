@@ -1,5 +1,12 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
+const {
+  validate,
+  string,
+  number,
+  date,
+  finalDate,
+} = require("../middlewares/model-validator");
 
 const WorkExperienceSchema = mongoose.model(
   "WorkExperience",
@@ -29,13 +36,16 @@ const WorkExperienceSchema = mongoose.model(
 );
 
 function valWorkExperience(workExperience) {
-  const schemaWorkExperience = Joi.object().keys({
-    role: Joi.string().min(3).max(30).required(),
-    institution: Joi.string().min(3).max(50).required(),
-    durationInMonths: Joi.number().greater(0),
-  });
-
-  return schemaWorkExperience.validate(workExperience);
+  return validate(
+    {
+      role: string(),
+      institution: string(),
+      durationInMonths: number(),
+      initialDate: date(),
+      finalDate: finalDate("initialDate"),
+    },
+    workExperience
+  );
 }
 
 module.exports = {

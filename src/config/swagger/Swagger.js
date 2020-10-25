@@ -2,9 +2,8 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = {
   openapi: "3.0.1",
   info: {
-    title: "Me Escolhe API",
     version: "1.0.0",
-    description: "",
+    description: `<img src="http://localhost:8080/static/images/Logo-me-escolhe-v7.png)" /> API Documentation`,
   },
   components: {
     securitySchemes: {
@@ -98,7 +97,7 @@ const swaggerSpecs = {
 };
 module.exports = {
   swaggerServe: swaggerUi.serve,
-  swaggetSetup: swaggerUi.setup(swaggerSpecs, {
+  swaggerSetup: swaggerUi.setup(swaggerSpecs, {
     customSiteTitle: "Me Escolhe API",
     customfavIcon: "http://localhost:8080/static/images/Logo.png",
     customCss: require("./Style").styleCss,

@@ -91,7 +91,7 @@ const withParameters = {
     parameters: [
       {
         in: "path",
-        name: "_id",
+        name: "id",
         schema: {
           type: "string",
           example: "5f5d1fa6dccfa335d03fdd3e",
@@ -184,7 +184,7 @@ const withParameters = {
     parameters: [
       {
         in: "path",
-        name: "_id",
+        name: "id",
         schema: {
           type: "string",
           example: "5f28ac7082e88b35448255e8",
