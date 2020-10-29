@@ -4,7 +4,7 @@ const PhaseController = require("../controllers/phase");
 const SelectionController = require("../controllers/selection");
 const express = require("express");
 const router = express.Router();
-const { isEmpty, validate } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
 router.get("/", async (req, res) => {
   const phases = PhaseController.getAll();
@@ -43,13 +43,25 @@ router.post("/", async (request, response) => {
   }
 });
 
-router.put("/student/:id", async (req, res) => {
-  PhaseController.addStudent(req.params.id, req.body.studentId)
-    .then((phase) => {
-      res.send(phase);
-    })
-    .catch((error) => res.status(400).send(error));
+router.put("/:id", (request, response) => {
+  const { error, message } = validate(request.body, PhaseController);
+  if (error) {
+    response.status(400).send(message);
+  } else {
+    const propsToUpdate = ["students", "selectionId", "description"];
+    PhaseController.update(
+      request.params.id,
+      filterProps(request.body, propsToUpdate)
+    ).then((phase) => {
+      if (!phase) {
+        response.status(404).send("The phase with the given ID was not found.");
+      } else {
+        response.send(phase);
+      }
+    });
+  }
 });
+
 router.delete("/:id/student/:studentId", async (req, res) =>
   PhaseController.removeStudent(req.params.id, req.body.studentId)
     .then((phase) => {

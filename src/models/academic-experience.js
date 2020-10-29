@@ -1,5 +1,11 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
+const {
+  validate,
+  string,
+  date,
+  finalDate,
+} = require("../middlewares/model-validator");
 
 const AcademicExperienceSchema = mongoose.model(
   "AcademicExperience",
@@ -16,18 +22,31 @@ const AcademicExperienceSchema = mongoose.model(
       type: String,
       required: true,
     },
+    initialDate: {
+      type: Date,
+      required: true,
+    },
+    finalDate: {
+      type: Date,
+      required: true,
+    },
   })
 );
 
-function validateAcademicExperience(academicExperience) {
-  const schemaAcademicExperience = Joi.object().keys({
-    type: Joi.string().min(4).max(30).required(),
-    category: Joi.string().min(4).max(50).required(),
-    institution: Joi.string().min(4).max(50).required(),
-  });
-
-  return schemaAcademicExperience.validate(academicExperience.body);
+function valAcademicExperience(academicExperience) {
+  return validate(
+    {
+      title: string(),
+      category: string(),
+      institution: string(),
+      initialDate: date(),
+      finalDate: finalDate("initialDate"),
+    },
+    academicExperience
+  );
 }
 
-exports.AcademicExperience = AcademicExperienceSchema;
-exports.valAcademicExperience = validateAcademicExperience;
+module.exports = {
+  AcademicExperience: AcademicExperienceSchema,
+  valAcademicExperience,
+};

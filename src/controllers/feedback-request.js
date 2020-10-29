@@ -5,7 +5,6 @@ const {
   valFeedbackRequest,
 } = require("../models/feedback-request");
 const mongoose = require("mongoose");
-const { updateObject } = require("../middlewares/util");
 const getAll = async () => {
   const feedbackRequests = await FeedbackRequest.find();
   return feedbackRequests;

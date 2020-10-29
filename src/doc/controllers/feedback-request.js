@@ -1,6 +1,6 @@
 const withoutParameters = {
   get: {
-    tags: ["Feedback request"],
+    tags: ["Feedback Request"],
     description: "",
     parameters: [],
     responses: {
@@ -34,7 +34,7 @@ const withoutParameters = {
   },
 
   post: {
-    tags: ["Feedback request"],
+    tags: ["Feedback Request"],
     description: "",
     parameters: [],
     requestBody: {
@@ -92,12 +92,12 @@ const withoutParameters = {
 
 const withParameters = {
   get: {
-    tags: ["Feedback request"],
+    tags: ["Feedback Request"],
     description: "",
     parameters: [
       {
         in: "path",
-        name: "_id",
+        name: "id",
         schema: {
           type: "string",
           example: "5f5d1fa6dccfa335d03fdd3e",
@@ -134,7 +134,7 @@ const withParameters = {
   },
 
   put: {
-    tags: ["Feedback request"],
+    tags: ["Feedback Request"],
     description: "",
     parameters: [
       {
@@ -185,12 +185,12 @@ const withParameters = {
   },
 
   delete: {
-    tags: ["Feedback request"],
+    tags: ["Feedback Request"],
     description: "",
     parameters: [
       {
         in: "path",
-        name: "_id",
+        name: "id",
         schema: {
           type: "string",
           example: "5f28ac7082e88b35448255e8",

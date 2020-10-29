@@ -18,23 +18,36 @@ const getById = async (id) => {
   return workExperience;
 };
 
-const create = async ({ role, institution, durationInMonths }) => {
+const create = async ({
+  role,
+  institution,
+  durationInMonths,
+  initialDate,
+  finalDate,
+}) => {
   let workExperience = new WorkExperience({
     role: role,
     institution: institution,
     durationInMonths: durationInMonths,
+    initialDate: initialDate,
+    finalDate: finalDate,
   });
   workExperience = await workExperience.save();
   return workExperience;
 };
 
-const update = async (id, { role, institution, durationInMonths }) => {
+const update = async (
+  id,
+  { role, institution, durationInMonths, initialDate, finalDate }
+) => {
   const workExperience = await WorkExperience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       role: role,
       institution: institution,
-      durationInMonths: durationInMonths
+      durationInMonths: durationInMonths,
+      initialDate: initialDate,
+      finalDate: finalDate,
     },
     { new: true }
   );

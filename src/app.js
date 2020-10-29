@@ -1,8 +1,12 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
+
 require("./config/Mongoose")(false);
-const { swaggerServe, swaggetSetup } = require("./config/Swagger");
+const { swaggerServe, swaggerSetup } = require("./config/swagger/Swagger");
+app.use(express.static("public"));
+app.use("/static", express.static("public"));
+
 const {
   labs,
   workExperiences,
@@ -39,6 +43,6 @@ app.use("/projects", projects);
 app.use("/feedbackRequests", feedbackRequests);
 app.use("/students", students);
 app.use("/teachers", teachers);
-app.use("/docs", swaggerServe, swaggetSetup);
+app.use("/docs", swaggerServe, swaggerSetup);
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
