@@ -89,7 +89,7 @@ const withoutParameters = {
               {
                 type: "string",
                 pattern: "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
-                example: "2018-08-22"
+                example: "2019-10-23"
               }
             },
           },

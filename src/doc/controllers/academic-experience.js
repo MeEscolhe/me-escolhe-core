@@ -88,7 +88,7 @@ const withoutParameters =
               finalDate:
               {
                 type: "string",
-                example: "2018-08-22"
+                example: "2019-10-23"
               }
             },
           },
