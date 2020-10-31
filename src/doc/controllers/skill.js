@@ -5,7 +5,7 @@ const withoutParameters = {
     parameters: [],
     responses: {
       200: {
-        description: "GET: successful",
+        description: "Successful.",
         content: {
           "application/json": {
             schema: {
@@ -19,7 +19,7 @@ const withoutParameters = {
       },
 
       400: {
-        description: "GET: unsuccessful",
+        description: "Unsuccessful.",
         content: {
           "application/json": {
             schema: {
@@ -83,7 +83,7 @@ const withoutParameters = {
 
     responses: {
       200: {
-        description: "POST: successful.",
+        description: "Successful.",
         content: {
           "application/json": {
             schema: {
@@ -94,7 +94,7 @@ const withoutParameters = {
       },
 
       400: {
-        description: "POST: unsuccessful",
+        description: "Unsuccessful.",
         content: {
           "application/json": {
             schema: {
@@ -126,7 +126,7 @@ const withParameters = {
 
     responses: {
       200: {
-        description: "GET: successful.",
+        description: "Successful.",
         content: {
           "application/json": {
             schema: {
@@ -138,7 +138,7 @@ const withParameters = {
       },
 
       404: {
-        description: "GET: unsuccessful",
+        description: "Unsuccessful.",
         content: {
           "application/json": {
             schema: {
@@ -178,7 +178,7 @@ const withParameters = {
 
     responses: {
       200: {
-        description: "PUT: successful.",
+        description: "Successful.",
         content: {
           "application/json": {
             schema: {
@@ -189,7 +189,7 @@ const withParameters = {
       },
 
       400: {
-        description: "PUT: unsuccessful",
+        description: "Unsuccessful.",
         content: {
           "application/json": {
             schema: {
@@ -219,7 +219,7 @@ const withParameters = {
 
     responses: {
       200: {
-        description: "DELETE: successful.",
+        description: "Successful.",
         content: {
           "application/json": {
             schema: {
@@ -231,7 +231,7 @@ const withParameters = {
       },
 
       404: {
-        description: "DELETE: unsuccessful",
+        description: "Unsuccessful.",
         content: {
           "application/json": {
             schema: {
