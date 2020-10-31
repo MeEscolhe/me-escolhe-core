@@ -62,13 +62,7 @@ router
     if (error) {
       response.status(400).send(message);
     } else {
-      const propsToUpdate = [
-        "role",
-        "institution",
-        "durationInMonths",
-        "initialDate",
-        "finalDate",
-      ];
+      const propsToUpdate = ["role", "institution", "initialDate", "finalDate"];
       workExperienceController
         .update(request.params.id, filterProps(request.body, propsToUpdate))
         .then((workExperience) => {

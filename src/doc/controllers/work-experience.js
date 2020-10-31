@@ -52,11 +52,6 @@ const withoutParameters = {
                 type: "String",
                 example: "Microsoft",
               },
-
-              durationInMonths: {
-                type: "Number",
-                example: 5,
-              },
             },
           },
         },

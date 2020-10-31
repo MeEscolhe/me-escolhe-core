@@ -1,6 +1,6 @@
 {
     "type": "object",
-    "required": ["id", "role", "institution", "durationInMonths"],
+    "required": ["id", "role", "institution"],
     "properties": 
     {
       "id": 
@@ -19,12 +19,6 @@
       {
         "type": "string",
         "example": "Microsoft"
-      },
-
-      "durationInMonths: ": 
-      {
-        "type": "number",
-        "example": 5
       }
       
     }
