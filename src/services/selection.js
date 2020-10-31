@@ -15,7 +15,8 @@ router.get("/", async (request, response) => {
 });
 
 router.get("/:id", async (request, response) => {
-  const selection = SelectionController.getById(request.params.id);
+  const selection = await SelectionController.getById(request.params.id);
+
   if (!selection) {
     return response
       .status(404)
@@ -39,7 +40,13 @@ router.put("/:id", (request, response) => {
   if (error) {
     response.status(400).send(message);
   } else {
-    const propsToUpdate = ["role", "description", "phases", "current", "skills"];
+    const propsToUpdate = [
+      "role",
+      "description",
+      "phases",
+      "current",
+      "skills",
+    ];
     SelectionController.update(
       request.params.id,
       filterProps(request.body, propsToUpdate)
