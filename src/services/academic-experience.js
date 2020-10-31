@@ -68,7 +68,13 @@ router
     if (error) {
       response.status(400).send(message);
     } else {
-      const propsToUpdate = ["title", "category", "institution"];
+      const propsToUpdate = [
+        "title",
+        "category",
+        "institution",
+        "initialDate",
+        "finalDate",
+      ];
       academicExperienceController
         .update(request.params.id, filterProps(request.body, propsToUpdate))
         .then((academicExperience) => {
