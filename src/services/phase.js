@@ -6,76 +6,81 @@ const express = require("express");
 const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
-router.get("/", async (req, res) => {
-  const phases = PhaseController.getAll();
-  if (isEmpty(phases)) {
-    return res.status(404).send("No phases to show.");
-  }
-  res.send(phases);
-});
+router
+  .route("/")
+  .get(async (request, response) => {
+    const phases = await PhaseController.getAll();
+    if (isEmpty(phases)) {
+      response.status(404).send("No phases to show.");
+    }
+    response.send(phases);
+  })
 
-router.get("/:id", async (req, res) => {
-  const phase = PhaseController.getById(req.params.id);
-  if (!phase) {
-    return res.status(404).send("The phases with the given ID was not found.");
-  }
-  res.send(phase);
-});
+  .post("/", async (request, response) => {
+    const { error, message } = validate(request.body, PhaseController);
+    if (error) {
+      response.status(400).send(message);
+    } else {
+      const phase = await PhaseController.create(request.body);
+      const { selectionId } = request.body;
 
-router.post("/", async (request, response) => {
-  const { error, message } = validate(request.body, PhaseController);
-  if (error) {
-    response.status(400).send(message);
-  } else {
-    const phase = await PhaseController.create(request.body);
-    const { selectionId } = request.body;
-    SelectionController.getById(selectionId).then((selection) => {
+      const selection = await SelectionController.getById(selectionId);
       if (!selection) {
-        return response
+        response
           .status(404)
           .send("The selection with the given selectionId was not found.");
       } else {
         selection.phases.push(phase.id);
-        SelectionController.update(selection._id, selection);
+        await SelectionController.update(selection._id, selection);
         response.send(phase);
       }
-    });
-  }
-});
+    }
+  });
 
-router.put("/:id", (request, response) => {
-  const { error, message } = validate(request.body, PhaseController);
-  if (error) {
-    response.status(400).send(message);
-  } else {
-    const propsToUpdate = ["students", "selectionId", "description"];
-    PhaseController.update(
-      request.params.id,
-      filterProps(request.body, propsToUpdate)
-    ).then((phase) => {
+router
+  .route("/:id")
+  .get(async (request, response) => {
+    const phase = await PhaseController.getById(request.params.id);
+    if (!phase) {
+      response.status(404).send("The phases with the given ID was not found.");
+    }
+    response.send(phase);
+  })
+
+  .put(async (request, response) => {
+    const { error, message } = validate(request.body, PhaseController);
+    if (error) {
+      response.status(400).send(message);
+    } else {
+      const propsToUpdate = ["students", "selectionId", "description"];
+      const phase = await PhaseController.update(
+        request.params.id,
+        filterProps(request.body, propsToUpdate)
+      );
       if (!phase) {
         response.status(404).send("The phase with the given ID was not found.");
       } else {
         response.send(phase);
       }
-    });
-  }
-});
+    }
+  })
 
-router.delete("/:id/student/:studentId", async (req, res) =>
-  PhaseController.removeStudent(req.params.id, req.body.studentId)
-    .then((phase) => {
-      res.send(phase);
-    })
-    .catch((error) => res.status(400).send(error))
-);
+  .delete(async (request, response) => {
+    const phases = await PhaseController.remove(request.params.id);
+    if (!phases) {
+      return response
+        .status(404)
+        .send("The phases with the given ID was not found.");
+    }
+    response.send(phases);
+  });
 
-router.delete("/:id", async (req, res) => {
-  const phases = PhaseController.remove(req.params.id);
-  if (!phases) {
-    return res.status(404).send("The phases with the given ID was not found.");
-  }
-  res.send(phases);
+router.route("/:id/student/:studentId").delete(async (request, response) => {
+  const phase = PhaseController.removeStudent(
+    request.params.id,
+    request.body.studentId
+  );
+  response.send(phase);
 });
 
 module.exports = router;

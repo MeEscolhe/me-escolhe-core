@@ -3,46 +3,53 @@
 const feedbackRequestCtrl = require("../controllers/feedback-request");
 const express = require("express");
 const router = express.Router();
+const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
-router.get("/", (req, res) =>
-  feedbackRequestCtrl
-    .getAll()
-    .then((feedbackRequests) => res.send(feedbackRequests))
-    .catch((e) => res.status(400).send(e.message))
-);
+router
+  .route("/")
+  .get(async (request, response) => {
+    const feedbackRequests = await feedbackRequestCtrl.getAll();
+    if (isEmpty(feedbackRequests)) {
+      response.status(404).send("No feedback requests to show.");
+    } else {
+      response.send(feedbackRequests);
+    }
+  })
 
-router.get("/:id", (req, res) =>
-  feedbackRequestCtrl
-    .getById(req.params.id)
-    .then((feedbackRequest) => {
-      if (!feedbackRequest) {
-        res.status(400).send("Feedback request not found");
-      } else {
-        res.send(feedbackRequest);
-      }
-    })
-    .catch((e) => res.status(400).send(e))
-);
+  .post(async (request, response) => {
+    const { error } = validate(request.body, feedbackRequestCtrl);
+    if (error) {
+      response.status(400).send("This feedback request cannot be created.");
+    } else {
+      const feedbackRequest = await feedbackRequestCtrl.create(request.body);
+      response.send(feedbackRequest);
+    }
+  });
 
-router.post("/", (req, res) =>
-  feedbackRequestCtrl
-    .create(req.body)
-    .then((feedback) => res.send(feedback))
-    .catch((e) => res.status(400).send(e))
-);
+router
+  .route("/:id")
+  .get(async (request, response) => {
+    const feedbackRequest = await feedbackRequestCtrl.getById(
+      request.params.id
+    );
+    if (!feedbackRequest) {
+      response
+        .status(404)
+        .send("The feedback request with the given ID was not found.");
+    } else {
+      response.send(feedbackRequest);
+    }
+  })
 
-router.delete("/:id/", (req, res) =>
-  feedbackRequestCtrl
-    .remove(req.params.id)
-    .then((feedbackRequest) => {
-      if (!feedbackRequest) {
-        return res
-          .status(400)
-          .send("The feedbackRequest with the given ID was not found.");
-      }
-      res.send(feedbackRequest);
-    })
-    .catch((e) => res.status(400).send(e))
-);
+  .delete(async (request, response) => {
+    const feedbackRequest = await feedbackRequestCtrl.remove(request.params.id);
+    if (!feedbackRequest) {
+      response
+        .status(404)
+        .send("The feedback request with the given ID was not found.");
+    } else {
+      response.send(academicExperience);
+    }
+  });
 
 module.exports = router;
