@@ -18,23 +18,36 @@ const getById = async (id) => {
   return academicExperience;
 };
 
-const create = async ({ title, category, institution }) => {
+const create = async ({
+  title,
+  category,
+  institution,
+  initialDate,
+  finalDate,
+}) => {
   let academicExperience = new AcademicExperience({
     title: title,
     category: category,
     institution: institution,
+    initialDate: initialDate,
+    finalDate: finalDate,
   });
   academicExperience = await academicExperience.save();
   return academicExperience;
 };
 
-const update = async (id, { title, category, institution }) => {
+const update = async (
+  id,
+  { title, category, institution, initialDate, finalDate }
+) => {
   const academicExperience = await AcademicExperience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       title: title,
       category: category,
       institution: institution,
+      initialDate: initialDate,
+      finalDate: finalDate,
     },
     { new: true }
   );
