@@ -20,10 +20,6 @@ const WorkExperienceSchema = mongoose.model(
       type: String,
       required: true,
     },
-    durationInMonths: {
-      type: Number,
-      min: 0,
-    },
     initialDate: {
       type: Date,
       required: true,
@@ -40,7 +36,6 @@ function valWorkExperience(workExperience) {
     {
       role: string(),
       institution: string(),
-      durationInMonths: number(),
       initialDate: date(),
       finalDate: finalDate("initialDate"),
     },

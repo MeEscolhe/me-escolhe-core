@@ -1,23 +1,16 @@
 const withoutParameters = {
-  get: 
-  {
+  get: {
     tags: ["Work Experience"],
     description: "",
     parameters: [],
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "Successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "array",
-              items: 
-              {
+              items: {
                 $ref: "#/components/schemas/work-experience",
               },
             },
@@ -25,15 +18,11 @@ const withoutParameters = {
         },
       },
 
-      400: 
-      {
+      400: {
         description: "Unsuccessful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "No work experiences to show.",
               enum: ["No work experiences to show."],
@@ -44,85 +33,60 @@ const withoutParameters = {
     },
   },
 
-  post: 
-  {
+  post: {
     tags: ["Work Experience"],
     description: "",
     parameters: [],
-    requestBody: 
-    {
-      content: 
-      {
-        "application/json": 
-        {
-          schema: 
-          {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
             type: "object",
-            properties: 
-            {
-              role: 
-              {
+            properties: {
+              role: {
                 type: "String",
                 example: "Developer",
               },
 
-              institution: 
-              {
+              institution: {
                 type: "String",
                 example: "Microsoft",
               },
 
-              durationInMonths: 
-              {
-                type: "Number",
-                example: 5,
+              initialDate: {
+                type: "string",
+                pattern: "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+                example: "2018-08-22",
               },
 
-              initialDate:
-              {
+              finalDate: {
                 type: "string",
                 pattern: "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
-                example: "2018-08-22"
+                example: "2019-10-23",
               },
-  
-              finalDate:
-              {
-                type: "string",
-                pattern: "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
-                example: "2019-10-23"
-              }
             },
           },
         },
       },
     },
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "Successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/work-experience",
             },
           },
         },
       },
 
-      400: 
-      {
+      400: {
         description: "Unsuccessful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "This work experience cannot be created.",
             },
@@ -133,19 +97,15 @@ const withoutParameters = {
   },
 };
 
-const withParameters = 
-{
-  get: 
-  {
+const withParameters = {
+  get: {
     tags: ["Work Experience"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         in: "path",
         name: "id",
-        schema: 
-        {
+        schema: {
           type: "string",
           example: "5f5d1fa6dccfa335d03fdd3e",
         },
@@ -153,17 +113,12 @@ const withParameters =
       },
     ],
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "Successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/work-experience",
             },
           },
@@ -171,15 +126,11 @@ const withParameters =
         },
       },
 
-      404: 
-      {
+      404: {
         description: "Unsuccessful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "The work experience with the given id was not found.",
             },
@@ -192,60 +143,45 @@ const withParameters =
   put: {
     tags: ["Work Experience"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         name: "id",
         in: "path",
         description: "ID of work experience",
         required: true,
-        schema: 
-        {
+        schema: {
           type: "string",
         },
       },
     ],
 
-    requestBody: 
-    {
-      content: 
-      {
-        "application/json": 
-        {
-          schema: 
-          {
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
             $ref: "#/components/schemas/work-experience",
           },
         },
       },
     },
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "Successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/work-experience",
             },
           },
         },
       },
 
-      400: 
-      {
+      400: {
         description: "Unsuccessful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "This work experience cannot be updatedted.",
             },
@@ -255,17 +191,14 @@ const withParameters =
     },
   },
 
-  delete: 
-  {
+  delete: {
     tags: ["Work Experience"],
     description: "",
-    parameters: 
-    [
+    parameters: [
       {
         in: "path",
         name: "id",
-        schema: 
-        {
+        schema: {
           type: "string",
           example: "5f28ac7082e88b35448255e8",
         },
@@ -273,17 +206,12 @@ const withParameters =
       },
     ],
 
-    responses: 
-    {
-      200: 
-      {
+    responses: {
+      200: {
         description: "Successful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               $ref: "#/components/schemas/work-experience",
             },
           },
@@ -291,15 +219,11 @@ const withParameters =
         },
       },
 
-      404: 
-      {
+      404: {
         description: "Unsuccessful.",
-        content: 
-        {
-          "application/json": 
-          {
-            schema: 
-            {
+        content: {
+          "application/json": {
+            schema: {
               type: "string",
               example: "The work experience with the given id was not found.",
             },

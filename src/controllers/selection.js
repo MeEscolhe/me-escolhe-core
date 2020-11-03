@@ -7,7 +7,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const getAll = async ({ page, limit }) =>
   await Selection.paginate({}, { page, limit });
 
-const getById = async (id) => await Selection.findById(id);
+const getById = async (id) => await Selection.findById(ObjectId(id));
 
 const create = async ({ role, description, phases, current, skills }) => {
   let selection = new Selection({

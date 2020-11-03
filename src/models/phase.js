@@ -19,6 +19,10 @@ const PhaseSchema = mongoose.model(
       type: ObjectId,
       ref: "Selection",
       required: true,
+      validate: {
+        validator: (v) => FKHelper(mongoose.model("Selection"), "_id", v),
+        message: `selectionId doesn't exist`,
+      },
     },
     description: {
       type: String,
