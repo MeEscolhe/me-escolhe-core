@@ -1,8 +1,8 @@
-1.  academic-experience: initialDate e finalDate ficam com valores null quando a operação de PUT é realizada. Ainda que sejam valores válidos;
-2.  work-experience:     se possui "initialDate" e "finalDate", qual a finalidade de "durationInMonths"? Também possui o mesmo bug acima;
+1.  academic-experience: ok;
+2.  work-experience:     ok;
 3.  experience:          ok;
 -----------------------------------------------------------------------------------------------------------------------------------------------
-4.  feedback-request:    PUT não pode ser executado;
+4.  feedback-request:    ok;
 -----------------------------------------------------------------------------------------------------------------------------------------------
 5.  hard:                GET sempre retorna "No hard skills to show.";
 6.  soft:                ok;
