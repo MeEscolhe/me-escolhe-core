@@ -1,0 +1,52 @@
+{
+    "type": "object",
+    "required": ["id", "name", "email",  "description", "labId", "managements"],
+    "properties": 
+    {
+      "id": 
+      {
+        "type": "string"
+      },
+
+      "name": 
+      {
+        "type": "string",
+        "example": "Jonas"
+          
+      },
+
+      "email": 
+      {
+        "type": "string",
+        "example": "jonas.alcantara@ccc.ufcg.edu.br"
+          
+      },
+
+
+      "description": 
+      {
+        "type": "string",
+        "example" : "Professor adjunto"
+          
+      },
+
+      "labId": 
+      {
+        "type": "string",
+        "examples": "6t71fk9127g63j85493265w2"
+         
+      },
+
+      "managements": 
+      {
+        "type": "array",
+         "items":
+         {
+          "type": "string",
+          "examples": ["4a14bg8357c32u09875565b7", "6u74zb0034f65zu435743o0"]
+         }
+      }
+
+    }
+  }
+  

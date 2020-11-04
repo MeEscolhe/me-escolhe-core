@@ -1,0 +1,36 @@
+{
+  "name": "me-escolhe-core",
+  "version": "1.0.0",
+  "main": "app.js",
+  "repository": "https://github.com/MeEscolhe/me-escolhe-core.git",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "joi": "^17.2.1",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.6",
+    "mongoose-paginate": "^5.0.3",
+    "swagger-ui-express": "^4.1.4"
+  },
+  "devDependencies": {
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
+  }
+}
