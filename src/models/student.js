@@ -62,8 +62,8 @@ const StudentSchema = mongoose.model(
  * validade student from request
  * @param {StudentSchema} student
  */
-const validateStudent = (student) => {
-  return validate(
+const validateStudent = (student) =>
+  validate(
     {
       registration: number(),
       name: string(),
@@ -76,7 +76,6 @@ const validateStudent = (student) => {
     },
     student
   );
-};
 
 /**
  * Get student with his selections

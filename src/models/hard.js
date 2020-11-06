@@ -32,15 +32,14 @@ const HardSchema = mongoose.model(
  * Validate hard skill from request
  * @param {HardSchema} hard
  */
-const validateHard = (hard) => {
-  return validate(
+const validateHard = (hard) =>
+  validate(
     {
       name: string(),
       level: numericRange(0, 4),
     },
     hard
   );
-};
 
 module.exports = {
   Hard: HardSchema,

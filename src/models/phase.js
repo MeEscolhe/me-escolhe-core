@@ -38,8 +38,8 @@ const PhaseSchema = mongoose.model(
  * Validade phase from request
  * @param {PhaseSchema} phase
  */
-const validatePhase = (phase) => {
-  return validate(
+const validatePhase = (phase) =>
+  validate(
     {
       students: arrayOfIds(),
       selectionId: id(),
@@ -47,7 +47,6 @@ const validatePhase = (phase) => {
     },
     phase
   );
-};
 
 module.exports = {
   Phase: PhaseSchema,

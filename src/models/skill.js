@@ -36,8 +36,8 @@ const SkillSchema = mongoose.model(
  * validade skill from request
  * @param {SkillSchema} skill
  */
-const validateSkill = (skill) => {
-  return validate(
+const validateSkill = (skill) =>
+  validate(
     {
       languages: arrayOfIds(),
       soft: arrayOfIds(),
@@ -45,7 +45,6 @@ const validateSkill = (skill) => {
     },
     skill
   );
-};
 
 module.exports = {
   Skill: SkillSchema,

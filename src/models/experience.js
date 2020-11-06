@@ -28,15 +28,14 @@ const ExperienceSchema = mongoose.model(
  * Validate experience from request
  * @param {ExperienceSchema} experience
  */
-const validateExperience = (experience) => {
-  return validate(
+const validateExperience = (experience) =>
+  validate(
     {
       academic: arrayOfIds(),
       work: arrayOfIds(),
     },
     experience
   );
-};
 
 exports.Experience = ExperienceSchema;
 

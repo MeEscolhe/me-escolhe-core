@@ -39,8 +39,8 @@ const WorkExperienceSchema = mongoose.model(
  * Validade work experience from request
  * @param {WorkExperienceSchema} workExperience
  */
-function validateWorkExperience(workExperience) {
-  return validate(
+const validateWorkExperience = (workExperience) =>
+  validate(
     {
       role: string(),
       institution: string(),
@@ -49,7 +49,6 @@ function validateWorkExperience(workExperience) {
     },
     workExperience
   );
-}
 
 module.exports = {
   WorkExperience: WorkExperienceSchema,

@@ -35,8 +35,8 @@ const ProjectSchema = mongoose.model(
  * Validade project from request
  * @param {ProjectSchema} project
  */
-const validateProject = (project) => {
-  return validate(
+const validateProject = (project) =>
+  validate(
     {
       name: string(),
       description: string(),
@@ -44,7 +44,6 @@ const validateProject = (project) => {
     },
     project
   );
-};
 
 module.exports = {
   Project: ProjectSchema,

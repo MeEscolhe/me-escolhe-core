@@ -48,8 +48,8 @@ const SelectionSchema = mongoose.model("Selection", SelectionModel);
  * validade selection from request
  * @param {SelectionSchema} selection
  */
-const validateSelection = (selection) => {
-  return validate(
+const validateSelection = (selection) =>
+  validate(
     {
       role: string(),
       description: string(),
@@ -59,7 +59,6 @@ const validateSelection = (selection) => {
     },
     selection
   );
-};
 
 module.exports = {
   Selection: SelectionSchema,

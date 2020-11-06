@@ -26,15 +26,14 @@ const LabSchema = mongoose.model(
  * Validate lab from request
  * @param {LabSchema} lab
  */
-const validateLab = (lab) => {
-  return validate(
+const validateLab = (lab) =>
+  validate(
     {
       name: string(),
       description: string(),
     },
     lab
   );
-};
 
 module.exports = {
   Lab: LabSchema,

@@ -32,15 +32,14 @@ const LanguageSchema = mongoose.model(
  * Validate language from request
  * @param {LanguageSchema} language
  */
-const validateLanguage = (language) => {
-  return validate(
+const validateLanguage = (language) =>
+  validate(
     {
       name: string(),
       level: numericRange(0, 2),
     },
     language
   );
-};
 
 module.exports = {
   Language: LanguageSchema,

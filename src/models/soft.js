@@ -21,14 +21,13 @@ const SoftSchema = mongoose.model(
  * Validate soft skill from request
  * @param {SoftSchema} soft
  */
-function validateSoft(soft) {
-  return validate(
+const validateSoft = (soft) =>
+  validate(
     {
       name: string(),
     },
     soft
   );
-}
 
 module.exports = {
   Soft: SoftSchema,

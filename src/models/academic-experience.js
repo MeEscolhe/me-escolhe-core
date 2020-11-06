@@ -42,8 +42,8 @@ const AcademicExperienceSchema = mongoose.model(
  * Validate academic experience from request
  * @param {AcademicExperienceSchema} academicExperience
  */
-const validateAcademicExperience = (academicExperience) => {
-  return validate(
+const validateAcademicExperience = (academicExperience) =>
+  validate(
     {
       title: string(),
       category: string(),
@@ -53,7 +53,6 @@ const validateAcademicExperience = (academicExperience) => {
     },
     academicExperience
   );
-};
 
 module.exports = {
   AcademicExperience: AcademicExperienceSchema,
