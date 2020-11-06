@@ -64,18 +64,24 @@ router
     if (error) {
       response.status(400).send(message);
     } else {
-      const propsToUpdate = ["title", "category", "institution"];
-      const academicExperience = await academicExperienceController.update(
-        request.params.id,
-        filterProps(request.body, propsToUpdate)
-      );
-      if (!academicExperience) {
-        response
-          .status(404)
-          .send("The academic experience with the given ID was not found.");
-      } else {
-        response.send(academicExperience);
-      }
+      const propsToUpdate = [
+        "title",
+        "category",
+        "institution",
+        "initialDate",
+        "finalDate",
+      ];
+      academicExperienceController
+        .update(request.params.id, filterProps(request.body, propsToUpdate))
+        .then((academicExperience) => {
+          if (!academicExperience) {
+            response
+              .status(404)
+              .send("The academic experience with the given ID was not found.");
+          } else {
+            response.send(academicExperience);
+          }
+        });
     }
   });
 

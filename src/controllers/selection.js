@@ -16,7 +16,7 @@ const getAll = async ({ page, limit }) =>
  * @param {string} id
  * @returns {object} selection
  */
-const getById = async (id) => await Selection.findById(id);
+const getById = async (id) => await Selection.findById(ObjectId(id));
 
 /**
  * Create selection

@@ -25,13 +25,23 @@ const getById = async (id) =>
  * @param {string} title
  * @param {string} category
  * @param {string} institution
+ * @param {string} initialDate date in string format
+ * @param {string} finalDate date in string format
  * @returns {object} academic experience created
  */
-const create = async ({ title, category, institution }) => {
-  const academicExperience = new AcademicExperience({
+const create = async ({
+  title,
+  category,
+  institution,
+  initialDate,
+  finalDate,
+}) => {
+  let academicExperience = new AcademicExperience({
     title: title,
     category: category,
     institution: institution,
+    initialDate: initialDate,
+    finalDate: finalDate,
   });
   return await academicExperience.save();
 };
@@ -42,15 +52,22 @@ const create = async ({ title, category, institution }) => {
  * @param {string} title
  * @param {string} category
  * @param {string} institution
+ * @param {string} initialDate date in string format
+ * @param {string} finalDate date in string format
  * @returns {object} academic experience updated
  */
-const update = async (id, { title, category, institution }) =>
+const update = async (
+  id,
+  { title, category, institution, initialDate, finalDate }
+) =>
   await AcademicExperience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       title: title,
       category: category,
       institution: institution,
+      initialDate: initialDate,
+      finalDate: finalDate,
     },
     { new: true }
   );

@@ -61,7 +61,7 @@ router
     if (error) {
       response.status(400).send(message);
     } else {
-      const propsToUpdate = ["role", "institution", "durationInMonths"];
+      const propsToUpdate = ["role", "institution", "initialDate", "finalDate"];
       const workExperience = await workExperienceController.update(
         request.params.id,
         filterProps(request.body, propsToUpdate)

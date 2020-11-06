@@ -19,6 +19,11 @@ const array = (items) => Joi.array().items(items).min(0).required();
 
 const arrayOfIds = () => array(id());
 
+const date = () => Joi.date().iso().required();
+
+const finalDate = (initialDateName) =>
+  Joi.date().iso().greater(Joi.ref(initialDateName)).required();
+
 module.exports = {
   id,
   string,
@@ -28,4 +33,6 @@ module.exports = {
   array,
   arrayOfIds,
   validate,
+  date,
+  finalDate,
 };

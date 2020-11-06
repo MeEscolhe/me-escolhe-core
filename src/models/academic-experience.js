@@ -1,7 +1,12 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const { validate, string } = require("../middlewares/model-validator");
+const {
+  validate,
+  string,
+  date,
+  finalDate,
+} = require("../middlewares/model-validator");
 
 /**
  *  Academic experience model
@@ -22,6 +27,14 @@ const AcademicExperienceSchema = mongoose.model(
       type: String,
       required: true,
     },
+    initialDate: {
+      type: Date,
+      required: true,
+    },
+    finalDate: {
+      type: Date,
+      required: true,
+    },
   })
 );
 
@@ -35,6 +48,8 @@ const validateAcademicExperience = (academicExperience) => {
       title: string(),
       category: string(),
       institution: string(),
+      initialDate: date(),
+      finalDate: finalDate("initialDate"),
     },
     academicExperience
   );

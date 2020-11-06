@@ -25,13 +25,16 @@ const getById = async (id) =>
  * @param {string} role
  * @param {string} institution
  * @param {number} durationInMonths
+ * @param {string} initialDate date in string format
+ * @param {string} finalDate date in string format
  * @returns {object} work experience created
  */
-const create = async ({ role, institution, durationInMonths }) => {
-  const workExperience = new WorkExperience({
+const create = async ({ role, institution, initialDate, finalDate }) => {
+  let workExperience = new WorkExperience({
     role: role,
     institution: institution,
-    durationInMonths: durationInMonths,
+    initialDate: initialDate,
+    finalDate: finalDate,
   });
   return await workExperience.save();
 };
@@ -41,16 +44,18 @@ const create = async ({ role, institution, durationInMonths }) => {
  * @param {string} id
  * @param {string} role
  * @param {string} institution
- * @param {number} durationInMonths
+ * @param {string} initialDate date in string format
+ * @param {string} finalDate date in string format
  * @returns {object} work experience updated
  */
-const update = async (id, { role, institution, durationInMonths }) =>
+const update = async (id, { role, institution, initialDate, finalDate }) =>
   await WorkExperience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       role: role,
       institution: institution,
-      durationInMonths: durationInMonths,
+      initialDate: initialDate,
+      finalDate: finalDate,
     },
     { new: true }
   );
