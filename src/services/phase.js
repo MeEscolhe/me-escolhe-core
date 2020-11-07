@@ -16,7 +16,7 @@ router
     response.send(phases);
   })
 
-  .post("/", async (request, response) => {
+  .post(async (request, response) => {
     const { error, message } = validate(request.body, PhaseController);
     if (error) {
       response.status(400).send(message);
