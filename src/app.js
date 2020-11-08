@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
 require("./config/Mongoose")(false);
 const { swaggerServe, swaggerSetup } = require("./config/swagger/Swagger");
 app.use(express.static("public"));
 app.use("/static", express.static("public"));
+
+app.use(cors());
 
 const {
   labs,
