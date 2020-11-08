@@ -5,6 +5,7 @@ const mongoosePaginate = require("mongoose-paginate");
 const ObjectId = require("mongodb").ObjectID;
 const {
   validate,
+  string,
   arrayOfIds,
   boolean,
 } = require("../middlewares/model-validator");

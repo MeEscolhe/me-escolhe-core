@@ -8,7 +8,7 @@ const { isEmpty, validate, filterProps } = require("../middlewares/util");
 router
   .route("/")
   .get(async (request, response) => {
-    const projects = await awaiProjectController.getAll();
+    const projects = await ProjectController.getAll();
     if (isEmpty(projects)) {
       response.status(404).send("No projects to show.");
     } else {
@@ -29,7 +29,7 @@ router
 router
   .route("/:id")
   .get(async (request, response) => {
-    const project = await ProjectController.getByID(request.params.id);
+    const project = await ProjectController.getById(request.params.id);
     if (!project) {
       response.status(404).send("The project with the given ID was not found.");
     } else {

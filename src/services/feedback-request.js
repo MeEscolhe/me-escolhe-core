@@ -3,7 +3,7 @@
 const feedbackRequestCtrl = require("../controllers/feedback-request");
 const express = require("express");
 const router = express.Router();
-const { isEmpty, validate, filterProps } = require("../middlewares/util");
+const { isEmpty, validate } = require("../middlewares/util");
 
 router
   .route("/")
@@ -48,7 +48,7 @@ router
         .status(404)
         .send("The feedback request with the given ID was not found.");
     } else {
-      response.send(academicExperience);
+      response.send(feedbackRequest);
     }
   });
 
