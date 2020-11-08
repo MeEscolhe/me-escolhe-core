@@ -1,6 +1,16 @@
-const Joi = require("joi");
-const mongoose = require("mongoose");
+"use strict";
 
+const mongoose = require("mongoose");
+const {
+  validate,
+  string,
+  numericRange,
+} = require("../middlewares/model-validator");
+
+/**
+ *  Language model
+ *  @typedef {{name: string, level: number}} LanguageSchema
+ */
 const LanguageSchema = mongoose.model(
   "Language",
   new mongoose.Schema({
@@ -18,15 +28,20 @@ const LanguageSchema = mongoose.model(
   })
 );
 
-function valLanguage(language) {
-  const schemaLanguage = Joi.object().keys({
-    name: Joi.string().min(4).max(30).required(),
-    level: Joi.number().min(0).max(2).required(),
-  });
-  return schemaLanguage.validate(language);
-}
+/**
+ * Validate language from request
+ * @param {LanguageSchema} language
+ */
+const validateLanguage = (language) =>
+  validate(
+    {
+      name: string(),
+      level: numericRange(0, 2),
+    },
+    language
+  );
 
 module.exports = {
   Language: LanguageSchema,
-  valLanguage,
+  validateLanguage,
 };

@@ -1,4 +1,5 @@
-const Joi = require("joi");
+"use strict";
+
 const mongoose = require("mongoose");
 const {
   validate,
@@ -7,6 +8,10 @@ const {
   finalDate,
 } = require("../middlewares/model-validator");
 
+/**
+ *  Academic experience model
+ *  @typedef {{title: string, category: string, institution: string}} AcademicExperienceSchema
+ */
 const AcademicExperienceSchema = mongoose.model(
   "AcademicExperience",
   new mongoose.Schema({
@@ -33,8 +38,12 @@ const AcademicExperienceSchema = mongoose.model(
   })
 );
 
-function valAcademicExperience(academicExperience) {
-  return validate(
+/**
+ * Validate academic experience from request
+ * @param {AcademicExperienceSchema} academicExperience
+ */
+const validateAcademicExperience = (academicExperience) =>
+  validate(
     {
       title: string(),
       category: string(),
@@ -44,9 +53,8 @@ function valAcademicExperience(academicExperience) {
     },
     academicExperience
   );
-}
 
 module.exports = {
   AcademicExperience: AcademicExperienceSchema,
-  valAcademicExperience,
+  validateAcademicExperience,
 };

@@ -1,44 +1,63 @@
 "use strict";
 
-const { Soft, valSoft } = require("../models/soft");
+const { Soft, validateSoft } = require("../models/soft");
 const mongoose = require("mongoose");
 
-const getAll = async () => {
-  const softs = await Soft.find().sort("name");
-  return softs;
-};
+/**
+ * Get all soft skills
+ * @returns {array} list of all soft skills
+ */
+const getAll = async () => await Soft.find().sort("name");
 
-const getById = async (id) => {
-  const soft = await Soft.findById(mongoose.Types.ObjectId(id));
-  return soft;
-};
+/**
+ * Get soft skill by id
+ * @param {string} id
+ * @returns {object} soft skill
+ */
+const getById = async (id) => await Soft.findById(mongoose.Types.ObjectId(id));
 
+/**
+ * Create soft skill
+ * @param {string} name
+ * @returns {object} soft skill created
+ */
 const create = async ({ name }) => {
-  let soft = new Soft({
+  const soft = new Soft({
     name: name,
   });
-  soft = await soft.save();
-  return soft;
+  return await soft.save();
 };
 
-const update = async (id, { name }) => {
-  const soft = await Soft.findByIdAndUpdate(
+/**
+ * Update soft skill by id
+ * @param {string} id
+ * @param {string} name
+ * @returns {object} soft skill updated
+ */
+const update = async (id, { name }) =>
+  await Soft.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       name: name,
     },
     { new: true }
   );
-  return soft;
-};
 
-const remove = async (id) => {
-  const soft = await Soft.findByIdAndRemove(mongoose.Types.ObjectId(id));
-  return soft;
-};
+/**
+ * Remove soft skill by id
+ * @param {string} id
+ * @returns {object} soft skill removed
+ */
+const remove = async (id) =>
+  await Soft.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
+/**
+ * Validate soft skill
+ * @param {object} object
+ * @returns {object} error (when it happens)
+ */
 const validate = (object) => {
-  const { error } = valSoft(object);
+  const { error } = validateSoft(object);
   return error;
 };
 

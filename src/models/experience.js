@@ -1,7 +1,13 @@
+"use strict";
+
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const Joi = require("joi");
+const { validate, arrayOfIds } = require("../middlewares/model-validator");
 
+/**
+ *  Experience model
+ *  @typedef {{academic: array, work: array}} ExperienceSchema
+ */
 const ExperienceSchema = mongoose.model(
   "Experience",
   new mongoose.Schema({
@@ -18,18 +24,22 @@ const ExperienceSchema = mongoose.model(
   })
 );
 
-const valExperience = (experience) => {
-  const experienceSchema = Joi.object().keys({
-    academic: Joi.array().items(Joi.string()).min(0).required(),
-    work: Joi.array().items(Joi.string()).min(0).required(),
-  });
-
-  return experienceSchema.validate(experience);
-};
+/**
+ * Validate experience from request
+ * @param {ExperienceSchema} experience
+ */
+const validateExperience = (experience) =>
+  validate(
+    {
+      academic: arrayOfIds(),
+      work: arrayOfIds(),
+    },
+    experience
+  );
 
 exports.Experience = ExperienceSchema;
 
 module.exports = {
   Experience: ExperienceSchema,
-  valExperience,
+  validateExperience,
 };

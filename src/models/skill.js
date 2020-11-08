@@ -1,7 +1,13 @@
+"use strict";
+
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const Joi = require("joi");
+const { validate, arrayOfIds } = require("../middlewares/model-validator");
 
+/**
+ *  Skill model
+ *  @typedef {{languages: array, soft: array, hard: array}} SkillSchema
+ */
 const SkillSchema = mongoose.model(
   "Skill",
   new mongoose.Schema({
@@ -26,16 +32,21 @@ const SkillSchema = mongoose.model(
   })
 );
 
-function valSkill(skill) {
-  const SkillSchema = Joi.object().keys({
-    languages: Joi.array().items(Joi.string()).min(0).required(),
-    soft: Joi.array().items(Joi.string()).min(0).required(),
-    hard: Joi.array().items(Joi.string()).min(0).required(),
-  });
-  return SkillSchema.validate(skill);
-}
+/**
+ * validade skill from request
+ * @param {SkillSchema} skill
+ */
+const validateSkill = (skill) =>
+  validate(
+    {
+      languages: arrayOfIds(),
+      soft: arrayOfIds(),
+      hard: arrayOfIds(),
+    },
+    skill
+  );
 
 module.exports = {
   Skill: SkillSchema,
-  valSkill,
+  validateSkill,
 };

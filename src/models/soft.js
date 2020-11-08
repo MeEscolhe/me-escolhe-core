@@ -1,6 +1,12 @@
-const Joi = require("joi");
-const mongoose = require("mongoose");
+"use strict";
 
+const mongoose = require("mongoose");
+const { validate, string } = require("../middlewares/model-validator");
+
+/**
+ *  Soft model
+ *  @typedef {{name: string}} SoftSchema
+ */
 const SoftSchema = mongoose.model(
   "Soft",
   new mongoose.Schema({
@@ -11,14 +17,19 @@ const SoftSchema = mongoose.model(
   })
 );
 
-function valSoft(soft) {
-  const schemaSoft = Joi.object().keys({
-    name: Joi.string().min(4).max(50).required(),
-  });
-  return schemaSoft.validate(soft);
-}
+/**
+ * Validate soft skill from request
+ * @param {SoftSchema} soft
+ */
+const validateSoft = (soft) =>
+  validate(
+    {
+      name: string(),
+    },
+    soft
+  );
 
 module.exports = {
   Soft: SoftSchema,
-  valSoft,
+  validateSoft,
 };
