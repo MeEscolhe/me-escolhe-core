@@ -7,7 +7,9 @@ const {
   validate,
   string,
   arrayOfIds,
+  array,
   boolean,
+  number,
 } = require("../middlewares/model-validator");
 
 /**
@@ -35,9 +37,44 @@ const SelectionModel = new mongoose.Schema({
     default: true,
   },
   skills: {
-    type: [ObjectId],
-    ref: "SkillSchema",
-    default: [],
+    hardSkills: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        level: {
+          type: Number,
+          enum: [0, 1, 2, 3, 4],
+          default: 2,
+          required: true,
+          default: 0,
+        },
+      },
+    ],
+    softSkills: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    languages: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        level: {
+          type: Number,
+          enum: [0, 1, 2],
+          default: 1,
+          required: true,
+          default: "",
+        },
+      },
+    ],
   },
 });
 
@@ -56,7 +93,19 @@ const validateSelection = (selection) =>
       description: string(),
       phases: arrayOfIds(),
       current: boolean(),
-      skills: arrayOfIds(),
+      skills: {
+        hardSkills: array({
+          name: string(),
+          level: numericRange(0, 4),
+        }),
+        softSkills: array({
+          name: string(),
+        }),
+        language: array({
+          name: string(),
+          level: numericRange(0, 2),
+        }),
+      },
     },
     selection
   );

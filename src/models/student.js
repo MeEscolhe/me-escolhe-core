@@ -41,9 +41,44 @@ const StudentSchema = mongoose.model(
       default: "",
     },
     skills: {
-      type: [ObjectId],
-      ref: "SkillSchema",
-      default: [],
+      hardSkills: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+          level: {
+            type: Number,
+            enum: [0, 1, 2, 3, 4],
+            default: 2,
+            required: true,
+            default: 0,
+          },
+        },
+      ],
+      softSkills: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
+      languages: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+          level: {
+            type: Number,
+            enum: [0, 1, 2],
+            default: 1,
+            required: true,
+            default: "",
+          },
+        },
+      ],
     },
     experiences: {
       type: [ObjectId],
@@ -70,7 +105,19 @@ const validateStudent = (student) =>
       description: string(),
       email: string(),
       cra: numericRange(0, 10),
-      skills: arrayOfIds(),
+      skills: {
+        hardSkills: array({
+          name: string(),
+          level: numericRange(0, 4),
+        }),
+        softSkills: array({
+          name: string(),
+        }),
+        language: array({
+          name: string(),
+          level: numericRange(0, 2),
+        }),
+      },
       experiences: arrayOfIds(),
       phases: arrayOfIds(),
     },
