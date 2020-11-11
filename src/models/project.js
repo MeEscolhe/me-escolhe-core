@@ -5,6 +5,7 @@ const ObjectId = require("mongodb").ObjectID;
 const {
   validate,
   string,
+  id,
   arrayOfIds,
 } = require("../middlewares/model-validator");
 
@@ -23,6 +24,10 @@ const ProjectSchema = mongoose.model(
       type: String,
       required: true,
     },
+    labId: {
+      type: ObjectId,
+      ref: "LabSchema",
+    },
     selections: {
       type: [ObjectId],
       ref: "SelectionSchema",
@@ -40,6 +45,7 @@ const validateProject = (project) =>
     {
       name: string(),
       description: string(),
+      labId: id(),
       selections: arrayOfIds(),
     },
     project

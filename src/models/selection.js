@@ -9,7 +9,8 @@ const {
   arrayOfIds,
   array,
   boolean,
-  number,
+  numericRange,
+  id,
 } = require("../middlewares/model-validator");
 
 /**
@@ -35,6 +36,10 @@ const SelectionModel = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: true,
+  },
+  projectId: {
+    type: ObjectId,
+    ref: "ProjectSchema",
   },
   skills: {
     hardSkills: [
@@ -93,6 +98,7 @@ const validateSelection = (selection) =>
       description: string(),
       phases: arrayOfIds(),
       current: boolean(),
+      projectId: id(),
       skills: {
         hardSkills: array({
           name: string(),
@@ -101,7 +107,7 @@ const validateSelection = (selection) =>
         softSkills: array({
           name: string(),
         }),
-        language: array({
+        languages: array({
           name: string(),
           level: numericRange(0, 2),
         }),

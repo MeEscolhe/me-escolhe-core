@@ -1,9 +1,11 @@
 "use strict";
 
 const SelectionController = require("../controllers/selection");
+const ProjectController = require("../controllers/project");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
+const selection = require("../models/selection");
 
 router
   .route("/")
@@ -13,7 +15,11 @@ router
     if (isEmpty(selections)) {
       response.status(404).send("No selections to show.");
     }
-    response.send(selections);
+    selections.docs.forEach(async (selection, index) => {
+      const project = await ProjectController.getById(selection.projectId);
+      selections[index].project = project;
+    });
+    response.send(selections.docs);
   })
 
   .post(async (request, response) => {
@@ -29,12 +35,14 @@ router
 router
   .route("/:id")
   .get(async (request, response) => {
-    const selection = await SelectionController.getById(request.params.id);
+    let selection = await SelectionController.getById(request.params.id);
     if (!selection) {
       response
         .status(404)
         .send("The selection with the given ID was not found.");
     }
+    const project = await ProjectController.getById(selection.projectId);
+    selection = { ...selection._doc, project };
     response.send(selection);
   })
 
@@ -48,6 +56,7 @@ router
         "description",
         "phases",
         "current",
+        "projectId",
         "skills",
       ];
       const selection = await SelectionController.update(

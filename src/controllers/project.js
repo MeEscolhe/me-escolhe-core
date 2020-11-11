@@ -24,10 +24,11 @@ const getById = async (id) =>
  * @param {array} selections
  * @returns {object} project created
  */
-const create = async ({ name, description, selections }) => {
+const create = async ({ name, description, labId, selections }) => {
   const project = new Project({
     name: name,
     description: description,
+    labId: labId,
     selections: selections,
   });
   return await project.save();
@@ -41,12 +42,13 @@ const create = async ({ name, description, selections }) => {
  * @param {array} selections
  * @returns {object} project updated
  */
-const update = async (id, { name, description, selections }) =>
+const update = async (id, { name, description, labId, selections }) =>
   await Project.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       name: name,
       description: description,
+      labId: labId,
       selections: selections,
     },
     { new: true }

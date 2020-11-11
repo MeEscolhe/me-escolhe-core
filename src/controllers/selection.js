@@ -27,12 +27,20 @@ const getById = async (id) => await Selection.findById(ObjectId(id));
  * @param {array} skills
  * @returns {object} project created
  */
-const create = async ({ role, description, phases, current, skills }) => {
+const create = async ({
+  role,
+  description,
+  phases,
+  current,
+  projectId,
+  skills,
+}) => {
   const selection = new Selection({
     role: role,
     description: description,
     phases: phases,
     current: current,
+    projectId: projectId,
     skills: skills,
   });
   return await selection.save();

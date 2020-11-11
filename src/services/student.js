@@ -4,6 +4,7 @@
  * @author Kelvin Cirne
  */
 const StudentController = require("../controllers/student");
+const ProjectController = require("../controllers/project");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate } = require("../middlewares/util");
@@ -15,6 +16,10 @@ router
     if (isEmpty(students)) {
       response.status(404).send("No students to show.");
     } else {
+      for (let i = 0; i < students.length; i++) {
+        const project = await ProjectController.getById(students[i].labId);
+        students[i] = { ...students[i]._doc, project };
+      }
       response.send(students);
     }
   })
@@ -29,9 +34,8 @@ router
     }
   });
 
-router.route("/:id");
-router.put(async (request, response) => {
-  const registration = request.params.id;
+router.route("/:registration").put(async (request, response) => {
+  const registration = request.params.registration;
   const { error, message } = validate(
     { registration, ...request.body },
     StudentController
@@ -55,12 +59,14 @@ router.put(async (request, response) => {
 router
   .route("/:registration")
   .get(async (request, response) => {
-    const student = await StudentController.getByRegistrationWithSelections(
+    let student = await StudentController.getByRegistrationWithSelections(
       request.params.registration
     );
     if (!student) {
       response.status(404).send("The student with the given ID was not found.");
     } else {
+      const project = await ProjectController.getById(student.projectId);
+      student = { ...student._doc, project };
       response.send(student);
     }
   })

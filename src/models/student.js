@@ -113,7 +113,7 @@ const validateStudent = (student) =>
         softSkills: array({
           name: string(),
         }),
-        language: array({
+        languages: array({
           name: string(),
           level: numericRange(0, 2),
         }),
