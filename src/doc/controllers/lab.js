@@ -1,6 +1,6 @@
 const withoutParameters = {
   get: {
-    tags: ["Hard Skill"],
+    tags: ["Lab"],
     description: "",
     parameters: [],
     responses: {
@@ -11,7 +11,7 @@ const withoutParameters = {
             schema: {
               type: "array",
               items: {
-                $ref: "#/components/schemas/hard-skill",
+                $ref: "#/components/schemas/lab",
               },
             },
           },
@@ -24,8 +24,8 @@ const withoutParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "No hard skills to show.",
-              enum: ["No hard skills to show."],
+              example: "No labs to show.",
+              enum: ["No labs to show."],
             },
           },
         },
@@ -34,7 +34,7 @@ const withoutParameters = {
   },
 
   post: {
-    tags: ["Hard Skill"],
+    tags: ["Lab"],
     description: "",
     parameters: [],
     requestBody: {
@@ -45,11 +45,11 @@ const withoutParameters = {
             properties: {
               name: {
                 type: "string",
-                example: "Java",
+                example: "IQuanta",
               },
-              category: {
-                type: "number",
-                example: 2,
+              description: {
+                type: "string",
+                example: "Laboratório de computação quântica",
               },
             },
           },
@@ -63,7 +63,7 @@ const withoutParameters = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/hard-skill",
+              $ref: "#/components/schemas/lab",
             },
           },
         },
@@ -75,7 +75,7 @@ const withoutParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "This hard skill cannot be created.",
+              example: "This lab cannot be created.",
             },
           },
         },
@@ -86,7 +86,7 @@ const withoutParameters = {
 
 const withParameters = {
   get: {
-    tags: ["Hard Skill"],
+    tags: ["Lab"],
     description: "",
     parameters: [
       {
@@ -106,7 +106,7 @@ const withParameters = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/hard-skill",
+              $ref: "#/components/schemas/lab",
             },
           },
           required: true,
@@ -119,7 +119,7 @@ const withParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "The hard skill with the given id was not found.",
+              example: "The lab with the given id was not found.",
             },
           },
         },
@@ -128,13 +128,13 @@ const withParameters = {
   },
 
   put: {
-    tags: ["Hard Skill"],
+    tags: ["Lab"],
     description: "",
     parameters: [
       {
         name: "id",
         in: "path",
-        description: "ID of hard-skill",
+        description: "ID of lab",
         required: true,
         schema: {
           type: "string",
@@ -146,7 +146,7 @@ const withParameters = {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/hard-skill",
+            $ref: "#/components/schemas/lab",
           },
         },
       },
@@ -158,7 +158,7 @@ const withParameters = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/hard-skill",
+              $ref: "#/components/schemas/lab",
             },
           },
         },
@@ -170,7 +170,7 @@ const withParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "This hard skill cannot be updated.",
+              example: "This lab cannot be updated.",
             },
           },
         },
@@ -179,7 +179,7 @@ const withParameters = {
   },
 
   delete: {
-    tags: ["Hard Skill"],
+    tags: ["Lab"],
     description: "",
     parameters: [
       {
@@ -199,7 +199,7 @@ const withParameters = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/hard-skill",
+              $ref: "#/components/schemas/lab",
             },
           },
           required: true,
@@ -212,7 +212,7 @@ const withParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "The hard skill with the given id was not found.",
+              example: "The lab with the given id was not found.",
             },
           },
         },
