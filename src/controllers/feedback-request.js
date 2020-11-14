@@ -1,42 +1,47 @@
 "use strict";
 
-const {
-  FeedbackRequest,
-  valFeedbackRequest,
-} = require("../models/feedback-request");
+const { FeedbackRequest } = require("../models/feedback-request");
 const mongoose = require("mongoose");
-const getAll = async () => {
-  const feedbackRequests = await FeedbackRequest.find();
-  return feedbackRequests;
-};
-const getById = async (id) => FeedbackRequest.findById(id);
 
-const create = ({ studentId, phaseId, teacherId }) => {
+/**
+ * Get all feedback requests
+ * @returns {array} list of all feedback requests
+ */
+const getAll = async () => await FeedbackRequest.find();
+
+/**
+ * Get feedback request by id
+ * @param {string} id
+ * @returns {object} feedback request
+ */
+const getById = async (id) => await FeedbackRequest.findById(id);
+
+/**
+ * Create feedback request
+ * @param {string} studentId
+ * @param {string} phaseId
+ * @param {string} teacherId
+ * @returns {object} feedback request created
+ */
+const create = async ({ studentId, phaseId, teacherId }) => {
   const feedbackRequest = new FeedbackRequest({
     studentId: studentId,
     phaseId: phaseId,
     teacherId: teacherId,
   });
-
-  return feedbackRequest.save().then((feedback) => feedback);
+  return await feedbackRequest.save();
 };
 
 /**
- * remove feedback-request
+ * Remove feedback request
  * @param {string} feedbackRequestId
  * @throws {InvalidArgumentException} mongoose id invalid or feedback not found
- * @returns {string} confirm message
+ * @returns {object} feedback request removed
  */
-const remove = (feedbackRequestId) =>
-  FeedbackRequest.findByIdAndRemove(
+const remove = async (feedbackRequestId) =>
+  await FeedbackRequest.findByIdAndRemove(
     mongoose.Types.ObjectId(feedbackRequestId)
-  ).then((feedbackRequestDelete) => {
-    if (feedbackRequestDelete) return "Feedback deleted";
-    throw "Error delete feedback";
-  });
-const validate = (object) => {
-  const { error } = valFeedbackRequest(object);
-  return error;
-};
+  );
 
-module.exports = { getAll, getById, create, remove, validate };
+
+module.exports = { getAll, getById, create, remove };

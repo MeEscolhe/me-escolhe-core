@@ -1,72 +1,107 @@
 {
-    "type": "object",
-    "required": ["registration", "name", "email", "cra", "description", "skills", "experiences", "phases"],
-    "properties": 
-    {
-      "registration": 
-      {
-        "type": "number",
-        "example": 116133454
-      },
+  "type": "object",
+  "required": [
+    "registration",
+    "name",
+    "email",
+    "cra",
+    "description",
+    "skills",
+    "experiences",
+    "phases"
+  ],
+  "properties": {
+    "registration": {
+      "type": "number",
+      "example": 116133454
+    },
 
-      "name": 
-      {
-        "type": "string",
-        "example": "Thomas"
-          
-      },
+    "name": {
+      "type": "string",
+      "example": "Thomas"
+    },
 
-      "email": 
-      {
-        "type": "string",
-        "example": "thomas.lopes@ccc.ufcg.edu.br"
-          
-      },
+    "email": {
+      "type": "string",
+      "example": "thomas.lopes@ccc.ufcg.edu.br"
+    },
 
-      "cra": 
-      {
-        "type": "number",
-        "example" : 8.5
-          
-      },
+    "cra": {
+      "type": "number",
+      "example": 8.5
+    },
 
-      "description": 
-      {
-        "type": "string",
-        "example" : "Developer"
-          
-      },
+    "description": {
+      "type": "string",
+      "example": "Developer"
+    },
 
-      "skills": 
-      {
-        "type": "array",
-         "items":
-         {
-          "type": "string",
-          "examples": ["4a14bg8357c32u09875565b7", "6u74zb0034f65zu435743o0"]
-         }
-      },
-
-      "experiences": 
-      {
-        "type": "array",
-         "items":
-         {
-          "type": "string",
-          "examples": ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"]
-         }
-      },
-
-      "phases: ": 
-      {
-        "type": "array",
-         "items":
-         {
-          "type": "string",
-          "examples": ["7f78fr3111x97h53779000a1", "7a65hg8755k73s21116789i8"]
-         }
+    "skills": {
+      "type": "object",
+      "properties": {
+        "hardSkills": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Java"
+              },
+              "level": {
+                "type": "number",
+                "example": 2,
+                "enum": [0, 1, 2, 3, 4]
+              }
+            }
+          }
+        },
+        "softSkills": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Trabalha bem em grupo"
+              }
+            }
+          }
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Java"
+              },
+              "level": {
+                "type": "number",
+                "example": 2,
+                "enum": [0, 1, 2]
+              }
+            }
+          }
+        }
       }
+    },
 
+    "experiences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "examples": ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"]
+      }
+    },
+
+    "phases: ": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "examples": ["7f78fr3111x97h53779000a1", "7a65hg8755k73s21116789i8"]
+      }
     }
   }
-  
+}

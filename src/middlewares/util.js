@@ -99,6 +99,7 @@ const FKHelper = (model, type, key) => {
     });
   });
 };
+
 module.exports = {
   validate,
   isEmpty,

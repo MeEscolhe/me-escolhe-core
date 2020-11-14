@@ -183,7 +183,7 @@ const withParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "This work experience cannot be updatedted.",
+              example: "This work experience cannot be updated.",
             },
           },
         },

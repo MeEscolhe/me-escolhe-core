@@ -1,29 +1,45 @@
 "use strict";
 
-const { Experience, valExperience } = require("../models/experience");
+const { Experience, validateExperience } = require("../models/experience");
 const mongoose = require("mongoose");
 
-const getAll = async () => {
-  const experience = await Experience.find();
-  return experience;
-};
+/**
+ * Get all experiences
+ * @returns {array} list of all experiences
+ */
+const getAll = async () => await Experience.find();
 
-const getById = async (id) => {
-  const experience = await Experience.findById(mongoose.Types.ObjectId(id));
-  return experience;
-};
+/**
+ * Get experience by id
+ * @param {string} id
+ * @returns {object} experience
+ */
+const getById = async (id) =>
+  await Experience.findById(mongoose.Types.ObjectId(id));
 
+/**
+ * Create experience
+ * @param {array} academic
+ * @param {array} work
+ * @returns {object} experience created
+ */
 const create = async ({ academic, work }) => {
-  let experience = new Experience({
+  const experience = new Experience({
     academic: academic,
     work: work,
   });
-  experience = await experience.save();
-  return experience;
+  return await experience.save();
 };
 
-const update = async (id, { academic, work }) => {
-  const experience = await Experience.findByIdAndUpdate(
+/**
+ * Update experience by id
+ * @param {string} id
+ * @param {array} academic
+ * @param {array} work
+ * @returns {object} experience updated
+ */
+const update = async (id, { academic, work }) =>
+  await Experience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       academic: academic,
@@ -31,18 +47,22 @@ const update = async (id, { academic, work }) => {
     },
     { new: true }
   );
-  return experience;
-};
 
-const remove = async (id) => {
-  const experience = await Experience.findByIdAndRemove(
-    mongoose.Types.ObjectId(id)
-  );
-  return experience;
-};
+/**
+ * Remove experience by id
+ * @param {string} id
+ * @returns {object} experience removed
+ */
+const remove = async (id) =>
+  await Experience.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
+/**
+ * Validate academic experience
+ * @param {object} object
+ * @returns {object} error (when it happens)
+ */
 const validate = (object) => {
-  const { error } = valExperience(object);
+  const { error } = validateExperience(object);
   return error;
 };
 

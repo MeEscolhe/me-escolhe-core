@@ -7,23 +7,21 @@ const { isEmpty, validate, filterProps } = require("../middlewares/util");
 
 router
   .route("/")
-  .get((request, response) => {
-    academicExperienceController.getAll().then((academicExperiences) => {
-      if (isEmpty(academicExperiences)) {
-        response.status(404).send("No academic experiences to show.");
-      } else {
-        response.send(academicExperiences);
-      }
-    });
+  .get(async (request, response) => {
+    const academicExperiences = await academicExperienceController.getAll();
+    if (isEmpty(academicExperiences)) {
+      response.status(404).send("No academic experiences to show.");
+    } else {
+      response.send(academicExperiences);
+    }
   })
 
   .post(async (request, response) => {
     const { error } = validate(request.body, academicExperienceController);
-
     if (error) {
       response.status(400).send("This academic experience cannot be created.");
     } else {
-      const academicExperience = academicExperienceController.create(
+      const academicExperience = await academicExperienceController.create(
         request.body
       );
       response.send(academicExperience);
@@ -33,34 +31,32 @@ router
 router
   .route("/:id")
   .get(async (request, response) => {
-    academicExperienceController
-      .getById(request.params.id)
-      .then((academicExperience) => {
-        if (!academicExperience) {
-          response
-            .status(404)
-            .send("The academic experience with the given ID was not found.");
-        } else {
-          response.send(academicExperience);
-        }
-      });
+    const academicExperience = await academicExperienceController.getById(
+      request.params.id
+    );
+    if (!academicExperience) {
+      response
+        .status(404)
+        .send("The academic experience with the given ID was not found.");
+    } else {
+      response.send(academicExperience);
+    }
   })
 
   .delete(async (request, response) => {
-    academicExperienceController
-      .remove(request.params.id)
-      .then((academicExperience) => {
-        if (!academicExperience) {
-          response
-            .status(404)
-            .send("The academic experience with the given id was not found.");
-        } else {
-          response.send(academicExperience);
-        }
-      });
+    const academicExperience = await academicExperienceController.remove(
+      request.params.id
+    );
+    if (!academicExperience) {
+      response
+        .status(404)
+        .send("The academic experience with the given id was not found.");
+    } else {
+      response.send(academicExperience);
+    }
   })
 
-  .put((request, response) => {
+  .put(async (request, response) => {
     const { error, message } = validate(
       request.body,
       academicExperienceController
