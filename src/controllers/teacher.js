@@ -18,6 +18,13 @@ const getById = async (id) =>
   await Teacher.findById(mongoose.Types.ObjectId(id));
 
 /**
+ * Get teacher by email
+ * @param {string} email
+ * @returns {object} teacher
+ */
+const getByEmail = async (email) => await Teacher.findOne({ email });
+
+/**
  * Create student
  * @param {string} name
  * @param {string} email
@@ -26,10 +33,18 @@ const getById = async (id) =>
  * @param {array} managements
  * @returns {object} teacher created
  */
-const create = async ({ name, email, description, labId, managements }) => {
+const create = async ({
+  name,
+  email,
+  password,
+  description,
+  labId,
+  managements,
+}) => {
   const teacher = new Teacher({
     name: name,
     email: email,
+    password: password,
     description: description,
     labId: labId,
     managements: managements,
@@ -78,4 +93,12 @@ const validate = (object) => {
   return error;
 };
 
-module.exports = { getAll, getById, create, update, remove, validate };
+module.exports = {
+  getAll,
+  getById,
+  getByEmail,
+  create,
+  update,
+  remove,
+  validate,
+};

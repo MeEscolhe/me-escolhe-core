@@ -30,6 +30,11 @@ const StudentSchema = mongoose.model(
     email: {
       type: String,
       required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
     },
     cra: {
       type: Number,
@@ -103,6 +108,7 @@ const validateStudent = (student) =>
     {
       registration: number(),
       name: string(),
+      password: string(),
       description: string(),
       email: string(),
       cra: numericRange(0, 10),

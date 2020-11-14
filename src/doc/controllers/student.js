@@ -58,6 +58,11 @@ const withoutParameters = {
                 example: "thomas.lopes@ccc.ufcg.edu.br",
               },
 
+              password: {
+                type: "string",
+                example: "thomas.lopes123",
+              },
+
               cra: {
                 type: "number",
                 example: 8.5,
@@ -311,4 +316,52 @@ const withParameters = {
   },
 };
 
-module.exports = { withParameters, withoutParameters };
+const login = {
+  get: {
+    tags: ["Student"],
+    description: "",
+    parameters: [],
+    requestBody: {
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              email: {
+                type: "String",
+                example: "thomas.lopes@ccc.ufcg.edu.br",
+              },
+            },
+          },
+        },
+      },
+    },
+
+    responses: {
+      200: {
+        description: "Successful.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/student",
+            },
+          },
+        },
+      },
+
+      400: {
+        description: "Unsuccessful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "string",
+              example: "The student with the given email was not found.",
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+module.exports = { withParameters, withoutParameters, login };

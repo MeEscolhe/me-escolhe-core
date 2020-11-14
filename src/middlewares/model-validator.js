@@ -9,7 +9,7 @@ const reference = () => Joi.string().min(1).max(30);
 
 const id = () => reference().required();
 
-const string = () => Joi.string().allow("").min(0).max(50).required();
+const string = () => Joi.string().allow("").min(0).max(256).required();
 
 const boolean = () => Joi.boolean().required();
 
