@@ -3,6 +3,7 @@
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
 const {
+  array,
   validate,
   number,
   numericRange,

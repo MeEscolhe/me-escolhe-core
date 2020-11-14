@@ -43,14 +43,5 @@ const remove = async (feedbackRequestId) =>
     mongoose.Types.ObjectId(feedbackRequestId)
   );
 
-/**
- * Validate feedback request
- * @param {object} object
- * @returns {object} error (when it happens)
- */
-const validate = (object) => {
-  const { error } = valFeedbackRequest(object);
-  return error;
-};
 
-module.exports = { getAll, getById, create, remove, validate };
+module.exports = { getAll, getById, create, remove };

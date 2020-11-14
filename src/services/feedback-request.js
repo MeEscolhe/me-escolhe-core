@@ -3,7 +3,7 @@
 const feedbackRequestCtrl = require("../controllers/feedback-request");
 const express = require("express");
 const router = express.Router();
-const { isEmpty, validate } = require("../middlewares/util");
+const { isEmpty } = require("../middlewares/util");
 
 router
   .route("/")
@@ -17,13 +17,8 @@ router
   })
 
   .post(async (request, response) => {
-    const { error } = validate(request.body, feedbackRequestCtrl);
-    if (error) {
-      response.status(400).send("This feedback request cannot be created.");
-    } else {
       const feedbackRequest = await feedbackRequestCtrl.create(request.body);
       response.send(feedbackRequest);
-    }
   });
 
 router

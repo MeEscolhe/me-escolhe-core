@@ -1,9 +1,9 @@
 "use strict";
 
-const { string } = require("joi");
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const { validate, id, arrayOfIds } = require("../middlewares/model-validator");
+const { FKHelper } = require("../middlewares/util");
+const { validate, id, arrayOfRegistrations, string } = require("../middlewares/model-validator");
 
 /**
  *  Phase model
@@ -41,7 +41,7 @@ const PhaseSchema = mongoose.model(
 const validatePhase = (phase) =>
   validate(
     {
-      students: arrayOfIds(),
+      students: arrayOfRegistrations(),
       selectionId: id(),
       description: string(),
     },

@@ -16,10 +16,6 @@ router
     if (isEmpty(students)) {
       response.status(404).send("No students to show.");
     } else {
-      for (let i = 0; i < students.length; i++) {
-        const project = await ProjectController.getById(students[i].labId);
-        students[i] = { ...students[i]._doc, project };
-      }
       response.send(students);
     }
   })
@@ -65,8 +61,6 @@ router
     if (!student) {
       response.status(404).send("The student with the given ID was not found.");
     } else {
-      const project = await ProjectController.getById(student.projectId);
-      student = { ...student._doc, project };
       response.send(student);
     }
   })
