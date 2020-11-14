@@ -11,18 +11,24 @@ router
   .route("/")
   .get(async (request, response) => {
     const { page = 1, limit = 10 } = request.body;
-    const selections = await SelectionController.getAll({ page, limit });
-    if (isEmpty(selections)) {
+    let selectionDocsList = await SelectionController.getAll({ page, limit });
+    if (isEmpty(selectionDocsList)) {
       response.status(404).send("No selections to show.");
     }
-    selections.docs.forEach(async (selection, index) => {
-      let project = await ProjectController.getById(selection.projectId);
+    let selections = selectionDocsList.docs;
+    for (let i = 0; i < selections.length; i++) {
+      let project = await ProjectController.getById(selections[i].projectId);
       let lab = await LabController.getById(project.labId);
-      project.lab = lab;
-      selections[index].project = project;
-      delete selections[index].projectId;
-    });
-    response.send(selections.docs);
+
+      project = { ...project._doc, lab };
+      delete project.labId;
+
+      let selection = { ...selections[i]._doc, project };
+      delete selection.projectId;
+
+      selections[i] = selection;
+    }
+    response.send(selections);
   })
 
   .post(async (request, response) => {
@@ -46,9 +52,13 @@ router
     }
     let project = await ProjectController.getById(selection.projectId);
     let lab = await LabController.getById(project.labId);
-    project.lab = lab;
+
+    project = { ...project._doc, lab };
+    delete project.labId;
+
     selection = { ...selection._doc, project };
     delete selection.projectId;
+
     response.send(selection);
   })
 

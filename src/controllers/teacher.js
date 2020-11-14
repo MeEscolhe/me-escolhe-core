@@ -33,10 +33,18 @@ const getByEmail = async (email) => await Teacher.findOne({ email });
  * @param {array} managements
  * @returns {object} teacher created
  */
-const create = async ({ name, email, description, labId, managements }) => {
+const create = async ({
+  name,
+  email,
+  password,
+  description,
+  labId,
+  managements,
+}) => {
   const teacher = new Teacher({
     name: name,
     email: email,
+    password: password,
     description: description,
     labId: labId,
     managements: managements,

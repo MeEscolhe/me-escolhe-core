@@ -51,7 +51,7 @@ router.route("/:registration").put(async (request, response) => {
     response.status(400).send(message);
   } else {
     const student = await StudentController.update(
-      request.params.id,
+      registration,
       request.body,
       false
     );

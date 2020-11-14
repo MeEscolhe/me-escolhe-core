@@ -58,6 +58,7 @@ router
       const propsToUpdate = [
         "name",
         "email",
+        "password",
         "description",
         "labId",
         "managements",
