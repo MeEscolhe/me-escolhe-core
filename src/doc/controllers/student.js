@@ -69,13 +69,54 @@ const withoutParameters = {
               },
 
               skills: {
-                type: "array",
-                items: {
-                  type: "string",
-                  examples: [
-                    "4a14bg8357c32u09875565b7",
-                    "6u74zb0034f65zu435743o0",
-                  ],
+                type: "object",
+                properties: {
+                  hardSkills: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        name: {
+                          type: "string",
+                          example: "Java",
+                        },
+                        level: {
+                          type: "number",
+                          example: 2,
+                          enum: [0, 1, 2, 3, 4],
+                        },
+                      },
+                    },
+                  },
+                  softSkills: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        name: {
+                          type: "string",
+                          example: "Trabalha bem em grupo",
+                        },
+                      },
+                    },
+                  },
+                  languages: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        name: {
+                          type: "string",
+                          example: "Java",
+                        },
+                        level: {
+                          type: "number",
+                          example: 2,
+                          enum: [0, 1, 2],
+                        },
+                      },
+                    },
+                  },
                 },
               },
 
@@ -219,7 +260,7 @@ const withParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "This student cannot be updatedted.",
+              example: "This student cannot be updated.",
             },
           },
         },

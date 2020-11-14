@@ -1,34 +1,25 @@
 {
-    "type": "object",
-    "required": ["id", "studentId", "phaseId", "teacherId"],
-    "properties": 
-    {
-      "id": 
-      {
-        "type": "string",
-        "example": "5f5d1fa6dccfa335d03fdd3e"
-      },
+  "type": "object",
+  "required": ["id", "studentId", "phaseId", "teacherId"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "example": "5f5d1fa6dccfa335d03fdd3e"
+    },
 
-      "studentId: ": 
-      {
-        "type": "number",
-        "example" : 116210877
-            
-      },
+    "studentId: ": {
+      "type": "number",
+      "example": 116210877
+    },
 
-      "phaseId: ": 
-      {
-        "type": "string",
-        "example": "5t5d1fb8dccfa665d03fdd3e"
-      },
+    "phaseId: ": {
+      "type": "string",
+      "example": "5t5d1fb8dccfa665d03fdd3e"
+    },
 
-      "teacherId: ": 
-      {
-        "type": "string",
-        "example": "5t5d1fa6dccfa665d03fdd3e"
-      }
-
-      
+    "teacherId: ": {
+      "type": "string",
+      "example": "5t5d1fa6dccfa665d03fdd3e"
     }
   }
-  
+}

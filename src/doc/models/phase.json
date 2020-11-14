@@ -1,36 +1,28 @@
 {
-    "type": "object",
-    "required": ["id", "name", "description"],
-    "properties": 
-    {
-      "id": 
-      {
-        "type": "string",
-        "example": "5f5d1fa6dccfa335d03fdd3e"
-      },
+  "type": "object",
+  "required": ["id", "name", "description"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "example": "5f5d1fa6dccfa335d03fdd3e"
+    },
 
-      "students: ": 
-      {
-        "type": "array",
-        "items":
-        {
-         "type": "number",
-         "example": [116210887, 112130765]
-        }
-      },
-
-      "selectionId: ": 
-      {
-        "type": "string",
-        "example": "5f28ac7082e88b35448255e8"
-      },
-
-      "description: ": 
-      {
-        "type": "string",
-        "example": "Fase de seleção de currículo"
+    "students: ": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "example": [116210887, 112130765]
       }
-      
+    },
+
+    "selectionId: ": {
+      "type": "string",
+      "example": "5f28ac7082e88b35448255e8"
+    },
+
+    "description: ": {
+      "type": "string",
+      "example": "Fase de seleção de currículo"
     }
   }
-  
+}
