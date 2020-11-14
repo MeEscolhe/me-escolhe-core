@@ -2,10 +2,10 @@
 
 const SelectionController = require("../controllers/selection");
 const ProjectController = require("../controllers/project");
+const LabController = require("../controllers/lab");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
-const selection = require("../models/selection");
 
 router
   .route("/")
@@ -17,7 +17,10 @@ router
     }
     selections.docs.forEach(async (selection, index) => {
       const project = await ProjectController.getById(selection.projectId);
+      const lab = await LabController.getById(project.labId);
+      project.lab = lab;
       selections[index].project = project;
+      delete selections[index].projectId;
     });
     response.send(selections.docs);
   })
@@ -42,7 +45,10 @@ router
         .send("The selection with the given ID was not found.");
     }
     const project = await ProjectController.getById(selection.projectId);
+    const lab = await LabController.getById(project.labId);
+    project.lab = lab;
     selection = { ...selection._doc, project };
+    delete selection.projectId;
     response.send(selection);
   })
 
