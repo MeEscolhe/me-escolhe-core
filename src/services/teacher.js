@@ -28,6 +28,17 @@ router
     }
   });
 
+router.route("/email").get(async (request, response) => {
+  const teacher = await TeacherController.getByEmail(request.body.email);
+  if (!teacher) {
+    response
+      .status(404)
+      .send("The teacher with the given email was not found.");
+  } else {
+    response.send(teacher);
+  }
+});
+
 router
   .route("/:id")
   .get(async (request, response) => {
@@ -47,6 +58,7 @@ router
       const propsToUpdate = [
         "name",
         "email",
+        "password",
         "description",
         "labId",
         "managements",

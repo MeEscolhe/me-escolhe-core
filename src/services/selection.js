@@ -2,24 +2,33 @@
 
 const SelectionController = require("../controllers/selection");
 const ProjectController = require("../controllers/project");
+const LabController = require("../controllers/lab");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
-const selection = require("../models/selection");
 
 router
   .route("/")
   .get(async (request, response) => {
     const { page = 1, limit = 10 } = request.body;
-    const selections = await SelectionController.getAll({ page, limit });
-    if (isEmpty(selections)) {
+    let selectionDocsList = await SelectionController.getAll({ page, limit });
+    if (isEmpty(selectionDocsList)) {
       response.status(404).send("No selections to show.");
     }
-    selections.docs.forEach(async (selection, index) => {
-      const project = await ProjectController.getById(selection.projectId);
-      selections[index].project = project;
-    });
-    response.send(selections.docs);
+    let selections = selectionDocsList.docs;
+    for (let i = 0; i < selections.length; i++) {
+      let project = await ProjectController.getById(selections[i].projectId);
+      let lab = await LabController.getById(project.labId);
+
+      project = { ...project._doc, lab };
+      delete project.labId;
+
+      let selection = { ...selections[i]._doc, project };
+      delete selection.projectId;
+
+      selections[i] = selection;
+    }
+    response.send(selections);
   })
 
   .post(async (request, response) => {
@@ -41,8 +50,15 @@ router
         .status(404)
         .send("The selection with the given ID was not found.");
     }
-    const project = await ProjectController.getById(selection.projectId);
+    let project = await ProjectController.getById(selection.projectId);
+    let lab = await LabController.getById(project.labId);
+
+    project = { ...project._doc, lab };
+    delete project.labId;
+
     selection = { ...selection._doc, project };
+    delete selection.projectId;
+
     response.send(selection);
   })
 
