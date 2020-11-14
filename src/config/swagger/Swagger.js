@@ -16,14 +16,14 @@ const swaggerSpecs = {
     },
     schemas: {
       "academic-experience": require("../../doc/models/academic-experience"),
-      "experience": require("../../doc/models/experience"),
+      experience: require("../../doc/models/experience"),
       "feedback-request": require("../../doc/models/feedback-request"),
-      "lab": require("../../doc/models/lab"),
-      "phase": require("../../doc/models/phase"),
-      "project": require("../../doc/models/project"),
-      "selection": require("../../doc/models/selection"),
-      "student": require("../../doc/models/student"),
-      "teacher": require("../../doc/models/teacher"),
+      lab: require("../../doc/models/lab"),
+      phase: require("../../doc/models/phase"),
+      project: require("../../doc/models/project"),
+      selection: require("../../doc/models/selection"),
+      student: require("../../doc/models/student"),
+      teacher: require("../../doc/models/teacher"),
       "work-experience": require("../../doc/models/work-experience"),
     },
   },
@@ -69,9 +69,11 @@ const swaggerSpecs = {
 
     "/students": require("../../doc/controllers/student").withoutParameters,
     "/students/{id}": require("../../doc/controllers/student").withParameters,
+    "/students/email": require("../../doc/controllers/student").login,
 
     "/teachers": require("../../doc/controllers/teacher").withoutParameters,
     "/teachers/{id}": require("../../doc/controllers/teacher").withParameters,
+    "/teachers/email": require("../../doc/controllers/teacher").login,
 
     "/workExperiences": require("../../doc/controllers/work-experience")
       .withoutParameters,
