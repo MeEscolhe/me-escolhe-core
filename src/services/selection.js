@@ -16,8 +16,8 @@ router
       response.status(404).send("No selections to show.");
     }
     selections.docs.forEach(async (selection, index) => {
-      const project = await ProjectController.getById(selection.projectId);
-      const lab = await LabController.getById(project.labId);
+      let project = await ProjectController.getById(selection.projectId);
+      let lab = await LabController.getById(project.labId);
       project.lab = lab;
       selections[index].project = project;
       delete selections[index].projectId;
@@ -44,8 +44,8 @@ router
         .status(404)
         .send("The selection with the given ID was not found.");
     }
-    const project = await ProjectController.getById(selection.projectId);
-    const lab = await LabController.getById(project.labId);
+    let project = await ProjectController.getById(selection.projectId);
+    let lab = await LabController.getById(project.labId);
     project.lab = lab;
     selection = { ...selection._doc, project };
     delete selection.projectId;
