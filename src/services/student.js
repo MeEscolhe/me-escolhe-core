@@ -30,6 +30,17 @@ router
     }
   });
 
+router.route("/email").get(async (request, response) => {
+  const student = await StudentController.getByEmail(request.body.email);
+  if (!student) {
+    response
+      .status(404)
+      .send("The student with the given email was not found.");
+  } else {
+    response.send(student);
+  }
+});
+
 router.route("/:registration").put(async (request, response) => {
   const registration = request.params.registration;
   const { error, message } = validate(

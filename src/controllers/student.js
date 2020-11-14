@@ -22,6 +22,13 @@ const getByRegistration = async (registration) =>
   await Student.findOne(registration);
 
 /**
+ * Get student by email
+ * @param {string} email
+ * @returns {object} student
+ */
+const getByEmail = async (email) => await Student.findOne({ email });
+
+/**
  * Get student by registration with selections
  * @param {number} registration
  * @returns {object} student with selections
@@ -120,6 +127,7 @@ const validate = (object) => {
 
 module.exports = {
   getAll,
+  getByEmail,
   getByRegistration,
   create,
   update,

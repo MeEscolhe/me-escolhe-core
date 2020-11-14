@@ -23,6 +23,11 @@ const TeacherSchema = mongoose.model(
     email: {
       type: String,
       required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
     },
     description: {
       type: String,
@@ -49,6 +54,7 @@ const validateTeacher = (teacher) =>
     {
       name: string(),
       email: string(),
+      password: string(),
       description: string(),
       labId: id(),
       managements: arrayOfIds(),
