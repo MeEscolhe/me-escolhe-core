@@ -1,9 +1,19 @@
+"use strict";
+
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const Joi = require("joi");
+const {
+  array,
+  validate,
+  number,
+  numericRange,
+  string,
+  arrayOfIds,
+} = require("../middlewares/model-validator");
+
 /**
- *
- *  @typedef {{registration: number,name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
+ *  Student model
+ *  @typedef {{registration: number, name: string, email: string, cra: number, description: string, skills: array, experiences: array, phases: array}} StudentSchema
  */
 const StudentSchema = mongoose.model(
   "Student",
@@ -32,9 +42,44 @@ const StudentSchema = mongoose.model(
       default: "",
     },
     skills: {
-      type: [ObjectId],
-      ref: "SkillSchema",
-      default: [],
+      hardSkills: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+          level: {
+            type: Number,
+            enum: [0, 1, 2, 3, 4],
+            default: 2,
+            required: true,
+            default: 0,
+          },
+        },
+      ],
+      softSkills: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
+      languages: [
+        {
+          name: {
+            type: String,
+            required: true,
+          },
+          level: {
+            type: Number,
+            enum: [0, 1, 2],
+            default: 1,
+            required: true,
+            default: "",
+          },
+        },
+      ],
     },
     experiences: {
       type: [ObjectId],
@@ -53,23 +98,36 @@ const StudentSchema = mongoose.model(
  * validade student from request
  * @param {StudentSchema} student
  */
-const valStudent = (student) => {
-  const studentSchema = Joi.object().keys({
-    registration: Joi.number().min(0).required(),
-    name: Joi.string().min(3).max(50).required(),
-    description: Joi.string().optional().allow("").min(0).max(50),
-    email: Joi.string().min(10).required(),
-    cra: Joi.number().min(0).max(10).required(),
-    skills: Joi.array().items(Joi.string()).min(0),
-    experiences: Joi.array().items(Joi.string()).min(0),
-    phases: Joi.array().items(Joi.string()).min(0),
-  });
+const validateStudent = (student) =>
+  validate(
+    {
+      registration: number(),
+      name: string(),
+      description: string(),
+      email: string(),
+      cra: numericRange(0, 10),
+      skills: {
+        hardSkills: array({
+          name: string(),
+          level: numericRange(0, 4),
+        }),
+        softSkills: array({
+          name: string(),
+        }),
+        languages: array({
+          name: string(),
+          level: numericRange(0, 2),
+        }),
+      },
+      experiences: arrayOfIds(),
+      phases: arrayOfIds(),
+    },
+    student
+  );
 
-  return studentSchema.validate(student);
-};
 /**
- * get student with selections
- *
+ * Get student with his selections
+ * @param {StudentSchema} student
  */
 const getStudentWithSelections = (student) => {
   const { getSelectionFromPhase } = require("../middlewares/util");
@@ -133,6 +191,6 @@ const getStudentWithSelections = (student) => {
 
 module.exports = {
   Student: StudentSchema,
-  valStudent,
+  validateStudent,
   getStudentWithSelections,
 };

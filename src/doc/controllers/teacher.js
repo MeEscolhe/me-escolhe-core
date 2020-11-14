@@ -192,7 +192,7 @@ const withParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "This teacher cannot be updatedted.",
+              example: "This teacher cannot be updated.",
             },
           },
         },

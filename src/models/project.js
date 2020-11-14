@@ -1,7 +1,18 @@
+"use strict";
+
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const Joi = require("joi");
+const {
+  validate,
+  string,
+  id,
+  arrayOfIds,
+} = require("../middlewares/model-validator");
 
+/**
+ *  Phase model
+ *  @typedef {{name: string, description: string, selections: array}} ProjectSchema
+ */
 const ProjectSchema = mongoose.model(
   "Project",
   new mongoose.Schema({
@@ -13,6 +24,10 @@ const ProjectSchema = mongoose.model(
       type: String,
       required: true,
     },
+    labId: {
+      type: ObjectId,
+      ref: "LabSchema",
+    },
     selections: {
       type: [ObjectId],
       ref: "SelectionSchema",
@@ -20,17 +35,23 @@ const ProjectSchema = mongoose.model(
     },
   })
 );
-function valProject(project) {
-  const ProjectSchema = Joi.object().keys({
-    name: Joi.string().min(4).max(50).required(),
-    description: Joi.string().allow("").min(0).max(50).required(),
-    selections: Joi.array().items(Joi.string()).min(0).required(),
-  });
 
-  return ProjectSchema.validate(project);
-}
+/**
+ * Validade project from request
+ * @param {ProjectSchema} project
+ */
+const validateProject = (project) =>
+  validate(
+    {
+      name: string(),
+      description: string(),
+      labId: id(),
+      selections: arrayOfIds(),
+    },
+    project
+  );
 
 module.exports = {
   Project: ProjectSchema,
-  valProject,
+  validateProject,
 };

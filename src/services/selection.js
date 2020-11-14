@@ -1,56 +1,68 @@
 "use strict";
 
 const SelectionController = require("../controllers/selection");
+const ProjectController = require("../controllers/project");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
+const selection = require("../models/selection");
 
-router.get("/", async (request, response) => {
-  const { page = 1, limit = 10 } = request.body;
-  const selections = await SelectionController.getAll({ page, limit });
-  if (isEmpty(selections)) {
-    return response.status(404).send("No selections to show.");
-  }
-  response.send(selections);
-});
+router
+  .route("/")
+  .get(async (request, response) => {
+    const { page = 1, limit = 10 } = request.body;
+    const selections = await SelectionController.getAll({ page, limit });
+    if (isEmpty(selections)) {
+      response.status(404).send("No selections to show.");
+    }
+    selections.docs.forEach(async (selection, index) => {
+      const project = await ProjectController.getById(selection.projectId);
+      selections[index].project = project;
+    });
+    response.send(selections.docs);
+  })
 
-router.get("/:id", async (request, response) => {
-  const selection = await SelectionController.getById(request.params.id);
+  .post(async (request, response) => {
+    const { error, message } = validate(request.body, SelectionController);
+    if (error) {
+      response.status(400).send(message);
+    } else {
+      const selection = await SelectionController.create(request.body);
+      response.send(selection);
+    }
+  });
 
-  if (!selection) {
-    return response
-      .status(404)
-      .send("The selection with the given ID was not found.");
-  }
-  response.send(selection);
-});
-
-router.post("/", async (request, response) => {
-  const { error, message } = validate(request.body, SelectionController);
-  if (error) {
-    response.status(400).send(message);
-  } else {
-    const selection = await SelectionController.create(request.body);
+router
+  .route("/:id")
+  .get(async (request, response) => {
+    let selection = await SelectionController.getById(request.params.id);
+    if (!selection) {
+      response
+        .status(404)
+        .send("The selection with the given ID was not found.");
+    }
+    const project = await ProjectController.getById(selection.projectId);
+    selection = { ...selection._doc, project };
     response.send(selection);
-  }
-});
+  })
 
-router.put("/:id", (request, response) => {
-  const { error, message } = validate(request.body, SelectionController);
-  if (error) {
-    response.status(400).send(message);
-  } else {
-    const propsToUpdate = [
-      "role",
-      "description",
-      "phases",
-      "current",
-      "skills",
-    ];
-    SelectionController.update(
-      request.params.id,
-      filterProps(request.body, propsToUpdate)
-    ).then((selection) => {
+  .put(async (request, response) => {
+    const { error, message } = validate(request.body, SelectionController);
+    if (error) {
+      response.status(400).send(message);
+    } else {
+      const propsToUpdate = [
+        "role",
+        "description",
+        "phases",
+        "current",
+        "projectId",
+        "skills",
+      ];
+      const selection = await SelectionController.update(
+        request.params.id,
+        filterProps(request.body, propsToUpdate)
+      );
       if (!selection) {
         response
           .status(404)
@@ -58,19 +70,18 @@ router.put("/:id", (request, response) => {
       } else {
         response.send(selection);
       }
-    });
-  }
-});
-router.delete("/:id", async (request, response) => {
-  SelectionController.remove(request.params.id).then((selection) => {
+    }
+  })
+
+  .delete(async (request, response) => {
+    const selection = await SelectionController.remove(request.params.id);
     if (!selection) {
-      return response
+      response
         .status(404)
         .send("The selection with the given ID was not found.");
     } else {
       response.send(selection);
     }
   });
-});
 
 module.exports = router;

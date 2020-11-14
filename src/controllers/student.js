@@ -2,28 +2,48 @@
 
 const {
   Student,
-  valStudent,
+  validateStudent,
   getStudentWithSelections,
 } = require("../models/student");
 const { filterProps } = require("../middlewares/util");
+
+/**
+ * Get all students
+ * @returns {array} list of all students
+ */
 const getAll = () => Student.find().sort("registration");
 
 /**
- * get student by registration
- * @param {number} registration student registration
- * @typedef {{registration: number, name: string,email: string,cra: number,description:string,skills:array,experiences: array,phases: array}} StudentSchema
- * @returns {StudentSchema}
+ * Get student by registration
+ * @param {number} registration
+ * @returns {object}
  */
-const getByRegistration = (registration) => Student.findOne(registration);
+const getByRegistration = async (registration) =>
+  await Student.findOne(registration);
+
 /**
- * get student by registration with selections
+ * Get student by registration with selections
+ * @param {number} registration
+ * @returns {object} student with selections
  */
-const getByRegistrationWithSelections = (registration) =>
-  Student.findOne({ registration: registration }).then((student) => {
-    if (student && student.error === undefined)
-      return getStudentWithSelections(student);
-    throw "The student with the given ID was not found.";
-  });
+const getByRegistrationWithSelections = async (registration) => {
+  const student = await Student.findOne({ registration: registration });
+  if (student && student.error === undefined)
+    return getStudentWithSelections(student);
+  throw "The student with the given ID was not found.";
+};
+
+/**
+ * Create student
+ * @param {number} registration
+ * @param {string} name
+ * @param {string} email
+ * @param {number} cra
+ * @param {string} description
+ * @param {array} skills
+ * @param {array} experiences
+ * @returns {object} student created
+ */
 const create = async ({
   registration,
   name,
@@ -33,7 +53,7 @@ const create = async ({
   skills,
   experiences,
 }) => {
-  let student = new Student({
+  const student = new Student({
     registration: registration,
     name: name,
     email: email,
@@ -42,11 +62,17 @@ const create = async ({
     skills: skills,
     experiences: experiences,
   });
-  student = await student.save();
-  return student;
+  return await student.save();
 };
 
-const update = (registration, updateData, updatePhase) => {
+/**
+ * Update student
+ * @param {number} registration
+ * @param {object} updateData, student to update
+ * @param {number} updatePhase, phase to update
+ * @returns {object} student updated
+ */
+const update = async (registration, updateData, updatePhase) => {
   let propsToUpdate = [
     "name",
     "email",
@@ -56,8 +82,7 @@ const update = (registration, updateData, updatePhase) => {
     "experiences",
   ];
   if (updatePhase) propsToUpdate.push("phases");
-
-  return Student.findOneAndUpdate(
+  return await Student.findOneAndUpdate(
     { registration: registration },
     {
       registration: registration,
@@ -74,15 +99,22 @@ const update = (registration, updateData, updatePhase) => {
     }
   );
 };
-/**
- * remove student by registration
- * @param {string} registration student registration
- * @returns {StudentSchema}
- */
-const remove = async (registration) => Student.findOneAndDelete(registration);
 
+/**
+ * Remove student by registration
+ * @param {string} registration
+ * @returns {object} student removed
+ */
+const remove = async (registration) =>
+  await Student.findOneAndDelete(registration);
+
+/**
+ * Validate student
+ * @param {object} object
+ * @returns {object} error (when it happens)
+ */
 const validate = (object) => {
-  const { error } = valStudent(object);
+  const { error } = validateStudent(object);
   return error;
 };
 

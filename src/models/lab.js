@@ -1,6 +1,12 @@
-const Joi = require("joi");
-const mongoose = require("mongoose");
+"use strict";
 
+const mongoose = require("mongoose");
+const { validate, string } = require("../middlewares/model-validator");
+
+/**
+ *  Lab model
+ *  @typedef {{name: string, description: string}} LabSchema
+ */
 const LabSchema = mongoose.model(
   "Lab",
   new mongoose.Schema({
@@ -16,16 +22,20 @@ const LabSchema = mongoose.model(
   })
 );
 
-function valLab(lab) {
-  const schemaLab = Joi.object().keys({
-    name: Joi.string().min(4).max(30).required(),
-    description: Joi.string().min(4).max(50).required(),
-  });
-
-  return schemaLab.validate(lab);
-}
+/**
+ * Validate lab from request
+ * @param {LabSchema} lab
+ */
+const validateLab = (lab) =>
+  validate(
+    {
+      name: string(),
+      description: string(),
+    },
+    lab
+  );
 
 module.exports = {
   Lab: LabSchema,
-  valLab,
+  validateLab,
 };

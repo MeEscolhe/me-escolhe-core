@@ -70,13 +70,54 @@ const withoutParameters = {
               },
 
               skills: {
-                type: "array",
-                items: {
-                  type: "string",
-                  examples: [
-                    "3a28ac7082e88b35448255e8",
-                    "3a36ty9019e36g1356785e8",
-                  ],
+                type: "object",
+                properties: {
+                  hardSkills: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        name: {
+                          type: "string",
+                          example: "Java",
+                        },
+                        level: {
+                          type: "number",
+                          example: 2,
+                          enum: [0, 1, 2, 3, 4],
+                        },
+                      },
+                    },
+                  },
+                  softSkills: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        name: {
+                          type: "string",
+                          example: "Trabalha bem em grupo",
+                        },
+                      },
+                    },
+                  },
+                  languages: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        name: {
+                          type: "string",
+                          example: "Java",
+                        },
+                        level: {
+                          type: "number",
+                          example: 2,
+                          enum: [0, 1, 2],
+                        },
+                      },
+                    },
+                  },
                 },
               },
             },

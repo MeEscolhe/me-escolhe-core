@@ -1,4 +1,5 @@
-const Joi = require("joi");
+"use strict";
+
 const mongoose = require("mongoose");
 const {
   validate,
@@ -8,6 +9,10 @@ const {
   finalDate,
 } = require("../middlewares/model-validator");
 
+/**
+ *  Work experience model
+ *  @typedef {{role: string, institution: string, durationInMonths: number}} WorkExperienceSchema
+ */
 const WorkExperienceSchema = mongoose.model(
   "WorkExperience",
   new mongoose.Schema({
@@ -15,7 +20,6 @@ const WorkExperienceSchema = mongoose.model(
       type: String,
       required: true,
     },
-
     institution: {
       type: String,
       required: true,
@@ -31,8 +35,12 @@ const WorkExperienceSchema = mongoose.model(
   })
 );
 
-function valWorkExperience(workExperience) {
-  return validate(
+/**
+ * Validade work experience from request
+ * @param {WorkExperienceSchema} workExperience
+ */
+const validateWorkExperience = (workExperience) =>
+  validate(
     {
       role: string(),
       institution: string(),
@@ -41,9 +49,8 @@ function valWorkExperience(workExperience) {
     },
     workExperience
   );
-}
 
 module.exports = {
   WorkExperience: WorkExperienceSchema,
-  valWorkExperience,
+  validateWorkExperience,
 };

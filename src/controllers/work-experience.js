@@ -2,22 +2,33 @@
 
 const {
   WorkExperience,
-  valWorkExperience,
+  validateWorkExperience,
 } = require("../models/work-experience");
 const mongoose = require("mongoose");
 
-const getAll = async () => {
-  const workExperiences = await WorkExperience.find().sort("role");
-  return workExperiences;
-};
+/**
+ * Get all work experiences
+ * @returns {array} list of all work experiences
+ */
+const getAll = async () => await WorkExperience.find().sort("role");
 
-const getById = async (id) => {
-  const workExperience = await WorkExperience.findById(
-    mongoose.Types.ObjectId(id)
-  );
-  return workExperience;
-};
+/**
+ * Get work experience by id
+ * @param {string} id
+ * @returns {object} work experience
+ */
+const getById = async (id) =>
+  await WorkExperience.findById(mongoose.Types.ObjectId(id));
 
+/**
+ * Create work experience
+ * @param {string} role
+ * @param {string} institution
+ * @param {number} durationInMonths
+ * @param {string} initialDate date in string format
+ * @param {string} finalDate date in string format
+ * @returns {object} work experience created
+ */
 const create = async ({ role, institution, initialDate, finalDate }) => {
   let workExperience = new WorkExperience({
     role: role,
@@ -25,12 +36,20 @@ const create = async ({ role, institution, initialDate, finalDate }) => {
     initialDate: initialDate,
     finalDate: finalDate,
   });
-  workExperience = await workExperience.save();
-  return workExperience;
+  return await workExperience.save();
 };
 
-const update = async (id, { role, institution, initialDate, finalDate }) => {
-  const workExperience = await WorkExperience.findByIdAndUpdate(
+/**
+ * Update work experience
+ * @param {string} id
+ * @param {string} role
+ * @param {string} institution
+ * @param {string} initialDate date in string format
+ * @param {string} finalDate date in string format
+ * @returns {object} work experience updated
+ */
+const update = async (id, { role, institution, initialDate, finalDate }) =>
+  await WorkExperience.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       role: role,
@@ -40,18 +59,22 @@ const update = async (id, { role, institution, initialDate, finalDate }) => {
     },
     { new: true }
   );
-  return workExperience;
-};
 
-const remove = async (id) => {
-  const workExperience = await WorkExperience.findByIdAndRemove(
-    mongoose.Types.ObjectId(id)
-  );
-  return workExperience;
-};
+/**
+ * Remove work experience by id
+ * @param {string} id
+ * @returns {object} work experience removed
+ */
+const remove = async (id) =>
+  await WorkExperience.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
+/**
+ * Validate work experience
+ * @param {object} object
+ * @returns {object} error (when it happens)
+ */
 const validate = (object) => {
-  const { error } = valWorkExperience(object);
+  const { error } = validateWorkExperience(object);
   return error;
 };
 
