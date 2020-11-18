@@ -9,6 +9,7 @@ const {
   numericRange,
   string,
   arrayOfIds,
+  foreingKeyValidatorSchema,
 } = require("../middlewares/model-validator");
 
 /**
@@ -86,16 +87,8 @@ const StudentSchema = mongoose.model(
         },
       ],
     },
-    experiences: {
-      type: [ObjectId],
-      ref: "ExperienceSchema",
-      default: [],
-    },
-    phases: {
-      type: [ObjectId],
-      ref: "PhaseSchema",
-      default: [],
-    },
+    experiences: foreingKeyValidatorSchema("Experience", "_id", ObjectId, true),
+    phases: foreingKeyValidatorSchema("Phase", "_id", ObjectId, true),
   })
 );
 

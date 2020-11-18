@@ -8,7 +8,7 @@ const {
   id,
   arrayOfRegistrations,
   string,
-  modelValidator,
+  foreingKeyValidatorSchema,
 } = require("../middlewares/model-validator");
 
 /**
@@ -18,8 +18,13 @@ const {
 const PhaseSchema = mongoose.model(
   "Phase",
   new mongoose.Schema({
-    students: modelValidator(true, "Student", "registration", "number", true),
-    selectionId: modelValidator(false, "Selection", "_id", "objectId", true),
+    students: foreingKeyValidatorSchema(
+      "Student",
+      "registration",
+      Number,
+      true
+    ),
+    selectionId: foreingKeyValidatorSchema("Selection", "_id", ObjectId),
     description: {
       type: String,
       default: "",

@@ -26,8 +26,12 @@ router
     if (error) {
       response.status(400).send(message);
     } else {
-      const project = await ProjectController.create(request.body);
-      response.send(project);
+      try {
+        const project = await ProjectController.create(request.body);
+        response.send(project);
+      } catch (error) {
+        response.status(400).send(error.message);
+      }
     }
   });
 
@@ -50,16 +54,20 @@ router
       response.status(400).send(message);
     } else {
       const propsToUpdate = ["name", "description", "labId", "selections"];
-      const project = await ProjectController.update(
-        request.params.id,
-        filterProps(request.body, propsToUpdate)
-      );
-      if (!project) {
-        response
-          .status(404)
-          .send("The project with the given ID was not found.");
-      } else {
-        response.send(project);
+      try {
+        const project = await ProjectController.update(
+          request.params.id,
+          filterProps(request.body, propsToUpdate)
+        );
+        if (!project) {
+          response
+            .status(404)
+            .send("The project with the given ID was not found.");
+        } else {
+          response.send(project);
+        }
+      } catch (error) {
+        response.status(400).send(error.message);
       }
     }
   });

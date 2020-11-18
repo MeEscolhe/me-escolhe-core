@@ -36,8 +36,12 @@ router
     if (error) {
       response.status(400).send(message);
     } else {
-      const selection = await SelectionController.create(request.body);
-      response.send(selection);
+      try {
+        const selection = await SelectionController.create(request.body);
+        response.send(selection);
+      } catch (error) {
+        response.status(400).send(error.message);
+      }
     }
   });
 
@@ -75,16 +79,20 @@ router
         "projectId",
         "skills",
       ];
-      const selection = await SelectionController.update(
-        request.params.id,
-        filterProps(request.body, propsToUpdate)
-      );
-      if (!selection) {
-        response
-          .status(404)
-          .send("The selection with the given ID was not found.");
-      } else {
-        response.send(selection);
+      try {
+        const selection = await SelectionController.update(
+          request.params.id,
+          filterProps(request.body, propsToUpdate)
+        );
+        if (!selection) {
+          response
+            .status(404)
+            .send("The selection with the given ID was not found.");
+        } else {
+          response.send(selection);
+        }
+      } catch (error) {
+        response.status(400).send(error.message);
       }
     }
   })

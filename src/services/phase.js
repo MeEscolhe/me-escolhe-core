@@ -23,16 +23,19 @@ router
     } else {
       const phase = await PhaseController.create(request.body);
       const { selectionId } = request.body;
-
-      const selection = await SelectionController.getById(selectionId);
-      if (!selection) {
-        response
-          .status(404)
-          .send("The selection with the given selectionId was not found.");
-      } else {
-        selection.phases.push(phase.id);
-        await SelectionController.update(selection._id, selection);
-        response.send(phase);
+      try {
+        const selection = await SelectionController.getById(selectionId);
+        if (!selection) {
+          response
+            .status(404)
+            .send("The selection with the given selectionId was not found.");
+        } else {
+          selection.phases.push(phase.id);
+          await SelectionController.update(selection._id, selection);
+          response.send(phase);
+        }
+      } catch (error) {
+        response.status(400).send(error.message);
       }
     }
   });

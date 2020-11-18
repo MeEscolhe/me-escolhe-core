@@ -23,8 +23,12 @@ router
     if (error) {
       response.status(400).send(message);
     } else {
-      const teacher = await TeacherController.create(request.body);
-      response.send(teacher);
+      try {
+        const teacher = await TeacherController.create(request.body);
+        response.send(teacher);
+      } catch (error) {
+        response.status(400).send(error.message);
+      }
     }
   });
 

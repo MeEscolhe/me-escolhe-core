@@ -7,6 +7,7 @@ const {
   string,
   id,
   arrayOfIds,
+  foreingKeyValidatorSchema,
 } = require("../middlewares/model-validator");
 
 /**
@@ -24,28 +25,8 @@ const ProjectSchema = mongoose.model(
       type: String,
       required: true,
     },
-    labId: {
-      type: ObjectId,
-      validate: {
-        validator: (v) => FKHelper(mongoose.model("Lab"), "_id", v),
-        message: (props) => `${props.value} doesn't exist`,
-      },
-      ref: "Lab",
-    },
-    selections: {
-      type: [
-        {
-          type: ObjectId,
-          validate: {
-            validator: (v) => FKHelper(mongoose.model("Selection"), "_id", v),
-            message: (props) => `${props.value} doesn't exist`,
-          },
-        },
-      ],
-      ref: "Selection",
-      required: true,
-      default: [],
-    },
+    labId: foreingKeyValidatorSchema("Lab", "_id", ObjectId),
+    selections: foreingKeyValidatorSchema("Selection", "_id", ObjectId, true),
   })
 );
 

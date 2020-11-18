@@ -2,7 +2,11 @@
 
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const { validate, arrayOfIds } = require("../middlewares/model-validator");
+const {
+  validate,
+  arrayOfIds,
+  foreingKeyValidatorSchema,
+} = require("../middlewares/model-validator");
 
 /**
  *  Experience model
@@ -11,34 +15,13 @@ const { validate, arrayOfIds } = require("../middlewares/model-validator");
 const ExperienceSchema = mongoose.model(
   "Experience",
   new mongoose.Schema({
-    academic: {
-      type: [
-        {
-          type: ObjectId,
-          validate: {
-            validator: (v) =>
-              FKHelper(mongoose.model("AcademicExperience"), "_id", v),
-            message: (props) => `${props.value} doesn't exist`,
-          },
-        },
-      ],
-      ref: "AcademicExperience",
-      required: true,
-    },
-    work: {
-      type: [
-        {
-          type: ObjectId,
-          validate: {
-            validator: (v) =>
-              FKHelper(mongoose.model("WorkExperience"), "_id", v),
-            message: (props) => `${props.value} doesn't exist`,
-          },
-        },
-      ],
-      ref: "WorkExperience",
-      required: true,
-    },
+    academic: foreingKeyValidatorSchema(
+      "AcademicExperience",
+      "_id",
+      ObjectId,
+      true
+    ),
+    work: foreingKeyValidatorSchema("WorkExperience", "_id", ObjectId, true),
   })
 );
 
