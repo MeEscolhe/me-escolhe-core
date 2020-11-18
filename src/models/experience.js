@@ -12,13 +12,31 @@ const ExperienceSchema = mongoose.model(
   "Experience",
   new mongoose.Schema({
     academic: {
-      type: [ObjectId],
-      ref: "AcademicExperienceSchema",
+      type: [
+        {
+          type: ObjectId,
+          validate: {
+            validator: (v) =>
+              FKHelper(mongoose.model("AcademicExperience"), "_id", v),
+            message: (props) => `${props.value} doesn't exist`,
+          },
+        },
+      ],
+      ref: "AcademicExperience",
       required: true,
     },
     work: {
-      type: [ObjectId],
-      ref: "WorkExperienceSchema",
+      type: [
+        {
+          type: ObjectId,
+          validate: {
+            validator: (v) =>
+              FKHelper(mongoose.model("WorkExperience"), "_id", v),
+            message: (props) => `${props.value} doesn't exist`,
+          },
+        },
+      ],
+      ref: "WorkExperience",
       required: true,
     },
   })

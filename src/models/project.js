@@ -26,11 +26,24 @@ const ProjectSchema = mongoose.model(
     },
     labId: {
       type: ObjectId,
-      ref: "LabSchema",
+      validate: {
+        validator: (v) => FKHelper(mongoose.model("Lab"), "_id", v),
+        message: (props) => `${props.value} doesn't exist`,
+      },
+      ref: "Lab",
     },
     selections: {
-      type: [ObjectId],
-      ref: "SelectionSchema",
+      type: [
+        {
+          type: ObjectId,
+          validate: {
+            validator: (v) => FKHelper(mongoose.model("Selection"), "_id", v),
+            message: (props) => `${props.value} doesn't exist`,
+          },
+        },
+      ],
+      ref: "Selection",
+      required: true,
       default: [],
     },
   })

@@ -62,7 +62,7 @@ const addStudent = async (phaseId, studentId) => {
       return await Phase.findByIdAndUpdate(
         mongoose.Types.ObjectId(phaseId),
         phase,
-        { new: true }
+        { new: true, runValidators: true }
       );
     }
   }
@@ -123,7 +123,7 @@ const update = async (id, { students, selectionId, description }) =>
       selectionId: selectionId,
       description: description,
     },
-    { new: true }
+    { new: true, runValidators: true }
   );
 
 /**

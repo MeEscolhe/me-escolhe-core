@@ -1,3 +1,5 @@
+const { number } = require("joi");
+
 function isEmpty(obj) {
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) return false;
@@ -93,7 +95,7 @@ const FKHelper = (model, type, key) => {
       } else
         return reject(
           new Error(
-            `FK Constraint 'checkObjectsExists' for '${key.toString()}' failed`
+            `FK Constraint 'checkObjectsExists' for '${key.toString()}' failed\n`
           )
         );
     });

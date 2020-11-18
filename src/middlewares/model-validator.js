@@ -27,7 +27,38 @@ const date = () => Joi.date().iso().required();
 
 const finalDate = (initialDateName) =>
   Joi.date().iso().greater(Joi.ref(initialDateName)).required();
-
+/**
+ *
+ * @param {boolean} isArray
+ * @param {string} modelName
+ * @param {string} key
+ * @param {string} type
+ */
+const modelValidator = (isArray, modelName, key, type, required) => {
+  const mongoose = require("mongoose");
+  const { FKHelper } = require("./util");
+  const item = {
+    type:
+      type === "objectId"
+        ? require("mongodb").ObjectID
+        : type === "number"
+        ? Number
+        : String,
+    validate: {
+      validator: (v) => FKHelper(mongoose.model(modelName), key, v),
+      message: (props) => `${props.value} doesn't exist`,
+    },
+  };
+  if (isArray) {
+    return {
+      type: [item],
+      ref: modelName,
+      required: required,
+      default: [],
+    };
+  }
+  return { ...item, ref: modelName, required: required };
+};
 module.exports = {
   reference,
   id,
@@ -41,4 +72,5 @@ module.exports = {
   validate,
   date,
   finalDate,
+  modelValidator,
 };
