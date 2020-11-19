@@ -56,16 +56,20 @@ router
       response.status(400).send(message);
     } else {
       const propsToUpdate = ["academic", "work"];
-      const experience = await experienceController.update(
-        request.params.id,
-        filterProps(request.body, propsToUpdate)
-      );
-      if (!experience) {
-        response
-          .status(404)
-          .send("The experience with the given ID was not found.");
-      } else {
-        response.send(experience);
+      try {
+        const experience = await experienceController.update(
+          request.params.id,
+          filterProps(request.body, propsToUpdate)
+        );
+        if (!experience) {
+          response
+            .status(404)
+            .send("The experience with the given ID was not found.");
+        } else {
+          response.send(experience);
+        }
+      } catch (error) {
+        response.status(400).send(error.message);
       }
     }
   });

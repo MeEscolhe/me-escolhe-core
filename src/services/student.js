@@ -25,8 +25,12 @@ router
     if (error) {
       response.status(400).send(message);
     } else {
-      const student = await StudentController.create(request.body);
-      response.send(student);
+      try {
+        const student = await StudentController.create(request.body);
+        response.send(student);
+      } catch (error) {
+        response.status(400).send(error.message);
+      }
     }
   });
 

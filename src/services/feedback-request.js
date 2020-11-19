@@ -17,8 +17,12 @@ router
   })
 
   .post(async (request, response) => {
+    try {
       const feedbackRequest = await feedbackRequestCtrl.create(request.body);
       response.send(feedbackRequest);
+    } catch (error) {
+      response.status(400).send(error.message);
+    }
   });
 
 router

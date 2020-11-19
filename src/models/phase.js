@@ -3,7 +3,13 @@
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
 const { FKHelper } = require("../middlewares/util");
-const { validate, id, arrayOfRegistrations, string } = require("../middlewares/model-validator");
+const {
+  validate,
+  id,
+  arrayOfRegistrations,
+  string,
+  foreingKeyValidatorSchema,
+} = require("../middlewares/model-validator");
 
 /**
  *  Phase model
@@ -12,21 +18,13 @@ const { validate, id, arrayOfRegistrations, string } = require("../middlewares/m
 const PhaseSchema = mongoose.model(
   "Phase",
   new mongoose.Schema({
-    students: {
-      type: [Number],
-      ref: "Student",
-      required: true,
-      default: [],
-    },
-    selectionId: {
-      type: ObjectId,
-      ref: "Selection",
-      required: true,
-      validate: {
-        validator: (v) => FKHelper(mongoose.model("Selection"), "_id", v),
-        message: `selectionId doesn't exist`,
-      },
-    },
+    students: foreingKeyValidatorSchema(
+      "Student",
+      "registration",
+      Number,
+      true
+    ),
+    selectionId: foreingKeyValidatorSchema("Selection", "_id", ObjectId),
     description: {
       type: String,
       default: "",

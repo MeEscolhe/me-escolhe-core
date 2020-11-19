@@ -1,3 +1,5 @@
+const { number } = require("joi");
+
 function isEmpty(obj) {
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) return false;
@@ -78,33 +80,11 @@ const getSelectionFromPhase = (phaseId) => {
       : { error: "phase " + phaseId + " not found" };
   });
 };
-/**
- * Validate foreing key to model
- * @param {object} model
- * @param {string} type is object's prop
- * @param {object} key key value
- * @returns {promise}
- */
-const FKHelper = (model, type, key) => {
-  return new Promise((resolve, reject) => {
-    model.findOne({ [type]: key }, (err, result) => {
-      if (result) {
-        return resolve(true);
-      } else
-        return reject(
-          new Error(
-            `FK Constraint 'checkObjectsExists' for '${key.toString()}' failed`
-          )
-        );
-    });
-  });
-};
 
 module.exports = {
   validate,
   isEmpty,
   filterProps,
   getSelectionFromPhase,
-  FKHelper,
   updateObject,
 };
