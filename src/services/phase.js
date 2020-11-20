@@ -11,15 +11,15 @@ router
   .get(async (request, response) => {
     const phases = await PhaseController.getAll();
     if (isEmpty(phases)) {
-      response.status(404).send("No phases to show.");
+      return response.status(404).send("No phases to show.");
     }
-    response.send(phases);
+    return response.send(phases);
   })
 
   .post(async (request, response) => {
     const { error, message } = validate(request.body, PhaseController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
       const phase = await PhaseController.create(request.body);
       const { selectionId } = request.body;
@@ -32,10 +32,10 @@ router
         } else {
           selection.phases.push(phase.id);
           await SelectionController.update(selection._id, selection);
-          response.send(phase);
+          return response.send(phase);
         }
       } catch (error) {
-        response.status(400).send(error.message);
+        return response.status(400).send(error.message);
       }
     }
   });
@@ -45,15 +45,17 @@ router
   .get(async (request, response) => {
     const phase = await PhaseController.getById(request.params.id);
     if (!phase) {
-      response.status(404).send("The phases with the given ID was not found.");
+      return response
+        .status(404)
+        .send("The phases with the given ID was not found.");
     }
-    response.send(phase);
+    return response.send(phase);
   })
 
   .put(async (request, response) => {
     const { error, message } = validate(request.body, PhaseController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
       const propsToUpdate = ["students", "selectionId", "description"];
       try {
@@ -66,10 +68,10 @@ router
             .status(404)
             .send("The phase with the given ID was not found.");
         } else {
-          response.send(phase);
+          return response.send(phase);
         }
       } catch (error) {
-        response.status(400).send(error.message);
+        return response.status(400).send(error.message);
       }
     }
   })
@@ -81,7 +83,7 @@ router
         .status(404)
         .send("The phases with the given ID was not found.");
     }
-    response.send(phases);
+    return response.send(phases);
   });
 
 router.route("/:id/student/:studentId").delete(async (request, response) => {
@@ -89,7 +91,7 @@ router.route("/:id/student/:studentId").delete(async (request, response) => {
     request.params.id,
     request.body.studentId
   );
-  response.send(phase);
+  return response.send(phase);
 });
 
 module.exports = router;

@@ -10,18 +10,18 @@ router
   .get(async (request, response) => {
     const feedbackRequests = await feedbackRequestCtrl.getAll();
     if (isEmpty(feedbackRequests)) {
-      response.status(404).send("No feedback requests to show.");
+      return response.status(404).send("No feedback requests to show.");
     } else {
-      response.send(feedbackRequests);
+      return response.send(feedbackRequests);
     }
   })
 
   .post(async (request, response) => {
     try {
       const feedbackRequest = await feedbackRequestCtrl.create(request.body);
-      response.send(feedbackRequest);
+      return response.send(feedbackRequest);
     } catch (error) {
-      response.status(400).send(error.message);
+      return response.status(400).send(error.message);
     }
   });
 
@@ -36,7 +36,7 @@ router
         .status(404)
         .send("The feedback request with the given ID was not found.");
     } else {
-      response.send(feedbackRequest);
+      return response.send(feedbackRequest);
     }
   })
 
@@ -47,7 +47,7 @@ router
         .status(404)
         .send("The feedback request with the given ID was not found.");
     } else {
-      response.send(feedbackRequest);
+      return response.send(feedbackRequest);
     }
   });
 

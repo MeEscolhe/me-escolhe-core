@@ -14,18 +14,18 @@ router
   .get(async (request, response) => {
     const labs = await LabController.getAll();
     if (isEmpty(labs)) {
-      response.status(404).send("No labs to show.");
+      return response.status(404).send("No labs to show.");
     }
-    response.send(labs);
+    return response.send(labs);
   })
 
   .post(async (request, response) => {
     const { error, message } = validate(request.body, LabController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
       const lab = await LabController.create(request.body);
-      response.send(lab);
+      return response.send(lab);
     }
   });
 
@@ -34,15 +34,17 @@ router
   .get(async (request, response) => {
     const lab = await LabController.getById(request.params.id);
     if (!lab) {
-      response.status(404).send("The lab with the given ID was not found.");
+      return response
+        .status(404)
+        .send("The lab with the given ID was not found.");
     }
-    response.send(lab);
+    return response.send(lab);
   })
 
   .put(async (request, response) => {
     const { error, message } = validate(request.body, LabController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
       const propsToUpdate = ["name", "description"];
       const lab = await LabController.update(
@@ -50,9 +52,11 @@ router
         filterProps(request.body, propsToUpdate)
       );
       if (!lab) {
-        response.status(404).send("The lab with the given ID was not found.");
+        return response
+          .status(404)
+          .send("The lab with the given ID was not found.");
       } else {
-        response.send(lab);
+        return response.send(lab);
       }
     }
   })
@@ -60,15 +64,19 @@ router
   .delete(async (request, response) => {
     const lab = await LabController.remove(request.params.id);
     if (!lab) {
-      response.status(404).send("The lab with the given ID was not found.");
+      return response
+        .status(404)
+        .send("The lab with the given ID was not found.");
     }
-    response.send(lab);
+    return response.send(lab);
   });
 
 router.route("/selections/:id").get(async (request, response) => {
   const lab = await LabController.getById(request.params.id);
   if (!lab) {
-    response.status(404).send("The lab with the given ID was not found.");
+    return response
+      .status(404)
+      .send("The lab with the given ID was not found.");
   } else {
     let selections = [];
     lab.managements.forEach(async (projectId) => {
@@ -78,7 +86,7 @@ router.route("/selections/:id").get(async (request, response) => {
         selections.push(selection);
       });
     });
-    response.send(selections);
+    return response.send(selections);
   }
 });
 

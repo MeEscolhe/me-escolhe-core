@@ -43,5 +43,4 @@ const remove = async (feedbackRequestId) =>
     mongoose.Types.ObjectId(feedbackRequestId)
   );
 
-
 module.exports = { getAll, getById, create, remove };

@@ -10,19 +10,19 @@ router
   .get(async (request, response) => {
     const experiences = await experienceController.getAll();
     if (isEmpty(experiences)) {
-      response.status(404).send("No experience to show.");
+      return response.status(404).send("No experience to show.");
     } else {
-      response.send(experiences);
+      return response.send(experiences);
     }
   })
 
   .post(async (request, response) => {
     const { error } = validate(request.body, experienceController);
     if (error) {
-      response.status(400).send("This experience cannot be created.");
+      return response.status(400).send("This experience cannot be created.");
     } else {
       const experience = await experienceController.create(request.body);
-      response.send(experience);
+      return response.send(experience);
     }
   });
 
@@ -35,7 +35,7 @@ router
         .status(404)
         .send("The experience with the given ID was not found.");
     } else {
-      response.send(experience);
+      return response.send(experience);
     }
   })
 
@@ -46,14 +46,14 @@ router
         .status(404)
         .send("The experience with the given id was not found.");
     } else {
-      response.send(experience);
+      return response.send(experience);
     }
   })
 
   .put(async (request, response) => {
     const { error, message } = validate(request.body, experienceController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
       const propsToUpdate = ["academic", "work"];
       try {
@@ -66,10 +66,10 @@ router
             .status(404)
             .send("The experience with the given ID was not found.");
         } else {
-          response.send(experience);
+          return response.send(experience);
         }
       } catch (error) {
-        response.status(400).send(error.message);
+        return response.status(400).send(error.message);
       }
     }
   });

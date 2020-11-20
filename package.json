@@ -8,8 +8,7 @@
   "scripts": {
     "start": "NODE_ENV=DEMO node src/app.js",
     "dev": "NODE_ENV=DEV nodemon src/app.js",
-    "prod": "NODE_ENV=PROD nodemon src/app.js",
-    "demo": "NODE_ENV=DEMO nodemon src/app.js"
+    "prod": "NODE_ENV=PROD nodemon src/app.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
