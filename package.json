@@ -6,12 +6,15 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "NODE_ENV=DEMO node src/app.js",
+    "dev": "NODE_ENV=DEV nodemon src/app.js",
+    "prod": "NODE_ENV=PROD nodemon src/app.js",
+    "demo": "NODE_ENV=DEMO nodemon src/app.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "joi": "^17.2.1",
     "mongodb": "^3.6.2",
