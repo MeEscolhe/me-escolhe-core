@@ -2,7 +2,11 @@
 
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const { validate, arrayOfIds } = require("../middlewares/model-validator");
+const {
+  validate,
+  arrayOfIds,
+  foreingKeyValidatorSchema,
+} = require("../middlewares/model-validator");
 
 /**
  *  Experience model
@@ -11,16 +15,13 @@ const { validate, arrayOfIds } = require("../middlewares/model-validator");
 const ExperienceSchema = mongoose.model(
   "Experience",
   new mongoose.Schema({
-    academic: {
-      type: [ObjectId],
-      ref: "AcademicExperienceSchema",
-      required: true,
-    },
-    work: {
-      type: [ObjectId],
-      ref: "WorkExperienceSchema",
-      required: true,
-    },
+    academic: foreingKeyValidatorSchema(
+      "AcademicExperience",
+      "_id",
+      ObjectId,
+      true
+    ),
+    work: foreingKeyValidatorSchema("WorkExperience", "_id", ObjectId, true),
   })
 );
 

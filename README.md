@@ -24,17 +24,29 @@ docker run --name mongodb -p 27017:27017 -d mongo
 
 Podemos executar a API REST em dois modos:
 
-1. Em **modo de produção**, utilizando o seguinte comando:
+1. Em **modo de demonstração**, utilizando o seguinte comando:
 
 ```
 yarn run start
 ```
+
+Neste caso, será usado o banco de dados _me-escolhe-demo_
 
 2. Em **modo de desenvolvimento**, utilizando o seguinte comando:
 
 ```
 yarn run dev
 ```
+
+Neste caso, será usado o banco de dados _me-escolhe-dev_
+
+3. Em **modo de produção**, utilizando o seguinte comando:
+
+```
+yarn run prod
+```
+
+Neste caso, será usado o banco de dados _me-escolhe-prod_
 
 Opcionalmente podemos executar a aplicação em modo de produção através de um contâiner **docker** com os comandos:
 

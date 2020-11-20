@@ -1,20 +1,41 @@
+"use strict";
+/**
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
+ */
 const mongoose = require("mongoose");
+
 /**
  * setting mongoDb connection
  */
-const connect = (isLocal) => {
-  !isLocal
-    ? mongoose.connect(
-        "mongodb+srv://admin:Me-escolhe-p1-p2@me-escolhe.szvxg.gcp.mongodb.net/me-escolhe?retryWrites=true&w=majority",
-        {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        }
-      )
-    : mongoose.connect("mongodb://localhost:27017/me-escolhe", {
+const connect = () => {
+  require("dotenv/config");
+
+  switch (process.env.NODE_ENV) {
+    case "LOCAL":
+      mongoose.connect(process.env.ME_ESCOLHE_LOCAL_DRIVER, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       });
+      break;
+    case "DEV":
+      mongoose.connect(process.env.ME_ESCOLHE_DEV_DRIVER, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      break;
+    case "PROD":
+      mongoose.connect(process.env.ME_ESCOLHE_PROD_DRIVER, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      break;
+    case "DEMO":
+      mongoose.connect(process.env.ME_ESCOLHE_DEMO_DRIVER, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      break;
+  }
 
   mongoose.set("useCreateIndex", true);
 };

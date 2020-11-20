@@ -12,19 +12,23 @@ router
   .get(async (request, response) => {
     const teachers = await TeacherController.getAll();
     if (isEmpty(teachers)) {
-      response.status(404).send("No teachers to show.");
+      return response.status(404).send("No teachers to show.");
     } else {
-      response.send(teachers);
+      return response.send(teachers);
     }
   })
 
   .post(async (request, response) => {
     const { error, message } = validate(request.body, TeacherController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
-      const teacher = await TeacherController.create(request.body);
-      response.send(teacher);
+      try {
+        const teacher = await TeacherController.create(request.body);
+        return response.send(teacher);
+      } catch (error) {
+        return response.status(400).send(error.message);
+      }
     }
   });
 
@@ -35,7 +39,7 @@ router.route("/email").get(async (request, response) => {
       .status(404)
       .send("The teacher with the given email was not found.");
   } else {
-    response.send(teacher);
+    return response.send(teacher);
   }
 });
 
@@ -44,16 +48,18 @@ router
   .get(async (request, response) => {
     const teacher = await TeacherController.getById(request.params.id);
     if (!teacher) {
-      response.status(404).send("The teacher with the given ID was not found.");
+      return response
+        .status(404)
+        .send("The teacher with the given ID was not found.");
     } else {
-      response.send(teacher);
+      return response.send(teacher);
     }
   })
 
   .put(async (request, response) => {
     const { error, message } = validate(request.body, TeacherController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
       const propsToUpdate = [
         "name",
@@ -72,7 +78,7 @@ router
           .status(404)
           .send("The teacher with the given ID was not found.");
       } else {
-        response.send(teacher);
+        return response.send(teacher);
       }
     }
   })
@@ -84,7 +90,7 @@ router
         .status(404)
         .send("The teacher with the given ID was not found.");
     } else {
-      response.send(teacher);
+      return response.send(teacher);
     }
   });
 
@@ -107,7 +113,7 @@ router.route("/selections/:id").get(async (request, response) => {
         selectionsByTeacher.push(selection);
       }
     }
-    response.send(selectionsByTeacher);
+    return response.send(selectionsByTeacher);
   }
 });
 

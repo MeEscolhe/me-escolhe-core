@@ -14,19 +14,23 @@ router
   .get(async (request, response) => {
     const students = await StudentController.getAll();
     if (isEmpty(students)) {
-      response.status(404).send("No students to show.");
+      return response.status(404).send("No students to show.");
     } else {
-      response.send(students);
+      return response.send(students);
     }
   })
 
   .post(async (request, response) => {
     const { error, message } = validate(request.body, StudentController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
-      const student = await StudentController.create(request.body);
-      response.send(student);
+      try {
+        const student = await StudentController.create(request.body);
+        return response.send(student);
+      } catch (error) {
+        return response.status(400).send(error.message);
+      }
     }
   });
 
@@ -37,7 +41,7 @@ router.route("/email").get(async (request, response) => {
       .status(404)
       .send("The student with the given email was not found.");
   } else {
-    response.send(student);
+    return response.send(student);
   }
 });
 
@@ -48,7 +52,7 @@ router.route("/:registration").put(async (request, response) => {
     StudentController
   );
   if (error) {
-    response.status(400).send(message);
+    return response.status(400).send(message);
   } else {
     const student = await StudentController.update(
       registration,
@@ -56,9 +60,11 @@ router.route("/:registration").put(async (request, response) => {
       false
     );
     if (!student) {
-      response.status(404).send("The student with the given ID was not found.");
+      return response
+        .status(404)
+        .send("The student with the given ID was not found.");
     } else {
-      response.send(student);
+      return response.send(student);
     }
   }
 });
@@ -70,9 +76,11 @@ router
       request.params.registration
     );
     if (!student) {
-      response.status(404).send("The student with the given ID was not found.");
+      return response
+        .status(404)
+        .send("The student with the given ID was not found.");
     } else {
-      response.send(student);
+      return response.send(student);
     }
   })
 
@@ -83,7 +91,7 @@ router
         .status(404)
         .send("The student with the given registration was not found.");
     } else {
-      response.send(student);
+      return response.send(student);
     }
   });
 
