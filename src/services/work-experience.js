@@ -10,21 +10,23 @@ router
   .get(async (request, response) => {
     const workExperiences = await workExperienceController.getAll();
     if (isEmpty(workExperiences)) {
-      response.status(404).send("No work experiences to show.");
+      return response.status(404).send("No work experiences to show.");
     } else {
-      response.send(workExperiences);
+      return response.send(workExperiences);
     }
   })
 
   .post(async (request, response) => {
     const { error } = validate(request.body, workExperienceController);
     if (error) {
-      response.status(400).send("This work experience cannot be created.");
+      return response
+        .status(400)
+        .send("This work experience cannot be created.");
     } else {
       const workExperience = await workExperienceController.create(
         request.body
       );
-      response.send(workExperience);
+      return response.send(workExperience);
     }
   });
 
@@ -39,7 +41,7 @@ router
         .status(404)
         .send("The work experience with the given ID was not found.");
     } else {
-      response.send(workExperience);
+      return response.send(workExperience);
     }
   })
 
@@ -52,14 +54,14 @@ router
         .status(404)
         .send("The work experience with the given id was not found.");
     } else {
-      response.send(workExperience);
+      return response.send(workExperience);
     }
   })
 
   .put(async (request, response) => {
     const { error, message } = validate(request.body, workExperienceController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
       const propsToUpdate = ["role", "institution", "initialDate", "finalDate"];
       const workExperience = await workExperienceController.update(
@@ -71,7 +73,7 @@ router
           .status(404)
           .send("The academic experience with the given ID was not found.");
       } else {
-        response.send(workExperience);
+        return response.send(workExperience);
       }
     }
   });

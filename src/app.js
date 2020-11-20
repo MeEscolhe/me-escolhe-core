@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
-require("./config/Mongoose")(false);
+require("./config/Mongoose")();
 const { swaggerServe, swaggerSetup } = require("./config/swagger/Swagger");
 app.use(express.static("public"));
 app.use("/static", express.static("public"));
@@ -15,10 +15,6 @@ const {
   workExperiences,
   academicExperiences,
   experiences,
-  languages,
-  softSkills,
-  hardSkills,
-  skills,
   selections,
   phases,
   projects,
@@ -43,5 +39,10 @@ app.use("/feedbackRequests", feedbackRequests);
 app.use("/students", students);
 app.use("/teachers", teachers);
 app.use("/docs", swaggerServe, swaggerSetup);
+
 const port = process.env.PORT || 8080;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+const env = process.env.NODE_ENV;
+
+app.listen(port, () =>
+  console.log(`Running in ${env} environment. Listening on port ${port}...`)
+);

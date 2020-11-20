@@ -10,21 +10,23 @@ router
   .get(async (request, response) => {
     const academicExperiences = await academicExperienceController.getAll();
     if (isEmpty(academicExperiences)) {
-      response.status(404).send("No academic experiences to show.");
+      return response.status(404).send("No academic experiences to show.");
     } else {
-      response.send(academicExperiences);
+      return response.send(academicExperiences);
     }
   })
 
   .post(async (request, response) => {
     const { error } = validate(request.body, academicExperienceController);
     if (error) {
-      response.status(400).send("This academic experience cannot be created.");
+      return response
+        .status(400)
+        .send("This academic experience cannot be created.");
     } else {
       const academicExperience = await academicExperienceController.create(
         request.body
       );
-      response.send(academicExperience);
+      return response.send(academicExperience);
     }
   });
 
@@ -39,7 +41,7 @@ router
         .status(404)
         .send("The academic experience with the given ID was not found.");
     } else {
-      response.send(academicExperience);
+      return response.send(academicExperience);
     }
   })
 
@@ -52,7 +54,7 @@ router
         .status(404)
         .send("The academic experience with the given id was not found.");
     } else {
-      response.send(academicExperience);
+      return response.send(academicExperience);
     }
   })
 
@@ -62,7 +64,7 @@ router
       academicExperienceController
     );
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
       const propsToUpdate = [
         "title",
@@ -79,7 +81,7 @@ router
               .status(404)
               .send("The academic experience with the given ID was not found.");
           } else {
-            response.send(academicExperience);
+            return response.send(academicExperience);
           }
         });
     }

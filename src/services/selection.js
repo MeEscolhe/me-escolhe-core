@@ -13,7 +13,7 @@ router
     const { page = 1, limit = 10 } = request.body;
     let selectionDocsList = await SelectionController.getAll({ page, limit });
     if (isEmpty(selectionDocsList)) {
-      response.status(404).send("No selections to show.");
+      return response.status(404).send("No selections to show.");
     }
     let selections = selectionDocsList.docs;
     for (let i = 0; i < selections.length; i++) {
@@ -28,19 +28,19 @@ router
 
       selections[i] = selection;
     }
-    response.send(selections);
+    return response.send(selections);
   })
 
   .post(async (request, response) => {
     const { error, message } = validate(request.body, SelectionController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
       try {
         const selection = await SelectionController.create(request.body);
-        response.send(selection);
+        return response.send(selection);
       } catch (error) {
-        response.status(400).send(error.message);
+        return response.status(400).send(error.message);
       }
     }
   });
@@ -63,13 +63,13 @@ router
     selection = { ...selection._doc, project };
     delete selection.projectId;
 
-    response.send(selection);
+    return response.send(selection);
   })
 
   .put(async (request, response) => {
     const { error, message } = validate(request.body, SelectionController);
     if (error) {
-      response.status(400).send(message);
+      return response.status(400).send(message);
     } else {
       const propsToUpdate = [
         "role",
@@ -89,10 +89,10 @@ router
             .status(404)
             .send("The selection with the given ID was not found.");
         } else {
-          response.send(selection);
+          return response.send(selection);
         }
       } catch (error) {
-        response.status(400).send(error.message);
+        return response.status(400).send(error.message);
       }
     }
   })
@@ -104,7 +104,7 @@ router
         .status(404)
         .send("The selection with the given ID was not found.");
     } else {
-      response.send(selection);
+      return response.send(selection);
     }
   });
 
