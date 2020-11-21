@@ -86,7 +86,7 @@ router
     return response.send(phases);
   });
 
-router.route("/:id/student/:studentId").delete(async (request, response) => {
+router.route("/:id/students/:studentId").delete(async (request, response) => {
   const phase = PhaseController.removeStudent(
     request.params.id,
     request.body.studentId
