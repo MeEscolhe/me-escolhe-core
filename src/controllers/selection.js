@@ -3,7 +3,6 @@
 const { Selection, validateSelection } = require("../models/selection");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
-
 /**
  * Get all selections
  * @returns {array} list of all selections
@@ -19,7 +18,7 @@ const getAll = async ({ page, limit }) =>
 const getById = async (id) => await Selection.findById(ObjectId(id));
 
 /**
- * Create selection
+ * Create selection,phase and push selection id in project selections list
  * @param {string} role
  * @param {string} description
  * @param {array} phases
@@ -30,20 +29,31 @@ const getById = async (id) => await Selection.findById(ObjectId(id));
 const create = async ({
   role,
   description,
-  phases,
   current,
   projectId,
+  phases,
   skills,
 }) => {
-  const selection = new Selection({
+  const ProjectController = require("../controllers/project");
+  const PhaseController = require("../controllers/phase");
+  let selection = await new Selection({
     role: role,
     description: description,
     phases: phases,
     current: current,
     projectId: projectId,
     skills: skills,
+  }).save();
+  const phase = await PhaseController.create({
+    students: [],
+    selectionId: selection._id,
+    description: "",
   });
-  return await selection.save();
+  selection.phases.push(phase._id);
+  let project = await ProjectController.getById(projectId);
+  project.selections.push(selection._id);
+  await ProjectController.update(projectId, project);
+  return await update(selection._id, selection);
 };
 
 /**
