@@ -227,6 +227,87 @@ const withParameters = {
       },
     },
   },
+
 };
 
-module.exports = { withParameters, withoutParameters };
+const withOtherParameters = {
+  delete: {
+    tags: ["Phase"],
+    description: "",
+    parameters: [
+      {
+        in: "path",
+        name: "id",
+        schema: {
+          type: "string",
+          example: "5f28ac7082e88b35448255e8",
+        },
+        required: true,
+      },
+
+      {
+        in: "path",
+        name: "studentId",
+        schema: {
+          type: "string",
+          example: 116210887,
+        },
+        required: true,
+      }
+    ],
+
+    responses: {
+      200: {
+        description: "Successful.",
+        content: {
+          "application/json": {
+            schema: {
+              "type": "object",
+              "required": ["id", "name", "description"],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "5f5d1fa6dccfa335d03fdd3e"
+                },
+            
+                "students: ": {
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "example": [112130765]
+                  }
+                },
+            
+                "selectionId: ": {
+                  "type": "string",
+                  "example": "5f28ac7082e88b35448255e8"
+                },
+            
+                "description: ": {
+                  "type": "string",
+                  "example": "Fase de seleção de currículo"
+                }
+              }
+            },
+          },
+          required: true,
+        },
+      },
+
+      404: {
+        description: "Unsuccessful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "string",
+              example: "The phase or the student with the given id was not found.",
+            },
+          },
+        },
+      },
+    },
+  }
+
+}
+
+module.exports = { withParameters, withoutParameters, withOtherParameters };
