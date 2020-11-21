@@ -3,6 +3,8 @@
 const { Selection, validateSelection } = require("../models/selection");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
+const ProjectController = require("../controllers/project");
+const PhaseController = require("../controllers/phase");
 /**
  * Get all selections
  * @returns {array} list of all selections
@@ -34,8 +36,6 @@ const create = async ({
   phases,
   skills,
 }) => {
-  const ProjectController = require("../controllers/project");
-  const PhaseController = require("../controllers/phase");
   let selection = await new Selection({
     role: role,
     description: description,
@@ -70,7 +70,18 @@ const update = async (id, updateData) =>
  * @param {string} id
  * @returns {object} selection removed
  */
-const remove = async (id) => await Selection.findByIdAndRemove(ObjectId(id));
+const remove = async (id) => {
+  const selection = await getById(id);
+  let project = await ProjectController.getById(selection.projectId);
+  project.selections = project.selections.filter(
+    (selectionId) => selectionId.toString() !== id.toString()
+  );
+  let phases = selection.phases.map(
+    async (phase) => await PhaseController.remove(phase)
+  );
+  await ProjectController.update(project._id, project);
+  return await Selection.findByIdAndRemove(ObjectId(id));
+};
 
 /**
  * Validate selection
