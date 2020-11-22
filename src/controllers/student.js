@@ -19,7 +19,7 @@ const getAll = () => Student.find().sort("registration");
  * @returns {object}
  */
 const getByRegistration = async (registration) =>
-  await Student.findOne(registration);
+  await Student.findOne({ registration });
 
 /**
  * Get student by email
@@ -34,7 +34,7 @@ const getByEmail = async (email) => await Student.findOne({ email });
  * @returns {object} student with selections
  */
 const getByRegistrationWithSelections = async (registration) => {
-  const student = await Student.findOne({ registration: registration });
+  const student = await Student.findOne({ registration });
   if (student && student.error === undefined)
     return getStudentWithSelections(student);
   throw "The student with the given ID was not found.";
@@ -59,6 +59,7 @@ const create = async ({
   cra,
   description,
   skills,
+  phases,
   experiences,
 }) => {
   const student = new Student({
@@ -69,6 +70,7 @@ const create = async ({
     cra: cra,
     description: description,
     skills: skills,
+    phases: phases,
     experiences: experiences,
   });
   return await student.save();
@@ -92,9 +94,9 @@ const update = async (registration, updateData, updatePhase) => {
   ];
   if (updatePhase) propsToUpdate.push("phases");
   return await Student.findOneAndUpdate(
-    { registration: registration },
+    { registration },
     {
-      registration: registration,
+      registration,
       ...filterProps(
         updateData,
         propsToUpdate,

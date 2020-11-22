@@ -84,7 +84,7 @@ router
 router.route("/:id").delete(async (request, response) => {
   let project = await ProjectController.remove(request.params.id);
   if (!project) {
-    response
+    return response
       .status(404)
       .send("The project with the given registration was not found.");
   }

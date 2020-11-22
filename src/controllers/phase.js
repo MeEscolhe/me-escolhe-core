@@ -75,7 +75,7 @@ const addStudent = async (phaseId, studentId) => {
  * @returns {object} phase updated
  */
 const removeStudent = async (phaseId, studentId) => {
-  const [phase, student] = await getPhaseAndStudent(phaseId, studentId);
+  let [phase, student] = await getPhaseAndStudent(phaseId, studentId);
   verifyAddOrRemoveStudent(phase, student, false);
   phase.students = phase.students.filter(
     (studentFK) => studentFK !== studentId
@@ -159,7 +159,7 @@ const verifyAddOrRemoveStudent = (phase, student, addStudent) => {
   } else if (!phase) {
     throw "Phase not found";
   } else if (!student) {
-    throw "Estudante not found";
+    throw "Student not found";
   } else if (addStudent && phase.students.includes(student.registration)) {
     throw "Student already registered in the phase";
   }
