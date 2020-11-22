@@ -195,7 +195,7 @@ const withParameters = {
         name: "id",
         schema: {
           type: "string",
-          example: "5f28ac7082e88b35448255e8",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
         required: true,
       },
@@ -227,7 +227,6 @@ const withParameters = {
       },
     },
   },
-
 };
 
 const students = {
@@ -240,7 +239,7 @@ const students = {
         name: "id",
         schema: {
           type: "string",
-          example: "5f28ac7082e88b35448255e8",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
         required: true,
       },
@@ -253,7 +252,7 @@ const students = {
           example: 116210887,
         },
         required: true,
-      }
+      },
     ],
 
     responses: {
@@ -262,32 +261,32 @@ const students = {
         content: {
           "application/json": {
             schema: {
-              "type": "object",
-              "required": ["id", "name", "description"],
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "example": "5f5d1fa6dccfa335d03fdd3e"
+              type: "object",
+              required: ["id", "name", "description"],
+              properties: {
+                id: {
+                  type: "string",
+                  example: "5f5d1fa6dccfa335d03fdd3e",
                 },
-            
+
                 "students: ": {
-                  "type": "array",
-                  "items": {
-                    "type": "number",
-                    "example": [112130765]
-                  }
+                  type: "array",
+                  items: {
+                    type: "number",
+                    example: [112130765],
+                  },
                 },
-            
+
                 "selectionId: ": {
-                  "type": "string",
-                  "example": "5f28ac7082e88b35448255e8"
+                  type: "string",
+                  example: "5f28ac7082e88b35448255e8",
                 },
-            
+
                 "description: ": {
-                  "type": "string",
-                  "example": "Fase de seleção de currículo"
-                }
-              }
+                  type: "string",
+                  example: "Fase de seleção de currículo",
+                },
+              },
             },
           },
           required: true,
@@ -300,13 +299,14 @@ const students = {
           "application/json": {
             schema: {
               type: "string",
-              example: "The phase or the student with the given id was not found.",
+              example:
+                "The phase or the student with the given id was not found.",
             },
           },
         },
       },
     },
-  }
+  },
 };
 
 module.exports = { withParameters, withoutParameters, students };
