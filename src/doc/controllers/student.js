@@ -186,7 +186,7 @@ const withParameters = {
     parameters: [
       {
         in: "path",
-        name: "id",
+        name: "registration",
         schema: {
           type: "string",
           example: "5f5d1fa6dccfa335d03fdd3e",
@@ -214,7 +214,7 @@ const withParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "The student with the given id was not found.",
+              example: "The student with the given registration was not found.",
             },
           },
         },
@@ -227,9 +227,9 @@ const withParameters = {
     description: "",
     parameters: [
       {
-        name: "id",
+        name: "registration",
         in: "path",
-        description: "ID of student",
+        description: "registration of student",
         required: true,
         schema: {
           type: "string",
@@ -279,7 +279,7 @@ const withParameters = {
     parameters: [
       {
         in: "path",
-        name: "id",
+        name: "registration",
         schema: {
           type: "string",
           example: "5f28ac7082e88b35448255e8",
@@ -307,7 +307,7 @@ const withParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "The student with the given id was not found.",
+              example: "The student with the given registration was not found.",
             },
           },
         },
