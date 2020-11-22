@@ -59,7 +59,8 @@ const swaggerSpecs = {
 
     "/phases": require("../../doc/controllers/phase").withoutParameters,
     "/phases/{id}": require("../../doc/controllers/phase").withParameters,
-    "/phases/{id}/student/{studentId}": require("../../doc/controllers/phase").withOtherParameters,
+    "/phases/{id}/students/{studentId}": require("../../doc/controllers/phase")
+      .students,
 
     "/projects": require("../../doc/controllers/project").withoutParameters,
     "/projects/{id}": require("../../doc/controllers/project").withParameters,
@@ -75,6 +76,8 @@ const swaggerSpecs = {
     "/teachers": require("../../doc/controllers/teacher").withoutParameters,
     "/teachers/{id}": require("../../doc/controllers/teacher").withParameters,
     "/teachers/email": require("../../doc/controllers/teacher").login,
+    "teachers/{id}/selections": require("../../doc/controllers/teacher")
+      .selections,
 
     "/workExperiences": require("../../doc/controllers/work-experience")
       .withoutParameters,
