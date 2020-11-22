@@ -1,12 +1,6 @@
 {
   "type": "object",
-  "required": [
-    "id",
-    "role",
-    "institution",
-    "initialDate",
-    "finalDate"
-  ],
+  "required": ["id", "role", "institution", "initialDate", "finalDate"],
   "properties": {
     "id": {
       "type": "string",
@@ -22,7 +16,6 @@
       "type": "string",
       "example": "Microsoft"
     },
-
 
     "initialDate": {
       "type": "string",
