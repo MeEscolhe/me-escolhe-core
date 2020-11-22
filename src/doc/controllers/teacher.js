@@ -65,7 +65,7 @@ const withoutParameters = {
 
               labId: {
                 type: "string",
-                examples: "6t71fk9127g63j85493265w2",
+                example: "6t71fk9127g63j85493265w2",
               },
 
               managements: {
@@ -322,7 +322,7 @@ const selections = {
               items: {
                 $ref: "#/components/schemas/teacher".managements,
               },
-            }
+            },
           },
           required: true,
         },
@@ -340,7 +340,7 @@ const selections = {
         },
       },
     },
-  }
+  },
 };
 
 module.exports = { withParameters, withoutParameters, login, selections };

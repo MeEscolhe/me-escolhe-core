@@ -7,7 +7,7 @@
       "example": "5f5d1fa6dccfa335d03fdd3e"
     },
 
-    "academic: ": {
+    "academic": {
       "type": "array",
       "items": {
         "type": "string",
@@ -15,7 +15,7 @@
       }
     },
 
-    "work: ": {
+    "work": {
       "type": "array",
       "items": {
         "type": "string",

@@ -101,7 +101,7 @@
       }
     },
 
-    "phases: ": {
+    "phases": {
       "type": "array",
       "items": {
         "type": "string",

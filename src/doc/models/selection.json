@@ -17,7 +17,7 @@
       "example": "Desejável ter conhecimento em Angular"
     },
 
-    "phases: ": {
+    "phases": {
       "type": "array",
       "items": {
         "type": "string",
