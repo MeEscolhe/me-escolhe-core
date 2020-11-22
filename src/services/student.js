@@ -4,7 +4,6 @@
  * @author Kelvin Cirne
  */
 const StudentController = require("../controllers/student");
-const ProjectController = require("../controllers/project");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate } = require("../middlewares/util");

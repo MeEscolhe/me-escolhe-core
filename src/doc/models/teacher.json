@@ -39,12 +39,12 @@
           "type": "string",
           "example": "Frontend developer"
         },
-    
+
         "description": {
           "type": "string",
           "example": "Desejável ter conhecimento em Angular"
         },
-    
+
         "phases: ": {
           "type": "array",
           "items": {
@@ -52,12 +52,12 @@
             "examples": ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"]
           }
         },
-    
+
         "current": {
           "type": "boolean",
           "example": true
         },
-    
+
         "skills": {
           "type": "object",
           "properties": {
@@ -110,5 +110,6 @@
           }
         }
       }
+    }
   }
 }

@@ -115,7 +115,7 @@ const update = async (registration, updateData, updatePhase) => {
  * @returns {object} student removed
  */
 const remove = async (registration) =>
-  await Student.findOneAndDelete(registration);
+  await Student.findOneAndDelete({ registration });
 
 /**
  * Validate student
