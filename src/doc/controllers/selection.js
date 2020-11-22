@@ -207,6 +207,7 @@ const withParameters = {
         required: true,
         schema: {
           type: "string",
+          example: "8y3d1fa6dccfa335d03fdd3e",
         },
       },
     ],
@@ -215,7 +216,32 @@ const withParameters = {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/selection",
+            type: "object",
+            example: {
+              role: "Frontend developer",
+              description: "Desejável ter conhecimento em Angular",
+              "phases: ": ["string"],
+              current: true,
+              skills: {
+                hardSkills: [
+                  {
+                    name: "Java",
+                    level: 2,
+                  },
+                ],
+                softSkills: [
+                  {
+                    name: "Trabalha bem em grupo",
+                  },
+                ],
+                languages: [
+                  {
+                    name: "Java",
+                    level: 2,
+                  },
+                ],
+              },
+            },
           },
         },
       },
@@ -255,7 +281,7 @@ const withParameters = {
         name: "id",
         schema: {
           type: "string",
-          example: "5f28ac7082e88b35448255e8",
+          example: "8y3d1fa6dccfa335d03fdd3e",
         },
         required: true,
       },
