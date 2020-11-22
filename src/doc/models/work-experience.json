@@ -4,7 +4,6 @@
     "id",
     "role",
     "institution",
-    "durationInMonths",
     "initialDate",
     "finalDate"
   ],
@@ -14,20 +13,16 @@
       "example": "5f5d1fa6dccfa335d03fdd3e"
     },
 
-    "role: ": {
+    "role": {
       "type": "string",
       "example": "Developer"
     },
 
-    "institution: ": {
+    "institution": {
       "type": "string",
       "example": "Microsoft"
     },
 
-    "durationInMonths: ": {
-      "type": "number",
-      "example": 5
-    },
 
     "initialDate": {
       "type": "string",

@@ -94,7 +94,7 @@ router
     }
   });
 
-router.route(":id/selections").get(async (request, response) => {
+router.route("/:id/selections").get(async (request, response) => {
   const teacher = await TeacherController.getById(request.params.id);
   if (!teacher) {
     return response

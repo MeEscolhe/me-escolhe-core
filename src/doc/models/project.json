@@ -12,7 +12,7 @@
       "example": "PIBIC"
     },
 
-    "description: ": {
+    "description": {
       "type": "string",
       "example": "Projeto de iniciação científica"
     },
