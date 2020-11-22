@@ -230,7 +230,7 @@ const withParameters = {
 
 };
 
-const withOtherParameters = {
+const students = {
   delete: {
     tags: ["Phase"],
     description: "",
@@ -307,7 +307,6 @@ const withOtherParameters = {
       },
     },
   }
+};
 
-}
-
-module.exports = { withParameters, withoutParameters, withOtherParameters };
+module.exports = { withParameters, withoutParameters, students };

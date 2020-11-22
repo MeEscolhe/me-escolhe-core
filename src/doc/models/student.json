@@ -42,7 +42,7 @@
     },
 
     "skills": {
-      "type": "object",
+      "type": "array",
       "properties": {
         "hardSkills": {
           "type": "array",

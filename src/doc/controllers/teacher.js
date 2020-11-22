@@ -296,4 +296,51 @@ const login = {
   },
 };
 
-module.exports = { withParameters, withoutParameters, login };
+const selections = {
+  get: {
+    tags: ["Teacher"],
+    description: "",
+    parameters: [
+      {
+        in: "path",
+        name: "id",
+        schema: {
+          type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
+        },
+        required: true,
+      },
+    ],
+
+    responses: {
+      200: {
+        description: "Successful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/teacher".managements,
+              },
+            }
+          },
+          required: true,
+        },
+      },
+
+      404: {
+        description: "Unsuccessful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "string",
+              example: "The phase with the given id was not found.",
+            },
+          },
+        },
+      },
+    },
+  }
+};
+
+module.exports = { withParameters, withoutParameters, login, selections };

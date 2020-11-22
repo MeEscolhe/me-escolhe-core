@@ -74,8 +74,8 @@ router
     }
   });
 
-router.route("/:registration").delete(async (request, response) => {
-  const project = await ProjectController.remove(request.params.registration);
+router.route("/:id").delete(async (request, response) => {
+  const project = await ProjectController.remove(request.params.id);
   if (!project) {
     response
       .status(404)
