@@ -318,10 +318,7 @@ const selections = {
         content: {
           "application/json": {
             schema: {
-              type: "array",
-              items: {
-                $ref: "#/components/schemas/teacher".managements,
-              },
+              $ref: "#/components/schemas/selection",
             },
           },
           required: true,
