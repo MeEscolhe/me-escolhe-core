@@ -2,6 +2,7 @@
 
 const { Project, validateProject } = require("../models/project");
 const mongoose = require("mongoose");
+const { Selection } = require("../models/selection");
 
 /**
  * Get all projects
@@ -16,6 +17,22 @@ const getAll = async () => await Project.find().sort("name");
  */
 const getById = async (id) =>
   await Project.findById(mongoose.Types.ObjectId(id));
+
+const addSelection = async (selection, id) => {
+  let project = await getById(selection.projectId);
+  project = { ...project._doc };
+  project.selections.push(selection._id);
+  await update(project._id, project);
+};
+
+const removeSelection = async (selectionId) => {
+  let project = await Project.findOne({ selections: selectionId.toString() });
+  project = { ...project._doc };
+  project.selections = project.selections.filter(
+    (item) => item != selectionId.toString()
+  );
+  await update(project._id, project);
+};
 
 /**
  * Create project
@@ -72,4 +89,13 @@ const validate = (object) => {
   return error;
 };
 
-module.exports = { getAll, getById, create, update, remove, validate };
+module.exports = {
+  getAll,
+  getById,
+  create,
+  update,
+  remove,
+  validate,
+  addSelection,
+  removeSelection,
+};

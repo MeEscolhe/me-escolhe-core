@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "required": ["id", "name", "description"],
+  "required": ["id", "students", "selectionId", "description"],
   "properties": {
     "id": {
       "type": "string",
@@ -9,10 +9,7 @@
 
     "students": {
       "type": "array",
-      "items": {
-        "type": "number",
-        "example": [116210887, 112130765]
-      }
+      "example": [116210887, 112130765]
     },
 
     "selectionId": {

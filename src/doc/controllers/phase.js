@@ -45,10 +45,7 @@ const withoutParameters = {
             properties: {
               students: {
                 type: "array",
-                items: {
-                  type: "number",
-                  example: [116210887, 112130765],
-                },
+                example: [116210887, 112130765],
               },
 
               selectionId: {
@@ -277,10 +274,7 @@ const students = {
 
                 "students: ": {
                   type: "array",
-                  items: {
-                    type: "number",
-                    example: [112130765],
-                  },
+                  example: [112130765],
                 },
 
                 "selectionId: ": {
