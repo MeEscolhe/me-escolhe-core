@@ -86,12 +86,24 @@ router
     return response.send(phases);
   });
 
-router.route("/:id/students/:studentId").delete(async (request, response) => {
-  const phase = PhaseController.removeStudent(
-    request.params.id,
-    request.body.studentId
-  );
-  return response.send(phase);
-});
+router
+  .route("/:id/students/:registration")
+  .delete(async (request, response) => {
+    const phase = PhaseController.add(
+      request.params.id,
+      request.params.studentId
+    );
+    return response.send(phase);
+  });
+
+router
+  .route("/:id/students/:registration")
+  .delete(async (request, response) => {
+    const phase = PhaseController.removeStudent(
+      request.params.id,
+      request.params.studentId
+    );
+    return response.send(phase);
+  });
 
 module.exports = router;

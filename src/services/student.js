@@ -26,7 +26,11 @@ router
       return response.status(400).send(message);
     } else {
       try {
-        const student = await StudentController.create(request.body);
+        let student = await StudentController.create(request.body);
+        for (let i = 0; i < student.phases.length; i++) {
+          let phaseId = student.phases[i];
+          await PhaseController.addStudent(phaseId, student.registration);
+        }
         return response.send(student);
       } catch (error) {
         return response.status(400).send(error.message);

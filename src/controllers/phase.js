@@ -40,7 +40,7 @@ const create = async ({ students, selectionId, description }) => {
  * @returns {object} phase updated
  */
 const addStudent = async (phaseId, studentId) => {
-  const [phase, student] = await getPhaseAndStudent(phaseId, studentId);
+  let [phase, student] = await getPhaseAndStudent(phaseId, studentId);
   verifyAddOrRemoveStudent(phase, student, true);
   phase.students.push(student.registration);
   phase = await Phase.findByIdAndUpdate(phaseId, phase, { new: true });
