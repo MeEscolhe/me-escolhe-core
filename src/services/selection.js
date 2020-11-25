@@ -32,6 +32,7 @@ router
   })
 
   .post(async (request, response) => {
+    request.body.phases = [];
     const { error, message } = validate(request.body, SelectionController);
     if (error) {
       return response.status(400).send(message);

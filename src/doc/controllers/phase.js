@@ -231,8 +231,85 @@ const withParameters = {
     },
   },
 };
+const StudentRoute = {
+  post: {
+    tags: ["Phase"],
+    description: "Add student in phase",
+    parameters: [
+      {
+        in: "path",
+        name: "id",
+        schema: {
+          type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
+        },
+        required: true,
+      },
+      {
+        in: "path",
+        name: "registration",
+        schema: {
+          type: "string",
+          example: "1234567890",
+        },
+        required: true,
+      },
+    ],
+    responses: {
+      200: {
+        description: "Successful",
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "string",
+                  example: "5f5d1fa6dccfa335d03fdd3e",
+                },
 
-const students = {
+                "students: ": {
+                  type: "array",
+                  items: {
+                    type: "number",
+                    example: [1234567890],
+                  },
+                },
+
+                "selectionId: ": {
+                  type: "string",
+                  example: "5f5d1fa6dccfa335d03fdd3e",
+                },
+
+                "description: ": {
+                  type: "string",
+                  example: "Fase de seleção de currículo",
+                },
+              },
+            },
+          },
+        },
+      },
+
+      400: {
+        description: "Unsuccessful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "string",
+              example: "Phase and student not found",
+              enum: [
+                "Phase and student not found",
+                "Phase not found",
+                "Student not found",
+                "Student already registered in the phase",
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
   delete: {
     tags: ["Phase"],
     description: "",
@@ -246,26 +323,23 @@ const students = {
         },
         required: true,
       },
-
       {
         in: "path",
-        name: "studentId",
+        name: "registration",
         schema: {
           type: "string",
-          example: 116210887,
+          example: "1234567890",
         },
         required: true,
       },
     ],
-
     responses: {
       200: {
-        description: "Successful.",
+        description: "Successful",
         content: {
           "application/json": {
             schema: {
               type: "object",
-              required: ["id", "name", "description"],
               properties: {
                 id: {
                   type: "string",
@@ -274,12 +348,15 @@ const students = {
 
                 "students: ": {
                   type: "array",
-                  example: [112130765],
+                  items: {
+                    type: "number",
+                    example: [],
+                  },
                 },
 
                 "selectionId: ": {
                   type: "string",
-                  example: "5f28ac7082e88b35448255e8",
+                  example: "5f5d1fa6dccfa335d03fdd3e",
                 },
 
                 "description: ": {
@@ -289,18 +366,22 @@ const students = {
               },
             },
           },
-          required: true,
         },
       },
 
-      404: {
+      400: {
         description: "Unsuccessful.",
         content: {
           "application/json": {
             schema: {
               type: "string",
-              example:
-                "The phase or the student with the given id was not found.",
+              example: "Phase and student not found",
+              enum: [
+                "Phase and student not found",
+                "Phase not found",
+                "Student not found",
+                "Student already registered in the phase",
+              ],
             },
           },
         },
@@ -309,4 +390,4 @@ const students = {
   },
 };
 
-module.exports = { withParameters, withoutParameters, students };
+module.exports = { withParameters, withoutParameters, StudentRoute };

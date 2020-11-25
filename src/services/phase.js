@@ -87,23 +87,29 @@ router
   });
 
 router
-  .route("/:id/students/:registration")
-  .delete(async (request, response) => {
-    const phase = PhaseController.add(
-      request.params.id,
-      request.params.studentId
-    );
-    return response.send(phase);
-  });
+  .route("/:id/student/:registration")
+  .post(async (request, response) => {
+    try {
+      const phase = await PhaseController.addStudent(
+        request.params.id,
+        request.params.registration
+      );
+      return response.send(phase);
+    } catch (error) {
+      return response.status(400).send(error.message);
+    }
+  })
 
-router
-  .route("/:id/students/:registration")
   .delete(async (request, response) => {
-    const phase = PhaseController.removeStudent(
-      request.params.id,
-      request.params.studentId
-    );
-    return response.send(phase);
+    try {
+      const phase = await PhaseController.removeStudent(
+        request.params.id,
+        request.params.registration
+      );
+      return response.send(phase);
+    } catch (error) {
+      return response.status(400).send(error.message);
+    }
   });
 
 module.exports = router;

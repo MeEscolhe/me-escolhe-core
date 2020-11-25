@@ -53,17 +53,6 @@ const withoutParameters = {
                 example: "Desejável ter conhecimento em Angular",
               },
 
-              phases: {
-                type: "array",
-                items: {
-                  type: "string",
-                  examples: [
-                    "5f28ac7082e88b35448255e8",
-                    "5f28ba7011e35b35448255e8",
-                  ],
-                },
-              },
-
               current: {
                 type: "boolean",
                 example: true,

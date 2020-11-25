@@ -9,8 +9,7 @@ const mongoose = require("mongoose");
  */
 const connect = () => {
   require("dotenv/config");
-
-  switch (process.env.NODE_ENV) {
+  switch (process.env.NODE_ENV.trim()) {
     case "LOCAL":
       mongoose.connect(process.env.ME_ESCOLHE_LOCAL_DRIVER, {
         useNewUrlParser: true,
@@ -35,6 +34,8 @@ const connect = () => {
         useUnifiedTopology: true,
       });
       break;
+    default:
+      console.log("Can't recognize NODE_ENV");
   }
 
   mongoose.set("useCreateIndex", true);
