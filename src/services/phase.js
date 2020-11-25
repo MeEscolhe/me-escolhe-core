@@ -87,12 +87,12 @@ router
   });
 
 router
-  .route("/:id/student/:studentId")
+  .route("/:id/student/:registration")
   .post(async (request, response) => {
     try {
       const phase = await PhaseController.addStudent(
         request.params.id,
-        request.params.studentId
+        request.params.registration
       );
       return response.send(phase);
     } catch (error) {
@@ -104,7 +104,7 @@ router
     try {
       const phase = await PhaseController.removeStudent(
         request.params.id,
-        request.params.studentId
+        request.params.registration
       );
       return response.send(phase);
     } catch (error) {
