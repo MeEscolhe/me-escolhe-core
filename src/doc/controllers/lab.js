@@ -147,11 +147,7 @@ const withParameters = {
       content: {
         "application/json": {
           schema: {
-            type: "object",
-            example: {
-              "name: ": "IQuanta",
-              "description: ": "Laboratório de computação quântica",
-            },
+            $ref: "#/components/schemas/lab",
           },
         },
       },
