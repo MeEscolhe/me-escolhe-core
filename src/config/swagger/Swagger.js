@@ -2,7 +2,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = {
   openapi: "3.0.1",
   info: {
-    version: "1.0.0",
+    version: "2.5.3",
     description: `<img src="http://localhost:8080/static/images/Logo-me-escolhe-v7.png)" /> API Documentation`,
   },
   components: {
