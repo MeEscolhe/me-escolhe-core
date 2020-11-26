@@ -239,4 +239,51 @@ const withParameters = {
   },
 };
 
-module.exports = { withParameters, withoutParameters };
+const teacher = {
+  get: {
+    tags: ["Project"],
+    description: "",
+    parameters: [
+      {
+        in: "path",
+        name: "id",
+        schema: {
+          type: "string",
+          example: "5f5d1fa6dccfa335d03fdabc",
+        },
+        required: true,
+      },
+    ],
+
+    responses: {
+      200: {
+        description: "Successful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/project",
+              },
+            },
+          },
+        },
+      },
+
+      400: {
+        description: "Unsuccessful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "string",
+              example: "No projects to show.",
+              enum: ["No projects to show."],
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+module.exports = { withParameters, withoutParameters, teacher };
