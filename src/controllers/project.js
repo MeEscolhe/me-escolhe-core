@@ -2,13 +2,19 @@
 
 const { Project, validateProject } = require("../models/project");
 const mongoose = require("mongoose");
-const { Selection } = require("../models/selection");
 
 /**
  * Get all projects
  * @returns {array} list of all projects
  */
 const getAll = async () => await Project.find().sort("name");
+
+/**
+ * Get all projects by teacher id
+ * @returns {array} list of all projects
+ */
+const getAllByListId = async (list_id) =>
+  await Project.find({ _id: { $in: list_id } }).sort("name");
 
 /**
  * Get project by id
@@ -18,13 +24,21 @@ const getAll = async () => await Project.find().sort("name");
 const getById = async (id) =>
   await Project.findById(mongoose.Types.ObjectId(id));
 
-const addSelection = async (selection, id) => {
+/**
+ * Add selection to your respective project
+ * @param {object} selection
+ */
+const addSelection = async (selection) => {
   let project = await getById(selection.projectId);
   project = { ...project._doc };
   project.selections.push(selection._id);
   await update(project._id, project);
 };
 
+/**
+ * Remove selection to your respective project
+ * @param {string} selectionId
+ */
 const removeSelection = async (selectionId) => {
   let project = await Project.findOne({ selections: selectionId.toString() });
   project = { ...project._doc };
@@ -91,6 +105,7 @@ const validate = (object) => {
 
 module.exports = {
   getAll,
+  getAllByListId,
   getById,
   create,
   update,
