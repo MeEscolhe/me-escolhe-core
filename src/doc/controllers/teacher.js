@@ -70,13 +70,10 @@ const withoutParameters = {
 
               managements: {
                 type: "array",
-                items: {
-                  type: "string",
-                  examples: [
-                    "4a14bg8357c32u09875565b7",
-                    "6u74zb0034f65zu435743o0",
-                  ],
-                },
+                example: [
+                  "4a14bg8357c32u09875565b7",
+                  "6u74zb0034f65zu435743o0",
+                ],
               },
             },
           },

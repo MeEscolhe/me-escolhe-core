@@ -95,18 +95,12 @@
 
     "experiences": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "example": ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"]
-      }
+      "example": ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"]
     },
 
     "phases": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "example": ["7f78fr3111x97h53779000a1", "7a65hg8755k73s21116789i8"]
-      }
+      "example": ["7f78fr3111x97h53779000a1", "7a65hg8755k73s21116789i8"]
     }
   }
 }

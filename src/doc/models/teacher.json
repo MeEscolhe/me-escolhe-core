@@ -34,10 +34,7 @@
 
     "managements": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "example": ["5f5d1fa6dccfa335d03fdd3e", "5f5d1fa6dccfa335d0i4335a"]
-      }
+      "example": ["5f5d1fa6dccfa335d03fdd3e", "5f5d1fa6dccfa335d0i4335a"]
     }
   }
 }
