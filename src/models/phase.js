@@ -2,7 +2,6 @@
 
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const { FKHelper } = require("../middlewares/util");
 const {
   validate,
   id,
@@ -46,13 +45,10 @@ const validatePhase = (phase) =>
     phase
   );
 const getStudentsData = async (phase) => {
-  const { _id, selectionId, description, students } = phase;
+  let { _id, selectionId, description, students } = phase;
   const studentsPhase = await Promise.all(
-    phase.students.map(
-      async (student) => await getByRegistration({ registration: student })
-    )
+    students.map(async (student) => await getByRegistration(student))
   );
-
   return { _id, students: studentsPhase, selectionId, description };
 };
 module.exports = {

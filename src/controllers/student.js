@@ -11,7 +11,16 @@ const { filterProps } = require("../middlewares/util");
  * Get all students
  * @returns {array} list of all students
  */
-const getAll = () => Student.find().sort("registration");
+const getAll = async () => await Student.find().sort("registration");
+
+/**
+ * Get all students
+ * @returns {array} list of all students
+ */
+const getAllByRegistrationList = async (registration_list) =>
+  await Student.find({ registration: { $in: registration_list } }).sort(
+    "registration"
+  );
 
 /**
  * Get student by registration
@@ -133,6 +142,7 @@ module.exports = {
   getAll,
   getByEmail,
   getByRegistration,
+  getAllByRegistrationList,
   create,
   update,
   remove,

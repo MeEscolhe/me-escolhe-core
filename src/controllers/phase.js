@@ -8,7 +8,14 @@ const StudentController = require("./student");
  * Get all phases
  * @returns {array} list of all phases
  */
-const getAll = async () => await Phase.find().sort("name");
+const getAll = async () => {
+  const phases = await Phase.find().sort("name");
+  for (let i = 0; i < phases.length; i++) {
+    let phase = { ...phases[i]._doc };
+    phases[i] = await getStudentsData(phase);
+  }
+  return phases;
+};
 
 /**
  * Get phase by id
@@ -18,7 +25,7 @@ const getAll = async () => await Phase.find().sort("name");
 const getById = async (id) => {
   const phase = await Phase.findById(mongoose.Types.ObjectId(id));
   if (phase) {
-    return getStudentsData(phase);
+    return await getStudentsData(phase);
   }
   return phase;
 };
