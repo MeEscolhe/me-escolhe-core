@@ -72,15 +72,20 @@ const update = async (id, updateData) =>
  */
 const remove = async (id) => {
   const selection = await getById(id);
+
   let project = await ProjectController.getById(selection.projectId);
-  project.selections = project.selections.filter(
-    (selectionId) => selectionId.toString() !== id.toString()
-  );
-  let phases = selection.phases.map(
-    async (phase) => await PhaseController.remove(phase)
-  );
-  await ProjectController.update(project._id, project);
-  return await Selection.findByIdAndRemove(ObjectId(id));
+  if (project) {
+    project.selections = project.selections.filter(
+      (selectionId) => selectionId.toString() !== id.toString()
+    );
+    let phases = selection.phases.map(
+      async (phase) => await PhaseController.remove(phase)
+    );
+    await ProjectController.update(project._id, project);
+    return await Selection.findByIdAndRemove(ObjectId(id));
+  } else {
+    throw new Error("Project id not found");
+  }
 };
 
 /**

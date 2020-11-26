@@ -59,8 +59,21 @@ const update = async (id, { name, description, labId, selections }) =>
  * @param {string} id
  * @returns {object} project removed
  */
-const remove = async (id) =>
-  await Project.findByIdAndRemove(mongoose.Types.ObjectId(id));
+const remove = async (id) => {
+  const SelectionController = require("./selection");
+  const project = await Project.findById(mongoose.Types.ObjectId(id));
+
+  if (project) {
+    await Promise.all(
+      project.selections.map(
+        async (selectionId) => await SelectionController.remove(selectionId)
+      )
+    );
+    return await Project.findByIdAndRemove(mongoose.Types.ObjectId(id));
+  } else {
+    throw new Error("The project with the given ID was not found.");
+  }
+};
 
 /**
  * Validate project

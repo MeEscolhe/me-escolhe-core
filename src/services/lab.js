@@ -62,13 +62,17 @@ router
   })
 
   .delete(async (request, response) => {
-    const lab = await LabController.remove(request.params.id);
-    if (!lab) {
-      return response
-        .status(404)
-        .send("The lab with the given ID was not found.");
+    try {
+      const lab = await LabController.remove(request.params.id);
+      if (!lab) {
+        return response
+          .status(404)
+          .send("The lab with the given ID was not found.");
+      }
+      return response.send(lab);
+    } catch (error) {
+      return response.status(400).send(error.message);
     }
-    return response.send(lab);
   });
 
 router.route("/selections/:id").get(async (request, response) => {

@@ -52,8 +52,20 @@ const update = async (id, { name, description }) =>
  * @param {string} id
  * @returns {object} lab removed
  */
-const remove = async (id) =>
-  await Lab.findByIdAndRemove(mongoose.Types.ObjectId(id));
+const remove = async (id) => {
+  const ProjectController = require("../controllers/project");
+  const SelectionController = require("../controllers/selection");
+  const lab = await getById(id);
+  if (lab) {
+    const projects = await ProjectController.getAll();
+    await projects
+      .filter((project) => project.labId.toString() === id.toString())
+      .forEach(async (project) => await ProjectController.remove(project._id));
+    return await Lab.findByIdAndRemove(mongoose.Types.ObjectId(id));
+  } else {
+    throw new Error("The lab with the given ID was not found.");
+  }
+};
 
 /**
  * Validate hard skill

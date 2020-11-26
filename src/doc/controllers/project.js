@@ -51,16 +51,6 @@ const withoutParameters = {
                 type: "string",
                 example: "Academic Project",
               },
-              selections: {
-                type: "array",
-                items: {
-                  type: "string",
-                  example: [
-                    "5f28ac7082e88b35448255e8",
-                    "5f28ba7011e35b35448255e8",
-                  ],
-                },
-              },
             },
           },
         },
@@ -216,7 +206,7 @@ const withParameters = {
         },
       },
 
-      404: {
+      400: {
         description: "Unsuccessful.",
         content: {
           "application/json": {

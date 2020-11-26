@@ -22,6 +22,7 @@ router
   })
 
   .post(async (request, response) => {
+    request.body.selections = [];
     const { error, message } = validate(request.body, ProjectController);
     if (error) {
       return response.status(400).send(message);
@@ -74,14 +75,16 @@ router
     }
   });
 
-router.route("/:registration").delete(async (request, response) => {
-  const project = await ProjectController.remove(request.params.registration);
-  if (!project) {
-    response
-      .status(404)
-      .send("The project with the given registration was not found.");
-  } else {
-    return response.send(project);
+router.route("/:id").delete(async (request, response) => {
+  try {
+    const project = await ProjectController.remove(request.params.id);
+    if (!project) {
+      response.status(400).send("The project with the given id was not found.");
+    } else {
+      return response.send(project);
+    }
+  } catch (error) {
+    return response.status(400).send(error.message);
   }
 });
 
