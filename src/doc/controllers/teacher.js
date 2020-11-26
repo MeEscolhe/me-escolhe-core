@@ -65,18 +65,15 @@ const withoutParameters = {
 
               labId: {
                 type: "string",
-                examples: "6t71fk9127g63j85493265w2",
+                example: "6t71fk9127g63j85493265w2",
               },
 
               managements: {
                 type: "array",
-                items: {
-                  type: "string",
-                  examples: [
-                    "4a14bg8357c32u09875565b7",
-                    "6u74zb0034f65zu435743o0",
-                  ],
-                },
+                example: [
+                  "4a14bg8357c32u09875565b7",
+                  "6u74zb0034f65zu435743o0",
+                ],
               },
             },
           },
@@ -296,4 +293,48 @@ const login = {
   },
 };
 
-module.exports = { withParameters, withoutParameters, login };
+const selections = {
+  get: {
+    tags: ["Teacher"],
+    description: "",
+    parameters: [
+      {
+        in: "path",
+        name: "id",
+        schema: {
+          type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
+        },
+        required: true,
+      },
+    ],
+
+    responses: {
+      200: {
+        description: "Successful.",
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/selection",
+            },
+          },
+          required: true,
+        },
+      },
+
+      404: {
+        description: "Unsuccessful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "string",
+              example: "The phase with the given id was not found.",
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+module.exports = { withParameters, withoutParameters, login, selections };

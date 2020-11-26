@@ -127,24 +127,18 @@ const withoutParameters = {
 
               experiences: {
                 type: "array",
-                items: {
-                  type: "string",
-                  examples: [
-                    "5f28ac7082e88b35448255e8",
-                    "5f28ba7011e35b35448255e8",
-                  ],
-                },
+                example: [
+                  "5f28ac7082e88b35448255e8",
+                  "5f28ba7011e35b35448255e8",
+                ],
               },
 
               phases: {
                 type: "array",
-                items: {
-                  type: "string",
-                  examples: [
-                    "7f78fr3111x97h53779000a1",
-                    "7a65hg8755k73s21116789i8",
-                  ],
-                },
+                example: [
+                  "7f78fr3111x97h53779000a1",
+                  "7a65hg8755k73s21116789i8",
+                ],
               },
             },
           },
@@ -186,7 +180,7 @@ const withParameters = {
     parameters: [
       {
         in: "path",
-        name: "id",
+        name: "registration",
         schema: {
           type: "string",
           example: "5f5d1fa6dccfa335d03fdd3e",
@@ -214,7 +208,7 @@ const withParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "The student with the given id was not found.",
+              example: "The student with the given registration was not found.",
             },
           },
         },
@@ -227,9 +221,9 @@ const withParameters = {
     description: "",
     parameters: [
       {
-        name: "id",
+        name: "registration",
         in: "path",
-        description: "ID of student",
+        description: "registration of student",
         required: true,
         schema: {
           type: "string",
@@ -279,7 +273,7 @@ const withParameters = {
     parameters: [
       {
         in: "path",
-        name: "id",
+        name: "registration",
         schema: {
           type: "string",
           example: "5f28ac7082e88b35448255e8",
@@ -307,7 +301,7 @@ const withParameters = {
           "application/json": {
             schema: {
               type: "string",
-              example: "The student with the given id was not found.",
+              example: "The student with the given registration was not found.",
             },
           },
         },

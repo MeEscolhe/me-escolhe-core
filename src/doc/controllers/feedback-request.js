@@ -140,10 +140,11 @@ const withParameters = {
       {
         name: "id",
         in: "path",
-        description: "ID of feedback-request",
+        description: "ID of feedback request",
         required: true,
         schema: {
           type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
       },
     ],
@@ -152,7 +153,12 @@ const withParameters = {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/feedback-request",
+            type: "object",
+            example: {
+              "studentId: ": 116210877,
+              "phaseId: ": "5t5d1fb8dccfa665d03fdd3e",
+              "teacherId: ": "5t5d1fa6dccfa665d03fdd3e",
+            },
           },
         },
       },
@@ -193,7 +199,7 @@ const withParameters = {
         name: "id",
         schema: {
           type: "string",
-          example: "5f28ac7082e88b35448255e8",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
         required: true,
       },
