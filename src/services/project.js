@@ -95,9 +95,10 @@ router
     return response.send(project);
   });
 
-router.route("/:teacherId").get(async (request, response) => {
-  const teacher = await TeacherController.getById(request.params.teacherId);
-  let projects = await ProjectController.getAll(teacher.managements);
+router.route("/teacher/:teacherId").get(async (request, response) => {
+  let teacher = await TeacherController.getById(request.params.teacherId);
+  let managements = teacher._doc.managements;
+  let projects = await ProjectController.getAllByListId(managements);
   if (isEmpty(projects)) {
     return response.status(404).send("No projects to show.");
   }

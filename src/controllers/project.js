@@ -13,8 +13,11 @@ const getAll = async () => await Project.find().sort("name");
  * Get all projects by teacher id
  * @returns {array} list of all projects
  */
-const getAllByListId = async (list_id) =>
-  await Project.find({ _id: { $in: list_id } }).sort("name");
+const getAllByListId = async (list_id) => {
+  let objectIds = [];
+  list_id.map((id) => objectIds.push(mongoose.Types.ObjectId(id)));
+  return await Project.find({ _id: { $in: objectIds } }).sort("name");
+};
 
 /**
  * Get project by id
