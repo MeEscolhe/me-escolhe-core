@@ -4,14 +4,13 @@ const mongoose = require("mongoose");
 const {
   validate,
   string,
-  number,
   date,
   finalDate,
 } = require("../middlewares/model-validator");
 
 /**
  *  Work experience model
- *  @typedef {{role: string, institution: string, durationInMonths: number}} WorkExperienceSchema
+ *  @typedef {{role: string, institution: string, initialDate: Date, finalDate: Date}} WorkExperienceSchema
  */
 const WorkExperienceSchema = mongoose.model(
   "WorkExperience",

@@ -45,10 +45,7 @@ const withoutParameters = {
             properties: {
               students: {
                 type: "array",
-                items: {
-                  type: "number",
-                  example: [116210887, 112130765],
-                },
+                example: [116210887, 112130765],
               },
 
               selectionId: {
@@ -147,6 +144,7 @@ const withParameters = {
         required: true,
         schema: {
           type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
       },
     ],
@@ -155,7 +153,12 @@ const withParameters = {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/phase",
+            type: "object",
+            example: {
+              "students: ": [116210887, 112130765],
+              "selectionId: ": "5f28ac7082e88b35448255e8",
+              "description: ": "Fase de seleção de currículo",
+            },
           },
         },
       },
@@ -195,7 +198,7 @@ const withParameters = {
         name: "id",
         schema: {
           type: "string",
-          example: "5f28ac7082e88b35448255e8",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
         required: true,
       },

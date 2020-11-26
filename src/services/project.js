@@ -12,13 +12,13 @@ router
     let projects = await ProjectController.getAll();
     if (isEmpty(projects)) {
       return response.status(404).send("No projects to show.");
-    } else {
-      for (let i = 0; i < projects.length; i++) {
-        const lab = await LabController.getById(projects[i].labId);
-        projects[i] = { ...projects[i]._doc, lab };
-      }
-      return response.send(projects);
     }
+    for (let i = 0; i < projects.length; i++) {
+      const lab = await LabController.getById(projects[i].labId);
+      projects[i] = { ...projects[i]._doc, lab };
+      delete projects[i].labId;
+    }
+    return response.send(projects);
   })
 
   .post(async (request, response) => {
@@ -27,7 +27,10 @@ router
       return response.status(400).send(message);
     } else {
       try {
-        const project = await ProjectController.create(request.body);
+        let project = await ProjectController.create(request.body);
+        const lab = await LabController.getById(project.labId);
+        project = { ...project._doc, lab };
+        delete project.labId;
         return response.send(project);
       } catch (error) {
         return response.status(400).send(error.message);
@@ -46,6 +49,7 @@ router
     } else {
       const lab = await LabController.getById(project.labId);
       project = { ...project._doc, lab };
+      delete project.labId;
       return response.send(project);
     }
   })
@@ -57,7 +61,7 @@ router
     } else {
       const propsToUpdate = ["name", "description", "labId", "selections"];
       try {
-        const project = await ProjectController.update(
+        let project = await ProjectController.update(
           request.params.id,
           filterProps(request.body, propsToUpdate)
         );
@@ -66,6 +70,9 @@ router
             .status(404)
             .send("The project with the given ID was not found.");
         } else {
+          const lab = await LabController.getById(project.labId);
+          project = { ...project._doc, lab };
+          delete project.labId;
           return response.send(project);
         }
       } catch (error) {
@@ -74,15 +81,17 @@ router
     }
   });
 
-router.route("/:registration").delete(async (request, response) => {
-  const project = await ProjectController.remove(request.params.registration);
+router.route("/:id").delete(async (request, response) => {
+  let project = await ProjectController.remove(request.params.id);
   if (!project) {
-    response
+    return response
       .status(404)
       .send("The project with the given registration was not found.");
-  } else {
-    return response.send(project);
   }
+  const lab = await LabController.getById(project.labId);
+  project = { ...project._doc, lab };
+  delete project.labId;
+  return response.send(project);
 });
 
 module.exports = router;

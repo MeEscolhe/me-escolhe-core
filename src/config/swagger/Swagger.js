@@ -2,7 +2,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = {
   openapi: "3.0.1",
   info: {
-    version: "1.0.0",
+    version: "2.5.3",
     description: `<img src="http://localhost:8080/static/images/Logo-me-escolhe-v7.png)" /> API Documentation`,
   },
   components: {
@@ -70,12 +70,15 @@ const swaggerSpecs = {
       .withParameters,
 
     "/students": require("../../doc/controllers/student").withoutParameters,
-    "/students/{id}": require("../../doc/controllers/student").withParameters,
+    "/students/{registration}": require("../../doc/controllers/student")
+      .withParameters,
     "/students/email": require("../../doc/controllers/student").login,
 
     "/teachers": require("../../doc/controllers/teacher").withoutParameters,
     "/teachers/{id}": require("../../doc/controllers/teacher").withParameters,
     "/teachers/email": require("../../doc/controllers/teacher").login,
+    "teachers/{id}/selections": require("../../doc/controllers/teacher")
+      .selections,
 
     "/workExperiences": require("../../doc/controllers/work-experience")
       .withoutParameters,

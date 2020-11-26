@@ -46,20 +46,20 @@ const withoutParameters = {
                 type: "string",
                 example: "PIBIC",
               },
-
               description: {
                 type: "string",
                 example: "Academic Project",
               },
+              labId: {
+                type: "string",
+                example: "5f5d1fa6dccfa335d03fdd3a",
+              },
               selections: {
                 type: "array",
-                items: {
-                  type: "string",
-                  example: [
-                    "5f28ac7082e88b35448255e8",
-                    "5f28ba7011e35b35448255e8",
-                  ],
-                },
+                example: [
+                  "5f28ac7082e88b35448255e8",
+                  "5f28ba7011e35b35448255e8",
+                ],
               },
             },
           },
@@ -148,6 +148,7 @@ const withParameters = {
         required: true,
         schema: {
           type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
       },
     ],
@@ -156,7 +157,14 @@ const withParameters = {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/project",
+            type: "object",
+            example: {
+              name: "PIBIC",
+              "description: ": "Projeto de iniciação científica",
+              selections: [
+                ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"],
+              ],
+            },
           },
         },
       },

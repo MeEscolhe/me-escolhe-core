@@ -7,17 +7,17 @@
       "example": "5f5d1fa6dccfa335d03fdd3e"
     },
 
-    "studentId: ": {
+    "studentId": {
       "type": "number",
       "example": 116210877
     },
 
-    "phaseId: ": {
+    "phaseId": {
       "type": "string",
       "example": "5t5d1fb8dccfa665d03fdd3e"
     },
 
-    "teacherId: ": {
+    "teacherId": {
       "type": "string",
       "example": "5t5d1fa6dccfa665d03fdd3e"
     }

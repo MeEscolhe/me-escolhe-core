@@ -35,7 +35,7 @@ router
 router.route("/email").get(async (request, response) => {
   const teacher = await TeacherController.getByEmail(request.body.email);
   if (!teacher) {
-    response
+    return response
       .status(404)
       .send("The teacher with the given email was not found.");
   } else {
@@ -94,7 +94,7 @@ router
     }
   });
 
-router.route("/selections/:id").get(async (request, response) => {
+router.route("/:id/selections").get(async (request, response) => {
   const teacher = await TeacherController.getById(request.params.id);
   if (!teacher) {
     return response
