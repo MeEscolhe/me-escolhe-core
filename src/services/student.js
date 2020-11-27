@@ -9,7 +9,6 @@ const ExperienceController = require("../controllers/experience");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate } = require("../middlewares/util");
-const experience = require("../models/experience");
 
 router
   .route("/")
@@ -94,9 +93,6 @@ router
         .status(404)
         .send("The student with the given ID was not found.");
     }
-    student.experiences = await ExperienceController.getAllByListId(
-      student.experiences
-    );
     return response.send(student);
   })
 
