@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 const getAll = async () => await Project.find().sort("name");
 
 /**
- * Get all projects by teacher id
+ * Get all projects by list id
  * @returns {array} list of all projects
  */
 const getAllByListId = async (list_id) => {
