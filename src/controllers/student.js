@@ -30,10 +30,12 @@ const getAllByRegistrationList = async (registration_list) =>
  */
 const getByRegistration = async (registration) => {
   let student = await Student.findOne({ registration });
-  student = { ...student._doc };
-  student.experiences = await ExperienceController.getAllByListId(
-    student.experiences
-  );
+  if (student) {
+    student = { ...student._doc };
+    student.experiences = await ExperienceController.getAllByListId(
+      student.experiences
+    );
+  }
   return student;
 };
 

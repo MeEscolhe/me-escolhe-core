@@ -85,15 +85,16 @@ router
   })
 
   .get(async (request, response) => {
-    let student = await StudentController.getByRegistrationWithSelections(
-      request.params.registration
-    );
-    if (!student) {
+    try {
+      let student = await StudentController.getByRegistrationWithSelections(
+        request.params.registration
+      );
+      return response.send(student);
+    } catch (error) {
       return response
         .status(404)
         .send("The student with the given ID was not found.");
     }
-    return response.send(student);
   })
 
   .delete(async (request, response) => {

@@ -158,7 +158,7 @@ const validate = (object) => {
 const getPhaseAndStudent = (phaseId, registration) =>
   Promise.all([
     Phase.findById(mongoose.Types.ObjectId(phaseId)),
-    StudentController.getByRegistration({ registration: registration }),
+    StudentController.getByRegistration(registration),
   ]);
 
 /**
