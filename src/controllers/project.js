@@ -61,6 +61,7 @@ const update = async (id, { name, description, labId, selections }) =>
  */
 const remove = async (id) => {
   const SelectionController = require("./selection");
+  const TeacherController = require("./teacher");
   const project = await Project.findById(mongoose.Types.ObjectId(id));
 
   if (project) {

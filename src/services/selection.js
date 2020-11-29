@@ -6,13 +6,26 @@ const LabController = require("../controllers/lab");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
-
+router.route("/teacher/").get(async (request, response) => {
+  try {
+    const teacherId = request.query.id;
+    let selectionList = await SelectionController.getAllTeacherSelections(
+      teacherId
+    );
+    if (isEmpty(selectionList)) {
+      return response.status(404).send("No selections to show.");
+    }
+    return response.send(selectionList);
+  } catch (error) {
+    return response.status(400).send(error.message);
+  }
+});
 router
   .route("/")
   .get(async (request, response) => {
     const { page = 1, limit = 10 } = request.body;
     let selectionDocsList = await SelectionController.getAll({ page, limit });
-    if (isEmpty(selectionDocsList)) {
+    if (isEmpty(selectionDocsList.docs)) {
       return response.status(404).send("No selections to show.");
     }
     let selections = selectionDocsList.docs;
@@ -49,22 +62,26 @@ router
 router
   .route("/:id")
   .get(async (request, response) => {
-    let selection = await SelectionController.getById(request.params.id);
-    if (!selection) {
-      response
-        .status(404)
-        .send("The selection with the given ID was not found.");
+    try {
+      let selection = await SelectionController.getById(request.params.id);
+      if (!selection) {
+        response
+          .status(404)
+          .send("The selection with the given ID was not found.");
+      }
+      let project = await ProjectController.getById(selection.projectId);
+      let lab = await LabController.getById(project.labId);
+
+      project = { ...project._doc, lab };
+      delete project.labId;
+
+      selection = { ...selection._doc, project };
+      delete selection.projectId;
+
+      return response.send(selection);
+    } catch (error) {
+      return response.status(400).send(error.message);
     }
-    let project = await ProjectController.getById(selection.projectId);
-    let lab = await LabController.getById(project.labId);
-
-    project = { ...project._doc, lab };
-    delete project.labId;
-
-    selection = { ...selection._doc, project };
-    delete selection.projectId;
-
-    return response.send(selection);
   })
 
   .put(async (request, response) => {

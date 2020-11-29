@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 const ProjectController = require("../controllers/project");
 const PhaseController = require("../controllers/phase");
+const LabController = require("../controllers/lab");
 /**
  * Get all selections
  * @returns {array} list of all selections
@@ -12,6 +13,39 @@ const PhaseController = require("../controllers/phase");
 const getAll = async ({ page, limit }) =>
   await Selection.paginate({}, { page, limit });
 
+/**
+ * Get all teacher's selections
+ * @returns {array} list of all selections
+ */
+const getAllTeacherSelections = async (teacherId) => {
+  const TeacherController = require("../controllers/teacher");
+  const teacher = await TeacherController.getById(teacherId);
+  if (teacher) {
+    const Allprojects = await ProjectController.getAll();
+    const teacherProjects = Allprojects.filter((project) =>
+      teacher.managements.some((teacherProjectId) =>
+        project._id.equals(teacherProjectId)
+      )
+    );
+    const teacherSelections = await Promise.all(
+      teacherProjects.map(async (project) => {
+        const selections = await Selection.find()
+          .where("_id")
+          .in(project.selections);
+        let lab = await LabController.getById(project.labId);
+        delete project.labId;
+        project = { ...project._doc, lab };
+        return selections.map((selection) => {
+          delete selection.projectId;
+          return { ...selection._doc, project };
+        });
+      })
+    );
+    return teacherSelections;
+  } else {
+    throw new Error("The teacher with the given ID was not found.");
+  }
+};
 /**
  * Get selection by id
  * @param {string} id
@@ -98,4 +132,12 @@ const validate = (object) => {
   return error;
 };
 
-module.exports = { getAll, getById, create, update, remove, validate };
+module.exports = {
+  getAll,
+  getAllTeacherSelections,
+  getById,
+  create,
+  update,
+  remove,
+  validate,
+};
