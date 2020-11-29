@@ -327,10 +327,82 @@ const withParameters = {
               current: true,
               phases: [
                 {
-                  id: "5f5d1fa6dccfa335d03fdd3e",
-                  students: [116210887, 112130765],
-                  selectionId: "5f28ac7082e88b35448255e8",
-                  description: "Fase de seleção de currículo",
+                  registration: 116133454,
+                  name: "Thomas",
+                  email: "thomas.lopes@ccc.ufcg.edu.br",
+                  password: "thomas.lopes123",
+                  cra: 8.5,
+                  description: "Developer",
+                  skills: {
+                    hardSkills: [
+                      {
+                        name: "Java",
+                        level: 2,
+                      },
+                    ],
+                    softSkills: [
+                      {
+                        name: "Trabalha bem em grupo",
+                      },
+                    ],
+                    languages: [
+                      {
+                        name: "Java",
+                        level: 2,
+                      },
+                    ],
+                  },
+                  experiences: [
+                    {
+                      type: "object",
+                      properties: {
+                        academic: {
+                          type: "array",
+                          example: [
+                            {
+                              id: "5f5d1fa6dccfa335d03fdd31",
+                              title: "Developer",
+                              category: "Backend",
+                              institution: "UFCG",
+                              initialDate: "2018-08-22",
+                              finalDate: "2019-10-23",
+                            },
+                            {
+                              id: "5f5d1fa6dccfa335d03fdd32",
+                              title: "Developer",
+                              category: "Frontend",
+                              institution: "UFCG",
+                              initialDate: "2018-08-22",
+                              finalDate: "2019-10-23",
+                            },
+                          ],
+                        },
+                        work: {
+                          type: "array",
+                          example: [
+                            {
+                              id: "5f5d1fa6dccfa335d03fdd3e",
+                              role: "Developer",
+                              institution: "Microsoft",
+                              initialDate: "2018-08-22",
+                              finalDate: "2019-10-23",
+                            },
+                            {
+                              id: "5f5d1fa6dccfa335d03fdd3e",
+                              role: "Developer",
+                              institution: "Google",
+                              initialDate: "2018-08-22",
+                              finalDate: "2019-10-23",
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                  phases: [
+                    "7f78fr3111097h53779000a1",
+                    "7a65hg8755k73s21116789i8",
+                  ],
                 },
               ],
               project: {

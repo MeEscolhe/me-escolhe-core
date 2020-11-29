@@ -2,8 +2,6 @@
 
 const { Project, validateProject } = require("../models/project");
 const mongoose = require("mongoose");
-const SelectionController = require("./selection");
-const TeacherController = require("./teacher");
 /**
  * Get all projects
  * @returns {array} list of all projects
@@ -96,6 +94,7 @@ const update = async (id, { name, description, labId, selections }) =>
  */
 const remove = async (id) => {
   const project = await Project.findById(mongoose.Types.ObjectId(id));
+  const SelectionController = require("./selection");
 
   if (project) {
     await Promise.all(

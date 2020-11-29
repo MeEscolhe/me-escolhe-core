@@ -4,8 +4,6 @@ const { Lab, validateLab } = require("../models/lab");
 const mongoose = require("mongoose");
 const teacher = require("../models/teacher");
 const ProjectController = require("../controllers/project");
-const SelectionController = require("../controllers/selection");
-const TeacherController = require("./teacher");
 /**
  * Get all labs
  * @returns {array} list of all labs
@@ -56,6 +54,8 @@ const update = async (id, { name, description }, runValidators = true) =>
  * @returns {object} lab removed
  */
 const remove = async (id) => {
+  const ProjectController = require("../controllers/project");
+  const SelectionController = require("../controllers/selection");
   const lab = await getById(id);
   if (lab) {
     const projects = await ProjectController.getAll();

@@ -19,6 +19,7 @@ const getAll = async ({ page, limit }) => {
   if (isEmpty(selectionDocsList.docs)) {
     return selectionDocsList;
   }
+
   let selections = selectionDocsList.docs;
   for (let i = 0; i < selections.length; i++) {
     let project = await ProjectController.getById(selections[i].projectId);
@@ -45,7 +46,9 @@ const getAllStudentSelections = async (studentRegistration) => {
   if (student) {
     const studentPhases = await PhaseController.getStudentsPhase(student);
     const studentSelections = await Promise.all(
-      studentPhases.map(async (selection) => await getById(selection._id))
+      studentPhases.map(
+        async (selection) => await getById(selection.selectionId)
+      )
     );
     return studentSelections;
   } else {
@@ -59,8 +62,8 @@ const getAllStudentSelections = async (studentRegistration) => {
 const getAllTeacherSelections = async (teacherId) => {
   const teacher = await TeacherController.getById(teacherId);
   if (teacher) {
-    const Allprojects = await ProjectController.getAll();
-    const teacherProjects = Allprojects.filter((project) =>
+    const allprojects = await ProjectController.getAll();
+    const teacherProjects = allprojects.filter((project) =>
       teacher.managements.some((teacherProjectId) =>
         project._id.equals(teacherProjectId)
       )
@@ -79,7 +82,7 @@ const getAllTeacherSelections = async (teacherId) => {
         });
       })
     );
-    return teacherSelections;
+    return teacherSelections.reduce((list, line) => list.concat(line), []);
   } else {
     throw new Error("The teacher with the given ID was not found.");
   }

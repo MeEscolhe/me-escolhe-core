@@ -5,14 +5,14 @@ const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
 const express = require("express");
 const router = express.Router();
-const { isEmpty, validate, filterProps } = require("../middlewares/util");
+const { validate, filterProps } = require("../middlewares/util");
 router
   .route("/")
   .get(async (request, response) => {
     try {
       const { type, id } = request.query;
       let selections;
-      if (!id) {
+      if (type === "all" || !id) {
         const { page = 1, limit = 10 } = request.body;
         selections = await SelectionController.getAll({ page, limit });
       } else if (type === "teacher" && id && id !== "") {
