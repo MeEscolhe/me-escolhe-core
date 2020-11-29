@@ -2,6 +2,7 @@
 
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
+const TeacherController = require("../controllers/teacher");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
@@ -79,19 +80,34 @@ router
         return response.status(400).send(error.message);
       }
     }
+  })
+
+  .delete(async (request, response) => {
+    let project = await ProjectController.remove(request.params.id);
+    if (!project) {
+      return response
+        .status(404)
+        .send("The project with the given registration was not found.");
+    }
+    const lab = await LabController.getById(project.labId);
+    project = { ...project._doc, lab };
+    delete project.labId;
+    return response.send(project);
   });
 
-router.route("/:id").delete(async (request, response) => {
-  let project = await ProjectController.remove(request.params.id);
-  if (!project) {
-    return response
-      .status(404)
-      .send("The project with the given registration was not found.");
+router.route("/teacher/:teacherId").get(async (request, response) => {
+  let teacher = await TeacherController.getById(request.params.teacherId);
+  let managements = teacher._doc.managements;
+  let projects = await ProjectController.getAllByListId(managements);
+  if (isEmpty(projects)) {
+    return response.status(404).send("No projects to show.");
   }
-  const lab = await LabController.getById(project.labId);
-  project = { ...project._doc, lab };
-  delete project.labId;
-  return response.send(project);
+  for (let i = 0; i < projects.length; i++) {
+    const lab = await LabController.getById(projects[i].labId);
+    projects[i] = { ...projects[i]._doc, lab };
+    delete projects[i].labId;
+  }
+  return response.send(projects);
 });
 
 module.exports = router;

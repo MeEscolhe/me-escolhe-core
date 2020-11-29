@@ -6,20 +6,38 @@ const {
   getStudentWithSelections,
 } = require("../models/student");
 const { filterProps } = require("../middlewares/util");
+const ExperienceController = require("../controllers/experience");
 
 /**
  * Get all students
  * @returns {array} list of all students
  */
-const getAll = () => Student.find().sort("registration");
+const getAll = async () => await Student.find().sort("registration");
+
+/**
+ * Get all students
+ * @returns {array} list of all students
+ */
+const getAllByRegistrationList = async (registration_list) =>
+  await Student.find({ registration: { $in: registration_list } }).sort(
+    "registration"
+  );
 
 /**
  * Get student by registration
  * @param {number} registration
  * @returns {object}
  */
-const getByRegistration = async (registration) =>
-  await Student.findOne({ registration });
+const getByRegistration = async (registration) => {
+  let student = await Student.findOne({ registration });
+  if (student) {
+    student = { ...student._doc };
+    student.experiences = await ExperienceController.getAllByListId(
+      student.experiences
+    );
+  }
+  return student;
+};
 
 /**
  * Get student by email
@@ -34,7 +52,7 @@ const getByEmail = async (email) => await Student.findOne({ email });
  * @returns {object} student with selections
  */
 const getByRegistrationWithSelections = async (registration) => {
-  const student = await Student.findOne({ registration });
+  const student = await getByRegistration(registration);
   if (student && student.error === undefined)
     return getStudentWithSelections(student);
   throw "The student with the given ID was not found.";
@@ -133,6 +151,7 @@ module.exports = {
   getAll,
   getByEmail,
   getByRegistration,
+  getAllByRegistrationList,
   create,
   update,
   remove,
