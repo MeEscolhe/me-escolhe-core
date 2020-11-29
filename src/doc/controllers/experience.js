@@ -45,24 +45,17 @@ const withoutParameters = {
             properties: {
               academic: {
                 type: "array",
-                items: {
-                  type: "string",
-                  example: [
-                    "5f28ac7082e88b35448255e8",
-                    "5f28ba7011e35b35448255e8",
-                  ],
-                },
+                example: [
+                  "5f28ac7082e88b35448255e8",
+                  "5f28ba7011e35b35448255e8",
+                ],
               },
-
               work: {
                 type: "array",
-                items: {
-                  type: "string",
-                  example: [
-                    "3a28ac7082e88b35448255e8",
-                    "3a36ty9019e36g1356785e8",
-                  ],
-                },
+                example: [
+                  "3a28ac7082e88b35448255e8",
+                  "3a36ty9019e36g1356785e8",
+                ],
               },
             },
           },
@@ -151,6 +144,7 @@ const withParameters = {
         required: true,
         schema: {
           type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
       },
     ],
@@ -159,7 +153,15 @@ const withParameters = {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/experience",
+            type: "object",
+            example: {
+              "academic: ": [
+                ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"],
+              ],
+              "work: ": [
+                ["3a28ac7082e88b35448255e8", "3a36ty9019e36g1356785e8"],
+              ],
+            },
           },
         },
       },
@@ -200,7 +202,7 @@ const withParameters = {
         name: "id",
         schema: {
           type: "string",
-          example: "5f28ac7082e88b35448255e8",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
         required: true,
       },

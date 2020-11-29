@@ -2,7 +2,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = {
   openapi: "3.0.1",
   info: {
-    version: "1.0.0",
+    version: "3.0.0",
     description: `<img src="http://localhost:8080/static/images/Logo-me-escolhe-v7.png)" /> API Documentation`,
   },
   components: {
@@ -59,23 +59,28 @@ const swaggerSpecs = {
 
     "/phases": require("../../doc/controllers/phase").withoutParameters,
     "/phases/{id}": require("../../doc/controllers/phase").withParameters,
-    "/phases/:id/student/:registration": require("../../doc/controllers/phase")
+    "/phases/{id}/student/{registration}": require("../../doc/controllers/phase")
       .StudentRoute,
 
     "/projects": require("../../doc/controllers/project").withoutParameters,
     "/projects/{id}": require("../../doc/controllers/project").withParameters,
+    "/projects/teacher/{teacherId}": require("../../doc/controllers/project")
+      .teacher,
 
     "/selections": require("../../doc/controllers/selection").withoutParameters,
     "/selections/{id}": require("../../doc/controllers/selection")
       .withParameters,
 
     "/students": require("../../doc/controllers/student").withoutParameters,
-    "/students/{id}": require("../../doc/controllers/student").withParameters,
+    "/students/{registration}": require("../../doc/controllers/student")
+      .withParameters,
     "/students/email": require("../../doc/controllers/student").login,
 
     "/teachers": require("../../doc/controllers/teacher").withoutParameters,
     "/teachers/{id}": require("../../doc/controllers/teacher").withParameters,
     "/teachers/email": require("../../doc/controllers/teacher").login,
+    "teachers/{id}/selections": require("../../doc/controllers/teacher")
+      .selections,
 
     "/workExperiences": require("../../doc/controllers/work-experience")
       .withoutParameters,

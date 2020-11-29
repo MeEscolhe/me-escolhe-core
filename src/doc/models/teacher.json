@@ -3,7 +3,8 @@
   "required": ["id", "name", "email", "description", "labId", "managements"],
   "properties": {
     "id": {
-      "type": "string"
+      "type": "string",
+      "example": "5f5d1fa6dccfa335d03fdd3e"
     },
 
     "name": {
@@ -33,10 +34,7 @@
 
     "managements": {
       "type": "array",
-      "items": {
-        "type": "string",
-        "examples": ["4a14bg8357c32u09875565b7", "6u74zb0034f65zu435743o0"]
-      }
+      "example": ["5f5d1fa6dccfa335d03fdd3e", "5f5d1fa6dccfa335d0i4335a"]
     }
   }
 }

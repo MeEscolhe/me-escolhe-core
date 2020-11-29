@@ -6,19 +6,58 @@ const ObjectId = mongoose.Types.ObjectId;
 const ProjectController = require("../controllers/project");
 const PhaseController = require("../controllers/phase");
 const LabController = require("../controllers/lab");
+const TeacherController = require("../controllers/teacher");
+const { isEmpty } = require("../middlewares/util");
+
 /**
  * Get all selections
  * @returns {array} list of all selections
  */
-const getAll = async ({ page, limit }) =>
-  await Selection.paginate({}, { page, limit });
+const getAll = async ({ page, limit }) => {
+  const selectionDocsList = await Selection.paginate({}, { page, limit });
 
+  if (isEmpty(selectionDocsList.docs)) {
+    return selectionDocsList;
+  }
+  let selections = selectionDocsList.docs;
+  for (let i = 0; i < selections.length; i++) {
+    let project = await ProjectController.getById(selections[i].projectId);
+    let lab = await LabController.getById(project.labId);
+
+    project = { ...project._doc, lab };
+    delete project.labId;
+
+    let selection = { ...selections[i]._doc, project };
+    delete selection.projectId;
+
+    selections[i] = selection;
+  }
+  return selections;
+};
+/**
+ * Get all teacher's selections
+ * @returns {array} list of all selections
+ */
+const getAllStudentSelections = async (studentRegistration) => {
+  const StudentController = require("../controllers/student");
+  const student = await StudentController.getByRegistration(
+    studentRegistration
+  );
+  if (student) {
+    const studentPhases = await PhaseController.getStudentsPhase(student);
+    const studentSelections = await Promise.all(
+      studentPhases.map(async (selection) => await getById(selection._id))
+    );
+    return studentSelections;
+  } else {
+    throw new Error("The teacher with the given ID was not found.");
+  }
+};
 /**
  * Get all teacher's selections
  * @returns {array} list of all selections
  */
 const getAllTeacherSelections = async (teacherId) => {
-  const TeacherController = require("../controllers/teacher");
   const teacher = await TeacherController.getById(teacherId);
   if (teacher) {
     const Allprojects = await ProjectController.getAll();
@@ -51,7 +90,19 @@ const getAllTeacherSelections = async (teacherId) => {
  * @param {string} id
  * @returns {object} selection
  */
-const getById = async (id) => await Selection.findById(ObjectId(id));
+const getById = async (id) => {
+  let selection = await Selection.findById(ObjectId(id));
+  if (selection) {
+    let project = await ProjectController.getById(selection.projectId);
+    let lab = await LabController.getById(project.labId);
+    delete project.labId;
+    delete selection.projectId;
+    project = { ...project._doc, lab };
+    return { ...selection._doc, project };
+  } else {
+    throw new Error("The selection with the given ID was not found.");
+  }
+};
 
 /**
  * Create selection,phase and push selection id in project selections list
@@ -135,6 +186,7 @@ const validate = (object) => {
 module.exports = {
   getAll,
   getAllTeacherSelections,
+  getAllStudentSelections,
   getById,
   create,
   update,

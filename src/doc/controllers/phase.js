@@ -1,3 +1,93 @@
+const thomas = {
+  registration: 116210887,
+  name: "Thomas",
+  email: "thomas.lopes@ccc.ufcg.edu.br",
+  password: "thomas.lopes123",
+  cra: 8.5,
+  description: "Developer",
+  skills: {
+    hardSkills: [
+      {
+        name: "Java",
+        level: 2,
+      },
+    ],
+    softSkills: [
+      {
+        name: "Trabalha bem em grupo",
+      },
+    ],
+    languages: [
+      {
+        name: "Java",
+        level: 2,
+      },
+    ],
+  },
+  experiences: ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"],
+  phases: ["7f78fr3111x97h53779000a1", "7a65hg8755k73s21116789i8"],
+};
+
+const jessica = {
+  registration: 112130765,
+  name: "Jessica",
+  email: "jessica.lopes@ccc.ufcg.edu.br",
+  password: "jessica.lopes123",
+  cra: 8.5,
+  description: "Developer",
+  skills: {
+    hardSkills: [
+      {
+        name: "Java",
+        level: 2,
+      },
+    ],
+    softSkills: [
+      {
+        name: "Trabalha bem em grupo",
+      },
+    ],
+    languages: [
+      {
+        name: "Java",
+        level: 2,
+      },
+    ],
+  },
+  experiences: ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"],
+  phases: ["7f78fr3111x97h53779000a1", "7a65hg8755k73s21116789i8"],
+};
+
+const phaseWithStudents = {
+  type: "object",
+  example: {
+    students: [thomas, jessica],
+    id: "5f28ac7082e88b35448255e8",
+    selectionId: "5f28ac7082e88b35448255e8",
+    description: "Fase de seleção de currículo",
+  },
+};
+
+const phaseWithStudent = {
+  type: "object",
+  example: {
+    students: [thomas],
+    id: "5f28ac7082e88b35448255e8",
+    selectionId: "5f28ac7082e88b35448255e8",
+    description: "Fase de seleção de currículo",
+  },
+};
+
+const phaseWithoutStudent = {
+  type: "object",
+  example: {
+    students: [],
+    id: "5f28ac7082e88b35448255e8",
+    selectionId: "5f28ac7082e88b35448255e8",
+    description: "Fase de seleção de currículo",
+  },
+};
+
 const withoutParameters = {
   get: {
     tags: ["Phase"],
@@ -10,9 +100,7 @@ const withoutParameters = {
           "application/json": {
             schema: {
               type: "array",
-              items: {
-                $ref: "#/components/schemas/phase",
-              },
+              items: phaseWithStudents,
             },
           },
         },
@@ -45,10 +133,7 @@ const withoutParameters = {
             properties: {
               students: {
                 type: "array",
-                items: {
-                  type: "number",
-                  example: [116210887, 112130765],
-                },
+                example: [116210887, 112130765],
               },
 
               selectionId: {
@@ -71,9 +156,7 @@ const withoutParameters = {
         description: "Successful.",
         content: {
           "application/json": {
-            schema: {
-              $ref: "#/components/schemas/phase",
-            },
+            schema: phaseWithStudents,
           },
         },
       },
@@ -114,9 +197,7 @@ const withParameters = {
         description: "Successful.",
         content: {
           "application/json": {
-            schema: {
-              $ref: "#/components/schemas/phase",
-            },
+            schema: phaseWithStudents,
           },
           required: true,
         },
@@ -147,6 +228,7 @@ const withParameters = {
         required: true,
         schema: {
           type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
       },
     ],
@@ -155,7 +237,12 @@ const withParameters = {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/schemas/phase",
+            type: "object",
+            example: {
+              "students: ": [116210887, 112130765],
+              "selectionId: ": "5f28ac7082e88b35448255e8",
+              "description: ": "Fase de seleção de currículo",
+            },
           },
         },
       },
@@ -166,9 +253,7 @@ const withParameters = {
         description: "Successful.",
         content: {
           "application/json": {
-            schema: {
-              $ref: "#/components/schemas/phase",
-            },
+            schema: phaseWithStudents,
           },
         },
       },
@@ -195,7 +280,7 @@ const withParameters = {
         name: "id",
         schema: {
           type: "string",
-          example: "5f28ac7082e88b35448255e8",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
         required: true,
       },
@@ -206,9 +291,7 @@ const withParameters = {
         description: "Successful.",
         content: {
           "application/json": {
-            schema: {
-              $ref: "#/components/schemas/phase",
-            },
+            schema: phaseWithStudents,
           },
           required: true,
         },
@@ -247,7 +330,7 @@ const StudentRoute = {
         name: "registration",
         schema: {
           type: "string",
-          example: "1234567890",
+          example: "116210887",
         },
         required: true,
       },
@@ -257,33 +340,7 @@ const StudentRoute = {
         description: "Successful",
         content: {
           "application/json": {
-            schema: {
-              type: "object",
-              properties: {
-                id: {
-                  type: "string",
-                  example: "5f5d1fa6dccfa335d03fdd3e",
-                },
-
-                "students: ": {
-                  type: "array",
-                  items: {
-                    type: "number",
-                    example: [1234567890],
-                  },
-                },
-
-                "selectionId: ": {
-                  type: "string",
-                  example: "5f5d1fa6dccfa335d03fdd3e",
-                },
-
-                "description: ": {
-                  type: "string",
-                  example: "Fase de seleção de currículo",
-                },
-              },
-            },
+            schema: phaseWithStudent,
           },
         },
       },
@@ -325,7 +382,7 @@ const StudentRoute = {
         name: "registration",
         schema: {
           type: "string",
-          example: "1234567890",
+          example: "116210887",
         },
         required: true,
       },
@@ -335,33 +392,7 @@ const StudentRoute = {
         description: "Successful",
         content: {
           "application/json": {
-            schema: {
-              type: "object",
-              properties: {
-                id: {
-                  type: "string",
-                  example: "5f5d1fa6dccfa335d03fdd3e",
-                },
-
-                "students: ": {
-                  type: "array",
-                  items: {
-                    type: "number",
-                    example: [],
-                  },
-                },
-
-                "selectionId: ": {
-                  type: "string",
-                  example: "5f5d1fa6dccfa335d03fdd3e",
-                },
-
-                "description: ": {
-                  type: "string",
-                  example: "Fase de seleção de currículo",
-                },
-              },
-            },
+            schema: phaseWithoutStudent,
           },
         },
       },

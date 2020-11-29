@@ -6,42 +6,34 @@ const LabController = require("../controllers/lab");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
-router.route("/teacher/").get(async (request, response) => {
-  try {
-    const teacherId = request.query.id;
-    let selectionList = await SelectionController.getAllTeacherSelections(
-      teacherId
-    );
-    if (isEmpty(selectionList)) {
-      return response.status(404).send("No selections to show.");
-    }
-    return response.send(selectionList);
-  } catch (error) {
-    return response.status(400).send(error.message);
-  }
-});
 router
   .route("/")
   .get(async (request, response) => {
-    const { page = 1, limit = 10 } = request.body;
-    let selectionDocsList = await SelectionController.getAll({ page, limit });
-    if (isEmpty(selectionDocsList.docs)) {
-      return response.status(404).send("No selections to show.");
+    try {
+      const { type, id } = request.query;
+      let selections;
+      if (!id) {
+        const { page = 1, limit = 10 } = request.body;
+        selections = await SelectionController.getAll({ page, limit });
+      } else if (type === "teacher" && id && id !== "") {
+        selections = await SelectionController.getAllTeacherSelections(id);
+      } else if (type === "student" && id && id !== "") {
+        selections = await SelectionController.getAllStudentSelections(id);
+      } else {
+        return response
+          .status(400)
+          .send(
+            "need Type as => [teacher,student] given type (" +
+              type +
+              ") need id, given id (" +
+              id +
+              ")"
+          );
+      }
+      return response.send(selections);
+    } catch (error) {
+      return response.status(400).send(error.message);
     }
-    let selections = selectionDocsList.docs;
-    for (let i = 0; i < selections.length; i++) {
-      let project = await ProjectController.getById(selections[i].projectId);
-      let lab = await LabController.getById(project.labId);
-
-      project = { ...project._doc, lab };
-      delete project.labId;
-
-      let selection = { ...selections[i]._doc, project };
-      delete selection.projectId;
-
-      selections[i] = selection;
-    }
-    return response.send(selections);
   })
 
   .post(async (request, response) => {
@@ -51,7 +43,16 @@ router
       return response.status(400).send(message);
     } else {
       try {
-        const selection = await SelectionController.create(request.body);
+        let selection = await SelectionController.create(request.body);
+        await ProjectController.addSelection(selection, selection.projectId);
+        let project = await ProjectController.getById(selection.projectId);
+        let lab = await LabController.getById(project.labId);
+
+        project = { ...project._doc, lab };
+        delete project.labId;
+
+        selection = { ...selection._doc, project };
+        delete selection.projectId;
         return response.send(selection);
       } catch (error) {
         return response.status(400).send(error.message);
@@ -98,7 +99,7 @@ router
         "skills",
       ];
       try {
-        const selection = await SelectionController.update(
+        let selection = await SelectionController.update(
           request.params.id,
           filterProps(request.body, propsToUpdate)
         );
@@ -107,6 +108,14 @@ router
             .status(404)
             .send("The selection with the given ID was not found.");
         } else {
+          let project = await ProjectController.getById(selection.projectId);
+          let lab = await LabController.getById(project.labId);
+
+          project = { ...project._doc, lab };
+          delete project.labId;
+
+          selection = { ...selection._doc, project };
+          delete selection.projectId;
           return response.send(selection);
         }
       } catch (error) {
@@ -116,14 +125,23 @@ router
   })
 
   .delete(async (request, response) => {
-    const selection = await SelectionController.remove(request.params.id);
+    let selection = await SelectionController.remove(request.params.id);
     if (!selection) {
-      response
+      return response
         .status(404)
         .send("The selection with the given ID was not found.");
-    } else {
-      return response.send(selection);
     }
+    let project = await ProjectController.getById(selection.projectId);
+    let lab = await LabController.getById(project.labId);
+
+    project = { ...project._doc, lab };
+    delete project.labId;
+
+    selection = { ...selection._doc, project };
+    delete selection.projectId;
+
+    await ProjectController.removeSelection(selection._id);
+    return response.send(selection);
   });
 
 module.exports = router;

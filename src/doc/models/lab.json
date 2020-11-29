@@ -7,12 +7,12 @@
       "example": "5f5d1fa6dccfa335d03fdd3e"
     },
 
-    "name: ": {
+    "name": {
       "type": "string",
       "example": "IQuanta"
     },
 
-    "description: ": {
+    "description": {
       "type": "string",
       "example": "Laboratório de computação quântica"
     }

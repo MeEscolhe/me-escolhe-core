@@ -1,3 +1,64 @@
+const projectWithLab = {
+  type: "object",
+  properties: {
+    id: {
+      type: "string",
+      example: "5f5d1fa6dccfa335d03fdd3e",
+    },
+    name: {
+      type: "string",
+      example: "PIBIC",
+    },
+    name: {
+      type: "string",
+      example: "PIBIC",
+    },
+    description: {
+      type: "string",
+      example: "Academic Project",
+    },
+    lab: {
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
+          example: "IQuanta",
+        },
+        description: {
+          type: "string",
+          example: "Laboratório de computação quântica",
+        },
+      },
+    },
+    selections: {
+      type: "array",
+      example: ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e9"],
+    },
+  },
+};
+
+const requestBody = {
+  type: "object",
+  properties: {
+    name: {
+      type: "string",
+      example: "PIBIC",
+    },
+    description: {
+      type: "string",
+      example: "Academic Project",
+    },
+    labId: {
+      type: "string",
+      example: "Laboratório de computação quântica",
+    },
+    selections: {
+      type: "array",
+      example: ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"],
+    },
+  },
+};
+
 const withoutParameters = {
   get: {
     tags: ["Project"],
@@ -10,9 +71,7 @@ const withoutParameters = {
           "application/json": {
             schema: {
               type: "array",
-              items: {
-                $ref: "#/components/schemas/project",
-              },
+              items: projectWithLab,
             },
           },
         },
@@ -39,20 +98,7 @@ const withoutParameters = {
     requestBody: {
       content: {
         "application/json": {
-          schema: {
-            type: "object",
-            properties: {
-              name: {
-                type: "string",
-                example: "PIBIC",
-              },
-
-              description: {
-                type: "string",
-                example: "Academic Project",
-              },
-            },
-          },
+          schema: requestBody,
         },
       },
     },
@@ -62,9 +108,7 @@ const withoutParameters = {
         description: "Successful.",
         content: {
           "application/json": {
-            schema: {
-              $ref: "#/components/schemas/project",
-            },
+            schema: projectWithLab,
           },
         },
       },
@@ -105,9 +149,7 @@ const withParameters = {
         description: "Successful.",
         content: {
           "application/json": {
-            schema: {
-              $ref: "#/components/schemas/project",
-            },
+            schema: projectWithLab,
           },
           required: true,
         },
@@ -138,6 +180,7 @@ const withParameters = {
         required: true,
         schema: {
           type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
         },
       },
     ],
@@ -145,9 +188,7 @@ const withParameters = {
     requestBody: {
       content: {
         "application/json": {
-          schema: {
-            $ref: "#/components/schemas/project",
-          },
+          schema: requestBody,
         },
       },
     },
@@ -157,9 +198,7 @@ const withParameters = {
         description: "Successful.",
         content: {
           "application/json": {
-            schema: {
-              $ref: "#/components/schemas/project",
-            },
+            schema: projectWithLab,
           },
         },
       },
@@ -198,9 +237,7 @@ const withParameters = {
         description: "Successful.",
         content: {
           "application/json": {
-            schema: {
-              $ref: "#/components/schemas/project",
-            },
+            schema: projectWithLab,
           },
           required: true,
         },
@@ -221,4 +258,49 @@ const withParameters = {
   },
 };
 
-module.exports = { withParameters, withoutParameters };
+const teacher = {
+  get: {
+    tags: ["Project"],
+    description: "",
+    parameters: [
+      {
+        in: "path",
+        name: "teacherId",
+        schema: {
+          type: "string",
+          example: "5f5d1fa6dccfa335d03fdabc",
+        },
+        required: true,
+      },
+    ],
+
+    responses: {
+      200: {
+        description: "Successful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "array",
+              items: projectWithLab,
+            },
+          },
+        },
+      },
+
+      400: {
+        description: "Unsuccessful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "string",
+              example: "No projects to show.",
+              enum: ["No projects to show."],
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+module.exports = { withParameters, withoutParameters, teacher };

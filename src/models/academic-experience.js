@@ -10,7 +10,7 @@ const {
 
 /**
  *  Academic experience model
- *  @typedef {{title: string, category: string, institution: string}} AcademicExperienceSchema
+ *  @typedef {{title: string, category: string, institution: string, initialDate: Date, finalDate: Date}} AcademicExperienceSchema
  */
 const AcademicExperienceSchema = mongoose.model(
   "AcademicExperience",
