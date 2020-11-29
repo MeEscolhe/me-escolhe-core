@@ -13,6 +13,19 @@ const mongoose = require("mongoose");
 const getAll = async () => await AcademicExperience.find().sort("title");
 
 /**
+ * Get all academic experiences by list id
+ * @returns {array} list of ids
+ * @returns {array} list of academic experiences
+ */
+const getAllByListId = async (list_id) => {
+  let objectIds = [];
+  list_id.map((id) => objectIds.push(mongoose.Types.ObjectId(id)));
+  return await AcademicExperience.find({ _id: { $in: objectIds } }).sort(
+    "title"
+  );
+};
+
+/**
  * Get academic experience by id
  * @param {string} id
  * @returns {object} academic experience
@@ -90,4 +103,12 @@ const validate = (object) => {
   return error;
 };
 
-module.exports = { getAll, getById, create, update, remove, validate };
+module.exports = {
+  getAll,
+  getAllByListId,
+  getById,
+  create,
+  update,
+  remove,
+  validate,
+};

@@ -62,7 +62,11 @@ const create = async ({
  * @param {array} managements
  * @returns {object} teacher updated
  */
-const update = async (id, { name, email, description, labId, managements }) =>
+const update = async (
+  id,
+  { name, email, description, labId, managements },
+  runValidators = true
+) =>
   await Teacher.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
@@ -72,7 +76,7 @@ const update = async (id, { name, email, description, labId, managements }) =>
       labId: labId,
       managements: managements,
     },
-    { new: true }
+    { new: true, runValidators: runValidators }
   );
 
 /**

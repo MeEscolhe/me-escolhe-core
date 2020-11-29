@@ -2,6 +2,7 @@
 
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
+const TeacherController = require("../controllers/teacher");
 const express = require("express");
 const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
@@ -22,6 +23,7 @@ router
   })
 
   .post(async (request, response) => {
+    request.body.selections = [];
     const { error, message } = validate(request.body, ProjectController);
     if (error) {
       return response.status(400).send(message);
@@ -82,16 +84,17 @@ router
   });
 
 router.route("/:id").delete(async (request, response) => {
-  let project = await ProjectController.remove(request.params.id);
-  if (!project) {
-    return response
-      .status(404)
-      .send("The project with the given registration was not found.");
+  try {
+    const project = await ProjectController.remove(request.params.id);
+    if (!project) {
+      response.status(400).send("The project with the given id was not found.");
+    } else {
+      return response.send(project);
+    }
+  } catch (error) {
+    return response.status(400).send(error.message);
   }
-  const lab = await LabController.getById(project.labId);
-  project = { ...project._doc, lab };
-  delete project.labId;
-  return response.send(project);
+  return response.send(projects);
 });
 
 module.exports = router;

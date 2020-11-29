@@ -2,7 +2,8 @@
 
 const { Lab, validateLab } = require("../models/lab");
 const mongoose = require("mongoose");
-
+const teacher = require("../models/teacher");
+const ProjectController = require("../controllers/project");
 /**
  * Get all labs
  * @returns {array} list of all labs
@@ -37,14 +38,14 @@ const create = async ({ name, description }) => {
  * @param {string} description
  * @returns {object} lab updated
  */
-const update = async (id, { name, description }) =>
+const update = async (id, { name, description }, runValidators = true) =>
   await Lab.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
       name: name,
       description: description,
     },
-    { new: true }
+    { new: true, runValidators: runValidators }
   );
 
 /**
@@ -52,8 +53,51 @@ const update = async (id, { name, description }) =>
  * @param {string} id
  * @returns {object} lab removed
  */
-const remove = async (id) =>
-  await Lab.findByIdAndRemove(mongoose.Types.ObjectId(id));
+const remove = async (id) => {
+  const ProjectController = require("../controllers/project");
+  const SelectionController = require("../controllers/selection");
+  const lab = await getById(id);
+  if (lab) {
+    const projects = await ProjectController.getAll();
+    await projects
+      .filter((project) => project.labId.toString() === id.toString())
+      .forEach(async (project) => await ProjectController.remove(project._id));
+    const teachers = await TeacherController.getAll();
+    await Promise.all(
+      teachers
+        .filter((teacher) => {
+          const { labId } = teacher;
+          return labId ? teacher.labId.toString() === id.toString() : false;
+        })
+        .map((teacher) => {
+          const {
+            description,
+            managements,
+            _id,
+            name,
+            email,
+            password,
+          } = teacher;
+          return TeacherController.update(
+            teacher._id,
+            {
+              description,
+              managements,
+              _id,
+              name,
+              email,
+              password,
+              labId: null,
+            },
+            false
+          );
+        })
+    );
+    return await Lab.findByIdAndRemove(mongoose.Types.ObjectId(id));
+  } else {
+    throw new Error("The lab with the given ID was not found.");
+  }
+};
 
 /**
  * Validate hard skill

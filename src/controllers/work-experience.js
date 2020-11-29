@@ -13,6 +13,17 @@ const mongoose = require("mongoose");
 const getAll = async () => await WorkExperience.find().sort("role");
 
 /**
+ * Get all work experiences by list id
+ * @returns {array} list of ids
+ * @returns {array} list of work experiences
+ */
+const getAllByListId = async (list_id) => {
+  let objectIds = [];
+  list_id.map((id) => objectIds.push(mongoose.Types.ObjectId(id)));
+  return await WorkExperience.find({ _id: { $in: objectIds } }).sort("role");
+};
+
+/**
  * Get work experience by id
  * @param {string} id
  * @returns {object} work experience
@@ -78,4 +89,12 @@ const validate = (object) => {
   return error;
 };
 
-module.exports = { getAll, getById, create, update, remove, validate };
+module.exports = {
+  getAll,
+  getAllByListId,
+  getById,
+  create,
+  update,
+  remove,
+  validate,
+};

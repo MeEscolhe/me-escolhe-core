@@ -1,22 +1,25 @@
 {
   "type": "object",
-  "required": ["id", "students", "selectionId", "description"],
+  "required": [
+    "id",
+    "students",
+    "selectionId",
+    "description"
+  ],
   "properties": {
     "id": {
       "type": "string",
       "example": "5f5d1fa6dccfa335d03fdd3e"
     },
-
     "students": {
       "type": "array",
-      "example": [116210887, 112130765]
+      "items": {
+          "$ref": "#/components/schemas/student"
+      }
     },
-
     "selectionId": {
-      "type": "string",
-      "example": "5f28ac7082e88b35448255e8"
+      "$ref": "#/components/schemas/selection"
     },
-
     "description": {
       "type": "string",
       "example": "Fase de seleção de currículo"
