@@ -29,7 +29,12 @@ const getById = async (id) => {
   }
   return phase;
 };
-
+/**
+ *
+ * @param {Student} student
+ */
+const getStudentsPhase = async (student) =>
+  await Phase.find().where("_id").in(student.phases);
 /**
  * Create phase
  * @param {array} students
@@ -188,4 +193,5 @@ module.exports = {
   remove,
   validate,
   update,
+  getStudentsPhase,
 };

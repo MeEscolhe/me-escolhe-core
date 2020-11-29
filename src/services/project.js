@@ -23,6 +23,7 @@ router
   })
 
   .post(async (request, response) => {
+    request.body.selections = [];
     const { error, message } = validate(request.body, ProjectController);
     if (error) {
       return response.status(400).send(message);
@@ -80,32 +81,18 @@ router
         return response.status(400).send(error.message);
       }
     }
-  })
-
-  .delete(async (request, response) => {
-    let project = await ProjectController.remove(request.params.id);
-    if (!project) {
-      return response
-        .status(404)
-        .send("The project with the given registration was not found.");
-    }
-    const lab = await LabController.getById(project.labId);
-    project = { ...project._doc, lab };
-    delete project.labId;
-    return response.send(project);
   });
 
-router.route("/teacher/:teacherId").get(async (request, response) => {
-  let teacher = await TeacherController.getById(request.params.teacherId);
-  let managements = teacher._doc.managements;
-  let projects = await ProjectController.getAllByListId(managements);
-  if (isEmpty(projects)) {
-    return response.status(404).send("No projects to show.");
-  }
-  for (let i = 0; i < projects.length; i++) {
-    const lab = await LabController.getById(projects[i].labId);
-    projects[i] = { ...projects[i]._doc, lab };
-    delete projects[i].labId;
+router.route("/:id").delete(async (request, response) => {
+  try {
+    const project = await ProjectController.remove(request.params.id);
+    if (!project) {
+      response.status(400).send("The project with the given id was not found.");
+    } else {
+      return response.send(project);
+    }
+  } catch (error) {
+    return response.status(400).send(error.message);
   }
   return response.send(projects);
 });

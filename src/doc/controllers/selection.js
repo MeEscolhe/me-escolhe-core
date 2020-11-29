@@ -28,7 +28,12 @@ const withoutParameters = {
                     type: "boolean",
                     example: true,
                   },
-
+                  phases: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/phase",
+                    },
+                  },
                   project: {
                     type: "object",
                     properties: {
@@ -320,6 +325,14 @@ const withParameters = {
               role: "Frontend developer",
               description: "Desejável ter conhecimento em Angular",
               current: true,
+              phases: [
+                {
+                  id: "5f5d1fa6dccfa335d03fdd3e",
+                  students: [116210887, 112130765],
+                  selectionId: "5f28ac7082e88b35448255e8",
+                  description: "Fase de seleção de currículo",
+                },
+              ],
               project: {
                 id: "5f5d1fa6dccfa335d03fdd33",
                 name: "PIBIC",

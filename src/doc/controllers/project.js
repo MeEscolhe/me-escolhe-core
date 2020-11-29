@@ -243,7 +243,7 @@ const withParameters = {
         },
       },
 
-      404: {
+      400: {
         description: "Unsuccessful.",
         content: {
           "application/json": {
