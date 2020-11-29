@@ -46,9 +46,7 @@ const getAllStudentSelections = async (studentRegistration) => {
   if (student) {
     const studentPhases = await PhaseController.getStudentsPhase(student);
     const studentSelections = await Promise.all(
-      studentPhases.map(
-        async (selection) => await getById(selection.selectionId)
-      )
+      studentPhases.map(async (phase) => await getById(phase.selectionId))
     );
     return studentSelections;
   } else {
