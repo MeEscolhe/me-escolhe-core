@@ -2,7 +2,29 @@ const withoutParameters = {
   get: {
     tags: ["Selection"],
     description: "",
-    parameters: [],
+    parameters: [
+      {
+        in: "path",
+        name: "type",
+        schema: {
+          type: "string",
+          example: "student",
+          enum: ["all", "student", "teacher"],
+        },
+        required: true,
+      },
+      {
+        in: "path",
+        name: "id",
+        schema: {
+          type: "string",
+          example: "5f5d1fa6dccfa335d03fdd3e",
+        },
+        description:
+          "teacher => mongodb Id, student => registration, all id can be undefined",
+        required: true,
+      },
+    ],
     responses: {
       200: {
         description: "Successful.",
