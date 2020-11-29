@@ -8,7 +8,7 @@ const PhaseController = require("../controllers/phase");
 const LabController = require("../controllers/lab");
 const TeacherController = require("../controllers/teacher");
 const { isEmpty } = require("../middlewares/util");
-
+const StudentController = require("../controllers/student");
 /**
  * Get all selections
  * @returns {array} list of all selections
@@ -39,7 +39,6 @@ const getAll = async ({ page, limit }) => {
  * @returns {array} list of all selections
  */
 const getAllStudentSelections = async (studentRegistration) => {
-  const StudentController = require("../controllers/student");
   const student = await StudentController.getByRegistration(
     studentRegistration
   );
