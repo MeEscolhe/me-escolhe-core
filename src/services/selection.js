@@ -76,7 +76,7 @@ router
       project = { ...project._doc, lab };
       delete project.labId;
 
-      selection = { ...selection._doc, project };
+      selection = { ...selection, project };
       delete selection.projectId;
 
       return response.send(selection);
