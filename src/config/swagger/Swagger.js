@@ -74,6 +74,8 @@ const swaggerSpecs = {
     "/students": require("../../doc/controllers/student").withoutParameters,
     "/students/{registration}": require("../../doc/controllers/student")
       .withParameters,
+    "/students/isInSelection?registration={registration}&selectionId={selectionId}": require("../../doc/controllers/student")
+      .seeStudentInSelection,
     "/students/email": require("../../doc/controllers/student").login,
 
     "/teachers": require("../../doc/controllers/teacher").withoutParameters,
