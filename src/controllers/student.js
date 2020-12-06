@@ -55,7 +55,7 @@ const getByRegistrationWithSelections = async (registration) => {
   const student = await getByRegistration(registration);
   if (student && student.error === undefined)
     return getStudentWithSelections(student);
-  throw new Error("The student with the given ID was not found.");
+  throw new Error("The student with the given registration was not found.");
 };
 
 /**
