@@ -432,5 +432,62 @@ const login = {
     },
   },
 };
+const seeStudentInSelection = {
+  get: {
+    tags: ["Student"],
+    description: "",
+    parameters: [
+      {
+        in: "path",
+        name: "registration",
+        schema: {
+          type: "string",
+          example: "116133454",
+        },
+        required: true,
+      },
+      {
+        in: "path",
+        name: "selectionId ",
+        schema: {
+          type: "string",
+          example: "5f28ac7082e88b35448255e8",
+        },
+        required: true,
+      },
+    ],
 
-module.exports = { withParameters, withoutParameters, login };
+    responses: {
+      200: {
+        description: "Successful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "boolean",
+              example: true,
+            },
+          },
+          required: true,
+        },
+      },
+
+      404: {
+        description: "Unsuccessful.",
+        content: {
+          "application/json": {
+            schema: {
+              type: "string",
+              example: "The student with the given registration was not found.",
+            },
+          },
+        },
+      },
+    },
+  },
+};
+module.exports = {
+  withParameters,
+  withoutParameters,
+  login,
+  seeStudentInSelection,
+};
