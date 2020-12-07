@@ -30,7 +30,7 @@ router
               ")"
           );
       }
-      return response.send(selections);
+      return response.send(selections.reverse());
     } catch (error) {
       return response.status(400).send(error.message);
     }
