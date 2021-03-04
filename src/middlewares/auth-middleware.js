@@ -1,5 +1,6 @@
 "use strict";
 
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv/config");
 
@@ -36,11 +37,38 @@ const tokenValidator = (request, response, next) => {
  * @param {Object} params
  * @return {String} token
  */
-function generateToken(params = {}) {
+const generateToken = (params = {}) => {
   // Validity: 7 days
   return jwt.sign(params, process.env.JWT_SECRET, {
     expiresIn: 604800,
   });
-}
+};
 
-module.exports = { tokenValidator, generateToken };
+/**
+ * Encrypt password
+ * @param {string} password
+ * @return {String} password encrypted
+ */
+const encryptPassword = (password) => {
+  return bcrypt.hashSync(
+    password,
+    parseInt(process.env.BCRYPT_PASSWORD_ROUNDS)
+  );
+};
+
+/**
+ * Check password
+ * @param {string} notEncryptedPassword
+ * @param {string} encryptedPassword
+ * @return {boolean} verification result
+ */
+const validatePassword = (notEncryptedPassword, encryptedPassword) => {
+  return bcrypt.compareSync(notEncryptedPassword, encryptedPassword);
+};
+
+module.exports = {
+  tokenValidator,
+  generateToken,
+  encryptPassword,
+  validatePassword,
+};

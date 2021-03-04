@@ -1,12 +1,9 @@
-const { number } = require("joi");
-
-function isEmpty(obj) {
+const isEmpty = (obj) => {
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) return false;
   }
-
   return true;
-}
+};
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
  * abstract to find by id and update

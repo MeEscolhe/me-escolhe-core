@@ -73,7 +73,6 @@ const create = async ({
   registration,
   name,
   email,
-  password,
   cra,
   description,
   skills,
@@ -81,15 +80,14 @@ const create = async ({
   experiences,
 }) => {
   const student = new Student({
-    registration: registration,
-    name: name,
-    email: email,
-    password: password,
-    cra: cra,
-    description: description,
-    skills: skills,
-    phases: phases,
-    experiences: experiences,
+    registration,
+    name,
+    email,
+    cra,
+    description,
+    skills,
+    phases,
+    experiences,
   });
   return await student.save();
 };

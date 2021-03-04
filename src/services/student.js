@@ -6,8 +6,8 @@
 const StudentController = require("../controllers/student");
 const PhaseController = require("../controllers/phase");
 const ExperienceController = require("../controllers/experience");
-const express = require("express");
-const router = express.Router();
+const CredentialController = require("../controllers/credential");
+const router = require("express").Router();
 const { isEmpty, validate } = require("../middlewares/util");
 
 router
@@ -33,6 +33,7 @@ router
     } else {
       try {
         let student = await StudentController.create(request.body);
+        await CredentialController.create(request.body, false);
         for (let i = 0; i < student.phases.length; i++) {
           let phaseId = student.phases[i];
           await PhaseController.addStudent(phaseId, student.registration);

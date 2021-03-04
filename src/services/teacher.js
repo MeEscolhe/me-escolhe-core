@@ -3,6 +3,7 @@
 const TeacherController = require("../controllers/teacher");
 const ProjectController = require("../controllers/project");
 const SelectionController = require("../controllers/selection");
+const CredentialController = require("../controllers/credential");
 const express = require("express");
 const router = express.Router();
 const { validate, isEmpty, filterProps } = require("../middlewares/util");
@@ -25,6 +26,7 @@ router
     } else {
       try {
         const teacher = await TeacherController.create(request.body);
+        await CredentialController.create(request.body, true);
         return response.send(teacher);
       } catch (error) {
         return response.status(400).send(error.message);
