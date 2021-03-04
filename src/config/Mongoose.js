@@ -5,7 +5,7 @@
 const mongoose = require("mongoose");
 
 /**
- * setting mongoDb connection
+ * Setting MongoDB connection
  */
 const connect = () => {
   require("dotenv/config");

@@ -5,7 +5,7 @@ const ObjectId = require("mongodb").ObjectID;
 const {
   validate,
   arrayOfIds,
-  foreingKeyValidatorSchema,
+  foreingKey,
 } = require("../middlewares/model-validator");
 
 /**
@@ -15,13 +15,8 @@ const {
 const ExperienceSchema = mongoose.model(
   "Experience",
   new mongoose.Schema({
-    academic: foreingKeyValidatorSchema(
-      "AcademicExperience",
-      "_id",
-      ObjectId,
-      true
-    ),
-    work: foreingKeyValidatorSchema("WorkExperience", "_id", ObjectId, true),
+    academic: foreingKey("AcademicExperience", "_id", ObjectId, true),
+    work: foreingKey("WorkExperience", "_id", ObjectId, true),
   })
 );
 

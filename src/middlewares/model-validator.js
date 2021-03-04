@@ -1,40 +1,24 @@
 const Joi = require("joi");
 
+/**
+ * Validate handler
+ * @param {object} keys attributes
+ * @param {object} model model object
+ * @returns {Joi.ValidationResult} validation result
+ */
 const validate = (keys, model) => {
   const validator = Joi.object().keys(keys);
   return validator.validate(model);
 };
 
-const reference = () => Joi.string().min(1).max(30);
-
-const id = () => reference().required();
-
-const string = () => Joi.string().allow("").min(0).max(256).required();
-
-const boolean = () => Joi.boolean().required();
-
-const number = () => Joi.number().required();
-
-const numericRange = (min, max) => number().min(min).max(max);
-
-const array = (items) => Joi.array().items(items).required();
-
-const arrayOfRegistrations = () => array(Joi.number());
-
-const arrayOfIds = () => array(reference());
-
-const date = () => Joi.date().iso().required();
-
-const finalDate = (initialDateName) =>
-  Joi.date().iso().greater(Joi.ref(initialDateName)).required();
 /**
- * Validate foreing key to model
- * @param {object} model
- * @param {string} type is object's prop
- * @param {object} key key value
- * @returns {promise}
+ * Validate foreing key handler
+ * @param {object} model model object
+ * @param {string} type model name
+ * @param {object} key attribute
+ * @returns {promise} validation result
  */
-const FKHelper = (model, type, key) => {
+const validateForeingKey = (model, type, key) => {
   return new Promise((resolve, reject) => {
     model.findOne({ [type]: key }, (err, result) => {
       if (result) {
@@ -48,25 +32,55 @@ const FKHelper = (model, type, key) => {
     });
   });
 };
+
+// String reference matcher
+const reference = () => Joi.string().min(1).max(30);
+
+// ID matcher
+const id = () => reference().required();
+
+// String matcher
+const string = () => Joi.string().allow("").min(0).max(256).required();
+
+// Boolean matcher
+const boolean = () => Joi.boolean().required();
+
+// Number matcher
+const number = () => Joi.number().required();
+
+// Numeric range matcher
+const numericRange = (min, max) => number().min(min).max(max);
+
+// Array matcher
+const array = (items) => Joi.array().items(items).required();
+
+// Array of registrations matcher
+const arrayOfRegistrations = () => array(Joi.number());
+
+// Array of IDs matcher
+const arrayOfIds = () => array(reference());
+
+// Date matcher
+const date = () => Joi.date().iso().required();
+
+// Final date of an interval matcher
+const finalDate = (initialDateName) =>
+  Joi.date().iso().greater(Joi.ref(initialDateName)).required();
+
 /**
  *
- * @param {boolean} isArray
- * @param {string} modelName
- * @param {string} key
- * @param {string} type
+ * @param {String} modelName model reference
+ * @param {string} key attribute
+ * @param {string} type attribute type
+ * @param {string} isArray consider attribute as a array
+ * @param {string} required consider required attribute
  */
-const foreingKeyValidatorSchema = (
-  modelName,
-  key,
-  type,
-  isArray = false,
-  required = true
-) => {
+const foreingKey = (modelName, key, type, isArray = false, required = true) => {
   const mongoose = require("mongoose");
   const item = {
     type,
     validate: {
-      validator: (v) => FKHelper(mongoose.model(modelName), key, v),
+      validator: (v) => validateForeingKey(mongoose.model(modelName), key, v),
       message: (props) => `${props.value} doesn't exist`,
     },
   };
@@ -94,6 +108,5 @@ module.exports = {
   validate,
   date,
   finalDate,
-  foreingKeyValidatorSchema,
-  FKHelper,
+  foreingKey,
 };

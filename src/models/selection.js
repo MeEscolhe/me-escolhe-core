@@ -11,7 +11,7 @@ const {
   boolean,
   numericRange,
   id,
-  foreingKeyValidatorSchema,
+  foreingKey,
 } = require("../middlewares/model-validator");
 
 /**
@@ -28,19 +28,13 @@ const SelectionModel = new mongoose.Schema({
     required: true,
     default: "",
   },
-  phases: foreingKeyValidatorSchema("PhaseSchema", "_id", ObjectId, true),
+  phases: foreingKey("PhaseSchema", "_id", ObjectId, true),
   current: {
     type: Boolean,
     required: true,
     default: true,
   },
-  projectId: foreingKeyValidatorSchema(
-    "Project",
-    "_id",
-    ObjectId,
-    false,
-    false
-  ),
+  projectId: foreingKey("Project", "_id", ObjectId, false, false),
   skills: {
     hardSkills: [
       {

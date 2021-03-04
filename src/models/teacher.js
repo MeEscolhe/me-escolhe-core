@@ -7,7 +7,7 @@ const {
   string,
   id,
   arrayOfIds,
-  foreingKeyValidatorSchema,
+  foreingKey,
 } = require("../middlewares/model-validator");
 
 /**
@@ -34,8 +34,8 @@ const TeacherSchema = mongoose.model(
       type: String,
       default: "",
     },
-    labId: foreingKeyValidatorSchema("Lab", "_id", ObjectId),
-    managements: foreingKeyValidatorSchema("Project", "_id", ObjectId, true),
+    labId: foreingKey("Lab", "_id", ObjectId),
+    managements: foreingKey("Project", "_id", ObjectId, true),
   })
 );
 

@@ -2,7 +2,7 @@
 
 const mongoose = require("mongoose");
 const ObjectId = require("mongodb").ObjectID;
-const { foreingKeyValidatorSchema } = require("../middlewares/model-validator");
+const { foreingKey } = require("../middlewares/model-validator");
 
 /**
  *  Feedback request model
@@ -11,9 +11,9 @@ const { foreingKeyValidatorSchema } = require("../middlewares/model-validator");
 const FeedbackRequestSchema = mongoose.model(
   "FeedbackRequest",
   new mongoose.Schema({
-    studentId: foreingKeyValidatorSchema("Student", "registration", Number),
-    phaseId: foreingKeyValidatorSchema("Phase", "_id", ObjectId),
-    teacherId: foreingKeyValidatorSchema("Teacher", "_id", ObjectId),
+    studentId: foreingKey("Student", "registration", Number),
+    phaseId: foreingKey("Phase", "_id", ObjectId),
+    teacherId: foreingKey("Teacher", "_id", ObjectId),
   })
 );
 

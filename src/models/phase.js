@@ -7,7 +7,7 @@ const {
   id,
   arrayOfRegistrations,
   string,
-  foreingKeyValidatorSchema,
+  foreingKey,
 } = require("../middlewares/model-validator");
 const { getByRegistration } = require("../controllers/student");
 /**
@@ -17,13 +17,8 @@ const { getByRegistration } = require("../controllers/student");
 const PhaseSchema = mongoose.model(
   "Phase",
   new mongoose.Schema({
-    students: foreingKeyValidatorSchema(
-      "Student",
-      "registration",
-      Number,
-      true
-    ),
-    selectionId: foreingKeyValidatorSchema("Selection", "_id", ObjectId),
+    students: foreingKey("Student", "registration", Number, true),
+    selectionId: foreingKey("Selection", "_id", ObjectId),
     description: {
       type: String,
       default: "",

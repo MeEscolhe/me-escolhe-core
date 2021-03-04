@@ -7,7 +7,7 @@ const {
   string,
   id,
   arrayOfIds,
-  foreingKeyValidatorSchema,
+  foreingKey,
 } = require("../middlewares/model-validator");
 
 /**
@@ -25,8 +25,8 @@ const ProjectSchema = mongoose.model(
       type: String,
       required: true,
     },
-    labId: foreingKeyValidatorSchema("Lab", "_id", ObjectId),
-    selections: foreingKeyValidatorSchema("Selection", "_id", ObjectId, true),
+    labId: foreingKey("Lab", "_id", ObjectId),
+    selections: foreingKey("Selection", "_id", ObjectId, true),
   })
 );
 

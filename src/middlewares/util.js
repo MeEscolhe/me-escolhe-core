@@ -54,6 +54,7 @@ const filterProps = (data, propsToFilter, conditionFunction) =>
       accumulate[key] = value;
     return accumulate;
   }, {});
+
 /**
  * get selection from phase id
  * @param {string} phaseId

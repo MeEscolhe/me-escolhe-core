@@ -9,7 +9,7 @@ const {
   numericRange,
   string,
   arrayOfIds,
-  foreingKeyValidatorSchema,
+  foreingKey,
 } = require("../middlewares/model-validator");
 
 /**
