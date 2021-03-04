@@ -63,17 +63,17 @@ router.route("/email").get(async (request, response) => {
   );
   return response.send(student);
 });
-router.route("/isInSelection/").get(async (request, response) => {
+router.route("/inSelection/").get(async (request, response) => {
   try {
     let { registration, selectionId } = request.query;
     const student = await StudentController.getByRegistrationWithSelections(
       registration
     );
-    const isInSelection = student.selections.filter(
+    const inSelection = student.selections.filter(
       (selection) =>
         selection.selection.selectionId.toString() === selectionId.toString()
     );
-    response.send(isInSelection.length > 0);
+    response.send(inSelection.length > 0);
   } catch (error) {
     response.status(400).send(error.message);
   }

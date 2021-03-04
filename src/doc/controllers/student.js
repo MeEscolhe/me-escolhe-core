@@ -48,7 +48,6 @@ const student = {
   registration: 116133454,
   name: "Thomas",
   email: "thomas.lopes@ccc.ufcg.edu.br",
-  password: "thomas.lopes123",
   cra: 8.5,
   description: "Developer",
   skills: {

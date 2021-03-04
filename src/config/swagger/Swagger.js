@@ -26,6 +26,10 @@ const swaggerSpecs = {
       teacher: require("../../doc/models/teacher"),
       "work-experience": require("../../doc/models/work-experience"),
     },
+    forms: {
+      "teacher-with-password": require("../../doc/models/teacher-with-password"),
+      "student-with-password": require("../../doc/models/student-with-password"),
+    },
   },
   security: [
     {
@@ -37,7 +41,6 @@ const swaggerSpecs = {
       url: "http://localhost:8080/",
     },
   ],
-  // customCssUrl:require('./eae.css'),
   paths: {
     "/academicExperiences": require("../../doc/controllers/academic-experience")
       .withoutParameters,
@@ -53,7 +56,7 @@ const swaggerSpecs = {
       .withoutParameters,
     "/feedbackRequests/{id}": require("../../doc/controllers/feedback-request")
       .withParameters,
-
+    "/login": require("../../doc/controllers/login").withoutParameters,
     "/labs": require("../../doc/controllers/lab").withoutParameters,
     "/labs/{id}": require("../../doc/controllers/lab").withParameters,
 
@@ -74,7 +77,7 @@ const swaggerSpecs = {
     "/students": require("../../doc/controllers/student").withoutParameters,
     "/students/{registration}": require("../../doc/controllers/student")
       .withParameters,
-    "/students/isInSelection?registration={registration}&selectionId={selectionId}": require("../../doc/controllers/student")
+    "/students/inSelection?registration={registration}&selectionId={selectionId}": require("../../doc/controllers/student")
       .seeStudentInSelection,
     "/students/email": require("../../doc/controllers/student").login,
 

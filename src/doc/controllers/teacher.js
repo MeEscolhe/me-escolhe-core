@@ -41,41 +41,7 @@ const withoutParameters = {
       content: {
         "application/json": {
           schema: {
-            type: "object",
-            properties: {
-              name: {
-                type: "String",
-                example: "Jonas",
-              },
-
-              email: {
-                type: "String",
-                example: "jonas.alcantara@ccc.ufcg.edu.br",
-              },
-
-              password: {
-                type: "string",
-                example: "jonas.alcantara123",
-              },
-
-              description: {
-                type: "String",
-                example: "Professor adjunto",
-              },
-
-              labId: {
-                type: "string",
-                example: "6t71fk9127g63j85493265w2",
-              },
-
-              managements: {
-                type: "array",
-                example: [
-                  "4a14bg8357c32u09875565b7",
-                  "6u74zb0034f65zu435743o0",
-                ],
-              },
-            },
+            $ref: "#/components/forms/teacher-with-password",
           },
         },
       },

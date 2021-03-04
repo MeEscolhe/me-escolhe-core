@@ -26,11 +26,6 @@
       "example": "thomas.lopes@ccc.ufcg.edu.br"
     },
 
-    "password": {
-      "type": "string",
-      "example": "thomas.lopes123"
-    },
-
     "cra": {
       "type": "number",
       "example": 8.5
