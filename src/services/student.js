@@ -9,6 +9,7 @@ const ExperienceController = require("../controllers/experience");
 const CredentialController = require("../controllers/credential");
 const router = require("express").Router();
 const { isEmpty, validate } = require("../middlewares/util");
+const student = require("../models/student");
 
 router
   .route("/")
@@ -27,18 +28,22 @@ router
   })
 
   .post(async (request, response) => {
-    const { error, message } = validate(request.body, StudentController);
+    const { password, ...student } = request.body;
+    const { error, message } = validate(student, StudentController);
     if (error) {
       return response.status(400).send(message);
     } else {
       try {
-        let student = await StudentController.create(request.body);
+        let createdStudent = await StudentController.create(student);
         await CredentialController.create(request.body, false);
-        for (let i = 0; i < student.phases.length; i++) {
-          let phaseId = student.phases[i];
-          await PhaseController.addStudent(phaseId, student.registration);
+        for (let i = 0; i < createdStudent.phases.length; i++) {
+          let phaseId = createdStudent.phases[i];
+          await PhaseController.addStudent(
+            phaseId,
+            createdStudent.registration
+          );
         }
-        return response.send(student);
+        return response.send(createdStudent);
       } catch (error) {
         return response.status(400).send(error.message);
       }

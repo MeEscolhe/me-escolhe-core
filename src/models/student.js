@@ -33,10 +33,6 @@ const StudentSchema = mongoose.model(
       required: true,
       unique: true,
     },
-    password: {
-      type: String,
-      required: true,
-    },
     cra: {
       type: Number,
       min: 0,
@@ -87,8 +83,8 @@ const StudentSchema = mongoose.model(
         },
       ],
     },
-    experiences: foreingKeyValidatorSchema("Experience", "_id", ObjectId, true),
-    phases: foreingKeyValidatorSchema("Phase", "_id", ObjectId, true),
+    experiences: foreingKey("Experience", "_id", ObjectId, true),
+    phases: foreingKey("Phase", "_id", ObjectId, true),
   })
 );
 
@@ -101,7 +97,6 @@ const validateStudent = (student) =>
     {
       registration: number(),
       name: string(),
-      password: string(),
       description: string(),
       email: string(),
       cra: numericRange(0, 10),

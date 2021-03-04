@@ -7,6 +7,7 @@ const CredentialController = require("../controllers/credential");
 const express = require("express");
 const router = express.Router();
 const { validate, isEmpty, filterProps } = require("../middlewares/util");
+const teacher = require("../models/teacher");
 
 router
   .route("/")
@@ -20,14 +21,15 @@ router
   })
 
   .post(async (request, response) => {
-    const { error, message } = validate(request.body, TeacherController);
+    const { password, ...teacher } = request.body;
+    const { error, message } = validate(teacher, TeacherController);
     if (error) {
       return response.status(400).send(message);
     } else {
       try {
-        const teacher = await TeacherController.create(request.body);
+        const createdTeacher = await TeacherController.create(teacher);
         await CredentialController.create(request.body, true);
-        return response.send(teacher);
+        return response.send(createdTeacher);
       } catch (error) {
         return response.status(400).send(error.message);
       }

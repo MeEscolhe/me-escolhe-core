@@ -21,6 +21,7 @@ const {
   feedbackRequests,
   students,
   teachers,
+  auth,
 } = require("./Router");
 
 mongoose.set("useFindAndModify", false);
@@ -29,6 +30,7 @@ mongoose.set("useUnifiedTopology", true);
 
 app.use(express.json());
 app.use("/labs", labs);
+app.use("/auth", auth);
 app.use("/workExperiences", workExperiences);
 app.use("/academicExperiences", academicExperiences);
 app.use("/experiences", experiences);

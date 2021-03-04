@@ -8,7 +8,7 @@ const { validate, string, boolean } = require("../middlewares/model-validator");
  *  @typedef {{email: string, password: string, isTeacher: boolean}} CredentialSchema
  */
 const CredentialSchema = mongoose.model(
-  "CredentialSchema",
+  "Credential",
   new mongoose.Schema({
     email: {
       type: String,
@@ -42,6 +42,6 @@ const validateCredential = (credential) =>
   );
 
 module.exports = {
-  Credential: LabSchema,
+  Credential: CredentialSchema,
   validateCredential: validateCredential,
 };
