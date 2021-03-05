@@ -8,7 +8,7 @@ const TeacherController = require("../controllers/teacher");
 const ProjectController = require("../controllers/project");
 const SelectionController = require("../controllers/selection");
 const CredentialController = require("../controllers/credential");
-const { validate, isEmpty, filterProps } = require("../middlewares/util");
+const { validate, isEmpty, filterProps } = require("../middlewares/utils");
 const router = require("express").Router();
 
 router

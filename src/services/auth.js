@@ -11,6 +11,7 @@ const {
   validatePassword,
   generateToken,
 } = require("../middlewares/auth-middleware");
+const { Successful, NotAuthorized } = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
 /**
@@ -22,10 +23,10 @@ const router = require("express").Router();
 router.route("/").get(async (request, response) => {
   const credential = await CredentialController.getByEmail(request.body.email);
   if (!credential) {
-    return response.status(404).send("Email or password incorrect");
+    return NotAuthorized(response);
   }
   if (!validatePassword(request.body.password, credential.password)) {
-    return response.status(404).send("Email or password incorrect");
+    return NotAuthorized(response);
   }
   let responseBody = {};
   if (credential.isTeacher) {
@@ -34,7 +35,7 @@ router.route("/").get(async (request, response) => {
     responseBody.user = await StudentController.getByEmail(request.body.email);
   }
   responseBody.token = generateToken(request.body);
-  return response.send(responseBody);
+  return Successful(response, responseBody);
 });
 
 module.exports = router;

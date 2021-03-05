@@ -7,7 +7,7 @@
 const StudentController = require("../controllers/student");
 const PhaseController = require("../controllers/phase");
 const CredentialController = require("../controllers/credential");
-const { isEmpty, validate } = require("../middlewares/util");
+const { isEmpty, validate } = require("../middlewares/utils");
 const router = require("express").Router();
 
 router

@@ -7,7 +7,7 @@
 const SelectionController = require("../controllers/selection");
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
-const { validate, filterProps } = require("../middlewares/util");
+const { validate, filterProps } = require("../middlewares/utils");
 const router = require("express").Router();
 router
   .route("/")

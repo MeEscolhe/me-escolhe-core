@@ -4,85 +4,78 @@
  * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
  */
 
+const LAB = "lab";
+
 const LabController = require("../controllers/lab");
 const ProjectController = require("../controllers/project");
 const SelectionController = require("../controllers/selection");
-const { isEmpty, validate, filterProps } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/utils");
+const {
+  Successful,
+  NotFound,
+  NotFoundById,
+  UnexpectedError,
+} = require("../middlewares/rest-middleware");
+const lab = require("../models/lab");
 const router = require("express").Router();
 
 router
   .route("/")
   .get(async (request, response) => {
-    const labs = await LabController.getAll();
-    if (isEmpty(labs)) {
-      return response.status(404).send("No labs to show.");
+    try {
+      const labs = await LabController.getAll();
+      if (isEmpty(labs)) return NotFound(response, LAB);
+      return Successful(response, labs);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
-    return response.send(labs);
   })
 
   .post(async (request, response) => {
-    const { error, message } = validate(request.body, LabController);
-    if (error) {
-      return response.status(400).send(message);
-    } else {
-      const lab = await LabController.create(request.body);
-      return response.send(lab);
-    }
+    const { error } = validate(request.body, LabController);
+    if (error) return UnexpectedError(response, error);
+    const lab = await LabController.create(request.body);
+    return Successful(response, lab);
   });
 
 router
   .route("/:id")
   .get(async (request, response) => {
-    const lab = await LabController.getById(request.params.id);
-    if (!lab) {
-      return response
-        .status(404)
-        .send("The lab with the given ID was not found.");
+    try {
+      const lab = await LabController.getById(request.params.id);
+      if (!lab) return NotFoundById(response, LAB);
+      return Successful(response, lab);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
-    return response.send(lab);
   })
 
   .put(async (request, response) => {
-    const { error, message } = validate(request.body, LabController);
-    if (error) {
-      return response.status(400).send(message);
-    } else {
-      const propsToUpdate = ["name", "description"];
-      const lab = await LabController.update(
-        request.params.id,
-        filterProps(request.body, propsToUpdate)
-      );
-      if (!lab) {
-        return response
-          .status(404)
-          .send("The lab with the given ID was not found.");
-      } else {
-        return response.send(lab);
-      }
-    }
+    const { error } = validate(request.body, LabController);
+    if (error) return UnexpectedError(response, error);
+    const propsToUpdate = ["name", "description"];
+    const lab = await LabController.update(
+      request.params.id,
+      filterProps(request.body, propsToUpdate)
+    );
+    if (!lab) return NotFoundById(response, LAB);
+    return Successful(response, lab);
   })
 
   .delete(async (request, response) => {
     try {
       const lab = await LabController.remove(request.params.id);
-      if (!lab) {
-        return response
-          .status(404)
-          .send("The lab with the given ID was not found.");
-      }
-      return response.send(lab);
+      if (!lab) return NotFoundById(response, LAB);
+      return Successful(response, lab);
     } catch (error) {
-      return response.status(400).send(error.message);
+      return UnexpectedError(response, error);
     }
   });
 
 router.route("/selections/:id").get(async (request, response) => {
-  const lab = await LabController.getById(request.params.id);
-  if (!lab) {
-    return response
-      .status(404)
-      .send("The lab with the given ID was not found.");
-  } else {
+  try {
+    const lab = await LabController.getById(request.params.id);
+    if (!lab) return NotFoundById(response, LAB);
     let selections = [];
     lab.managements.forEach(async (projectId) => {
       const project = await ProjectController.getById(projectId);
@@ -91,7 +84,9 @@ router.route("/selections/:id").get(async (request, response) => {
         selections.push(selection);
       });
     });
-    return response.send(selections);
+    return Successful(response, selections);
+  } catch (error) {
+    return UnexpectedError(response, error);
   }
 });
 

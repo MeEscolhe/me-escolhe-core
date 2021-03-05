@@ -4,89 +4,79 @@
  * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
  */
 
+const PHASE = "phase";
+
 const PhaseController = require("../controllers/phase");
 const SelectionController = require("../controllers/selection");
-const { isEmpty, validate, filterProps } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/utils");
+const {
+  Successful,
+  NotFound,
+  NotFoundById,
+  UnexpectedError,
+} = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
 router
   .route("/")
   .get(async (request, response) => {
-    const phases = await PhaseController.getAll();
-    if (isEmpty(phases)) {
-      return response.status(404).send("No phases to show.");
+    try {
+      const phases = await PhaseController.getAll();
+      if (isEmpty(phases)) return NotFound(response, PHASE);
+      return Successful(response, phases);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
-    return response.send(phases);
   })
 
   .post(async (request, response) => {
-    const { error, message } = validate(request.body, PhaseController);
-    if (error) {
-      return response.status(400).send(message);
-    } else {
-      const phase = await PhaseController.create(request.body);
-      const { selectionId } = request.body;
-      try {
-        const selection = await SelectionController.getById(selectionId);
-        if (!selection) {
-          response
-            .status(404)
-            .send("The selection with the given selectionId was not found.");
-        } else {
-          selection.phases.push(phase.id);
-          await SelectionController.update(selection._id, selection);
-          return response.send(phase);
-        }
-      } catch (error) {
-        return response.status(400).send(error.message);
-      }
+    const { error } = validate(request.body, PhaseController);
+    if (error) return UnexpectedError(error);
+    const phase = await PhaseController.create(request.body);
+    const { selectionId } = request.body;
+    try {
+      const selection = await SelectionController.getById(selectionId);
+      if (!selection) return NotFoundById(response, PHASE);
+      selection.phases.push(phase.id);
+      await SelectionController.update(selection._id, selection);
+      return Successful(response, phase);
+    } catch (error) {
+      return UnexpectedError(error);
     }
   });
 
 router
   .route("/:id")
   .get(async (request, response) => {
-    const phase = await PhaseController.getById(request.params.id);
-    if (!phase) {
-      return response
-        .status(404)
-        .send("The phases with the given ID was not found.");
+    try {
+      const phase = await PhaseController.getById(request.params.id);
+      if (!phase) return NotFoundById(response, PHASE);
+      return Successful(response, phase);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
-    return response.send(phase);
   })
 
   .put(async (request, response) => {
-    const { error, message } = validate(request.body, PhaseController);
-    if (error) {
-      return response.status(400).send(message);
-    } else {
+    const { error } = validate(request.body, PhaseController);
+    if (error) return UnexpectedError(response, error);
+    try {
       const propsToUpdate = ["students", "selectionId", "description"];
-      try {
-        const phase = await PhaseController.update(
-          request.params.id,
-          filterProps(request.body, propsToUpdate)
-        );
-        if (!phase) {
-          response
-            .status(404)
-            .send("The phase with the given ID was not found.");
-        } else {
-          return response.send(phase);
-        }
-      } catch (error) {
-        return response.status(400).send(error.message);
-      }
+      const phase = await PhaseController.update(
+        request.params.id,
+        filterProps(request.body, propsToUpdate)
+      );
+      if (!phase) return NotFoundById(response, PHASE);
+      return Successful(response, phase);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
   })
 
   .delete(async (request, response) => {
     const phases = await PhaseController.remove(request.params.id);
-    if (!phases) {
-      return response
-        .status(404)
-        .send("The phases with the given ID was not found.");
-    }
-    return response.send(phases);
+    if (!phases) return NotFoundById(response, PHASE);
+    return Successful(response, phases);
   });
 
 router
@@ -97,9 +87,9 @@ router
         request.params.id,
         request.params.registration
       );
-      return response.send(phase);
+      return Successful(response, phase);
     } catch (error) {
-      return response.status(400).send(error.message);
+      return UnexpectedError(response, error);
     }
   })
 
@@ -109,9 +99,9 @@ router
         request.params.id,
         request.params.registration
       );
-      return response.send(phase);
+      return Successful(response, phase);
     } catch (error) {
-      return response.status(400).send(error.message);
+      return UnexpectedError(response, error);
     }
   });
 

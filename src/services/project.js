@@ -6,7 +6,7 @@
 
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
-const { isEmpty, validate, filterProps } = require("../middlewares/util");
+const { isEmpty, validate, filterProps } = require("../middlewares/utils");
 const router = require("express").Router();
 
 router

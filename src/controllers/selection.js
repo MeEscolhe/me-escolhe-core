@@ -7,7 +7,7 @@ const ProjectController = require("../controllers/project");
 const PhaseController = require("../controllers/phase");
 const LabController = require("../controllers/lab");
 const TeacherController = require("../controllers/teacher");
-const { isEmpty } = require("../middlewares/util");
+const { isEmpty } = require("../middlewares/utils");
 const StudentController = require("../controllers/student");
 /**
  * Get all selections

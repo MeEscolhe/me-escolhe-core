@@ -4,18 +4,28 @@
  * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
  */
 
+const FEEDBACK_REQUEST = "feedback request";
+
 const FeedbackRequestController = require("../controllers/feedback-request");
-const { isEmpty } = require("../middlewares/util");
+const { isEmpty } = require("../middlewares/utils");
+const {
+  Successful,
+  NotFound,
+  NotFoundById,
+  UnexpectedError,
+} = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
 router
   .route("/")
   .get(async (request, response) => {
-    const feedbackRequests = await FeedbackRequestController.getAll();
-    if (isEmpty(feedbackRequests)) {
-      return response.status(404).send("No feedback requests to show.");
-    } else {
-      return response.send(feedbackRequests);
+    try {
+      const feedbackRequests = await FeedbackRequestController.getAll();
+      if (isEmpty(feedbackRequests))
+        return NotFound(response, FEEDBACK_REQUEST);
+      return Successful(response, feedbackRequests);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
   })
 
@@ -24,37 +34,35 @@ router
       const feedbackRequest = await FeedbackRequestController.create(
         request.body
       );
-      return response.send(feedbackRequest);
+      return Successful(response, feedbackRequest);
     } catch (error) {
-      return response.status(400).send(error.message);
+      return UnexpectedError(response, error);
     }
   });
 
 router
   .route("/:id")
   .get(async (request, response) => {
-    const feedbackRequest = await FeedbackRequestController.getById(
-      request.params.id
-    );
-    if (!feedbackRequest) {
-      response
-        .status(404)
-        .send("The feedback request with the given ID was not found.");
-    } else {
-      return response.send(feedbackRequest);
+    try {
+      const feedbackRequest = await FeedbackRequestController.getById(
+        request.params.id
+      );
+      if (!feedbackRequest) return NotFoundById(response, FEEDBACK_REQUEST);
+      return Successful(response, feedbackRequest);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
   })
 
   .delete(async (request, response) => {
-    const feedbackRequest = await FeedbackRequestController.remove(
-      request.params.id
-    );
-    if (!feedbackRequest) {
-      response
-        .status(404)
-        .send("The feedback request with the given ID was not found.");
-    } else {
-      return response.send(feedbackRequest);
+    try {
+      const feedbackRequest = await FeedbackRequestController.remove(
+        request.params.id
+      );
+      if (!feedbackRequest) return NotFoundById(response, FEEDBACK_REQUEST);
+      return Successful(response, feedbackRequest);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
   });
 
