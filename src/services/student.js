@@ -10,6 +10,8 @@ const CredentialController = require("../controllers/credential");
 const { isEmpty, validate } = require("../middlewares/utils");
 const router = require("express").Router();
 
+// DAQUI PRA BAIXO, FALTA ADICIONAR AS RESPONSTAS USANDO MIDDLEWARE
+
 router
   .route("/")
   .get(async (request, response) => {

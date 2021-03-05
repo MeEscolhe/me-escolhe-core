@@ -8,10 +8,19 @@ const SelectionController = require("../controllers/selection");
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
 const { validate, filterProps } = require("../middlewares/utils");
+const {
+  Successful,
+  NotFound,
+  NotFoundById,
+  UnexpectedError,
+} = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 router
   .route("/")
   .get(async (request, response) => {
+    // TO-DO: DIVIDIR ESSE ENDPOINT EM 3
+    // POIS ENDPOINTS DEVEM SER MODULARIZADOS
+    // (HÁ 3 CONTEXTOS AQUI)
     try {
       const { type, id } = request.query;
       let selections;
@@ -33,11 +42,13 @@ router
               ")"
           );
       }
-      return response.send(selections.reverse());
+      return Successful(response, selections.reverse());
     } catch (error) {
-      return response.status(400).send(error.message);
+      return UnexpectedError(response, error);
     }
   })
+
+  // DAQUI PRA BAIXO, FALTA ADICIONAR AS RESPONSTAS USANDO MIDDLEWARE
 
   .post(async (request, response) => {
     request.body.phases = [];
