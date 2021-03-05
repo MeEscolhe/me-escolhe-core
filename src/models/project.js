@@ -1,7 +1,6 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const ObjectId = require("mongodb").ObjectID;
 const {
   validate,
   string,
@@ -25,7 +24,10 @@ const ProjectSchema = mongoose.model(
       type: String,
       required: true,
     },
-    labId: foreingKey("Lab", "_id", ObjectId),
+    labId: {
+      type: String,
+      required: true,
+    },
   })
 );
 

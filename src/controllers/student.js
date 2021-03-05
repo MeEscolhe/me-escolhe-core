@@ -5,7 +5,7 @@ const {
   DefaultArray,
   DefaultSkills,
   DefaultExperiences,
-} = require("../middlewares/values-provider");
+} = require("../middlewares/default-values-provider");
 const PhaseController = require("../controllers/phase");
 const SelectionController = require("../controllers/selection");
 const { filterProps } = require("../middlewares/utils");

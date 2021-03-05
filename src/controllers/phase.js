@@ -2,7 +2,7 @@
 
 const { Phase, validatePhase, getStudentsData } = require("../models/phase");
 const { Student } = require("../models/student");
-const { DefaultObject } = require("../middlewares/values-provider");
+const { DefaultObject } = require("../middlewares/default-values-provider");
 const { ObjectId } = require("../middlewares/types-provider");
 const StudentController = require("./student");
 

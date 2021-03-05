@@ -168,7 +168,8 @@ const remove = async (id) => {
 };
 
 const removeByProjectId = async (id) => {
-  const selections = await Selection.remove({ projectId: id });
+  const selections = await Selection.find({ projectId: id });
+  await Selection.deleteMany({ projectId: id });
   const phasesLists = selections.map((selection) => selection.phases);
   for (const phasesList in phasesLists) {
     PhaseController.removeByIds(phasesList);

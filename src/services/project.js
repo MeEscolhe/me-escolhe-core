@@ -7,7 +7,6 @@
 const PROJECT = "project";
 
 const ProjectController = require("../controllers/project");
-const LabController = require("../controllers/lab");
 const { isEmpty, validate, filterProps } = require("../middlewares/utils");
 const {
   Successful,
@@ -23,11 +22,6 @@ router
     try {
       let projects = await ProjectController.getAll();
       if (isEmpty(projects)) return NotFound(response, PROJECT);
-      for (let i = 0; i < projects.length; i++) {
-        const lab = await LabController.getById(projects[i].labId);
-        projects[i] = { ...projects[i]._doc, lab };
-        delete projects[i].labId;
-      }
       return Successful(response, projects);
     } catch (error) {
       return UnexpectedError(response, error);
@@ -36,13 +30,8 @@ router
 
   .post(async (request, response) => {
     try {
-      request.body.selections = [];
-      const { error } = validate(request.body, ProjectController);
-      if (error) return UnexpectedError(response, error);
+      validate(request.body, ProjectController);
       let project = await ProjectController.create(request.body);
-      const lab = await LabController.getById(project.labId);
-      project = { ...project._doc, lab };
-      delete project.labId;
       return Successful(response, project);
     } catch (error) {
       return UnexpectedError(response, error);
@@ -55,9 +44,6 @@ router
     try {
       let project = await ProjectController.getById(request.params.id);
       if (!project) return NotFound(response, PROJECT);
-      const lab = await LabController.getById(project.labId);
-      project = { ...project._doc, lab };
-      delete project.labId;
       return Successful(response, project);
     } catch (error) {
       return UnexpectedError(response, error);
@@ -66,28 +52,23 @@ router
 
   .put(async (request, response) => {
     try {
-      const { error } = validate(request.body, ProjectController);
-      if (error) return UnexpectedError(response, error);
-      const propsToUpdate = ["name", "description", "labId", "selections"];
-      let project = await ProjectController.update(
+      validate(request.body, ProjectController);
+      const project = await ProjectController.update(
         request.params.id,
-        filterProps(request.body, propsToUpdate)
+        request.body
       );
-      if (!project) return NotFoundById(response, project);
-      const lab = await LabController.getById(project.labId);
-      project = { ...project._doc, lab };
-      delete project.labId;
+      if (!project) return NotFoundById(response, PROJECT);
       return Successful(response, project);
     } catch (error) {
-      return Successful(response, error);
+      return UnexpectedError(response, error);
     }
   });
 
 router.route("/:id").delete(async (request, response) => {
   try {
     const project = await ProjectController.remove(request.params.id);
-    if (!project) return NotFoundById(response, project);
-    return Successful(project);
+    if (!project) return NotFoundById(response, PROJECT);
+    return Successful(response, project);
   } catch (error) {
     return UnexpectedError(response, error);
   }

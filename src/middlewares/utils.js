@@ -16,12 +16,7 @@ const validate = (body, controller) => {
   if (error) throw Error(error.details[0].message);
 };
 
-const isEmpty = (obj) => {
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) return false;
-  }
-  return true;
-};
+const isEmpty = (array) => array && array.length === 0;
 
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>

@@ -2,13 +2,34 @@
 
 const { Project, validateProject } = require("../models/project");
 const SelectionController = require("./selection");
+const { Lab } = require("../models/lab");
+const { DefaultArray } = require("../middlewares/default-values-provider");
 const { ObjectId } = require("../middlewares/types-provider");
+
+/**
+ * Get project with lab
+ * @param {string} project
+ * @returns {object} project with lab
+ */
+const getLab = async (project) => {
+  project = project.toObject();
+  project.lab = await Lab.findById(ObjectId(project.labId));
+  delete project["labId"];
+  return project;
+};
 
 /**
  * Get all projects
  * @returns {array} list of all projects
  */
-const getAll = async () => await Project.find().sort("name");
+const getAll = async () => {
+  const projects = await Promise.all(
+    (await Project.find().sort("name")).map(
+      async (project) => await getLab(project)
+    )
+  );
+  return projects;
+};
 
 /**
  * Get all projects by list id
@@ -25,7 +46,7 @@ const getByIds = async (list_id) => {
  * @param {string} id
  * @returns {object} project
  */
-const getById = async (id) => await Project.findById(ObjectId(id));
+const getById = async (id) => getLab(await Project.findById(ObjectId(id)));
 
 /**
  * Add selection to your respective project
@@ -58,14 +79,20 @@ const removeSelection = async (selectionId) => {
  * @param {array} selections
  * @returns {object} project created
  */
-const create = async ({ name, description, labId, selections }) => {
+const create = async ({
+  name,
+  description,
+  labId,
+  selections = DefaultArray,
+}) => {
   const project = new Project({
-    name: name,
-    description: description,
-    labId: labId,
-    selections: selections,
+    name,
+    description,
+    labId,
+    selections,
   });
-  return await project.save();
+  let createdProject = getLab(await project.save());
+  return createdProject;
 };
 
 /**
@@ -76,7 +103,10 @@ const create = async ({ name, description, labId, selections }) => {
  * @param {array} selections
  * @returns {object} project updated
  */
-const update = async (id, { name, description, labId, selections }) =>
+const update = async (
+  id,
+  { name, description, labId, selections = DefaultArray }
+) =>
   await Project.findByIdAndUpdate(
     ObjectId(id),
     {
@@ -105,7 +135,8 @@ const remove = async (id) => {
  * @returns {object} removed projects
  */
 const removeByLabId = async (id) => {
-  const projects = await Project.remove({ labId: ObjectId(id) });
+  const projects = await Project.find({ labId: id });
+  await Project.deleteMany({ labId: id });
   const projectIds = projects.map((project) => project._id);
   for (const projectId in projectIds) {
     SelectionController.removeByProjectId(projectId);

@@ -21,7 +21,6 @@ const swaggerSpecs = {
       },
     },
     schemas: {
-      feedbackRequest: require("../../doc/models/feedback-request"),
       lab: require("../../doc/models/lab"),
       phase: require("../../doc/models/phase"),
       project: require("../../doc/models/project"),
@@ -54,10 +53,6 @@ const swaggerSpecs = {
     },
   ],
   paths: {
-    "/feedbackRequests": require("../../doc/controllers/feedback-request")
-      .withoutParameters,
-    "/feedbackRequests/{id}": require("../../doc/controllers/feedback-request")
-      .withParameters,
     "/login": require("../../doc/controllers/login").withoutParameters,
     "/labs": require("../../doc/controllers/lab").withoutParameters,
     "/labs/{id}": require("../../doc/controllers/lab").withParameters,
