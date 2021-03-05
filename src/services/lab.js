@@ -1,7 +1,9 @@
 "use strict";
+
 /**
  * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
  */
+
 const LabController = require("../controllers/lab");
 const ProjectController = require("../controllers/project");
 const SelectionController = require("../controllers/selection");

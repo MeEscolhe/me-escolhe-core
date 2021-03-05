@@ -1,4 +1,5 @@
 "use strict";
+
 /**
  * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
  */

@@ -1,6 +1,7 @@
 "use strict";
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
  * @author Kelvin Cirne
  */
 const StudentController = require("../controllers/student");

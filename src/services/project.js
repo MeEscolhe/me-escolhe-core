@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
+ */
+
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
 const { isEmpty, validate, filterProps } = require("../middlewares/util");

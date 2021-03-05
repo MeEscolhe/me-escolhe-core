@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
+ */
+
 const PhaseController = require("../controllers/phase");
 const SelectionController = require("../controllers/selection");
 const { isEmpty, validate, filterProps } = require("../middlewares/util");

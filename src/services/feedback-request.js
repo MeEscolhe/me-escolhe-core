@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
+ */
+
 const FeedbackRequestController = require("../controllers/feedback-request");
 const { isEmpty } = require("../middlewares/util");
 const router = require("express").Router();

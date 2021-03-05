@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
+ */
+
 const TeacherController = require("../controllers/teacher");
 const ProjectController = require("../controllers/project");
 const SelectionController = require("../controllers/selection");
