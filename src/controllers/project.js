@@ -2,9 +2,9 @@
 
 const { Project, validateProject } = require("../models/project");
 const SelectionController = require("./selection");
-const { Lab } = require("../models/lab");
 const { DefaultArray } = require("../middlewares/default-values-provider");
 const { ObjectId } = require("../middlewares/types-provider");
+const { Lab } = require("../models/lab");
 
 /**
  * Get project with lab
@@ -121,16 +121,6 @@ const removeByLabId = async (id) => {
 };
 
 /**
- * Validate project
- * @param {object} object
- * @returns {object} error (when it happens)
- */
-const validate = (object) => {
-  const { error } = validateProject(object);
-  return error;
-};
-
-/**
  * Add selection to your respective project
  * @param {object} selection
  */
@@ -154,6 +144,16 @@ const removeSelection = async (selectionId) => {
   await update(project._id, project);
 };
 
+/**
+ * Validate project
+ * @param {object} object
+ * @returns {object} error (when it happens)
+ */
+const validate = (object) => {
+  const { error } = validateProject(object);
+  return error;
+};
+
 module.exports = {
   getAll,
   getByIds,
@@ -162,7 +162,7 @@ module.exports = {
   update,
   remove,
   removeByLabId,
-  validate,
   addSelection,
   removeSelection,
+  validate,
 };

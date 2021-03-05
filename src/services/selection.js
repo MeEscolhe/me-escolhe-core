@@ -9,6 +9,10 @@ const SELECTION = "selection";
 const SelectionController = require("../controllers/selection");
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
+const {
+  DefaultLimit,
+  DefaultPage,
+} = require("../middlewares/default-values-provider");
 const { validate, filterProps } = require("../middlewares/utils");
 const {
   Successful,
@@ -20,30 +24,9 @@ const router = require("express").Router();
 router
   .route("/")
   .get(async (request, response) => {
-    // TO-DO: DIVIDIR ESSE ENDPOINT EM 3
-    // POIS ENDPOINTS DEVEM SER MODULARIZADOS
-    // (HÁ 3 CONTEXTOS AQUI)
     try {
-      const { type, id } = request.query;
-      let selections;
-      if (type === "all" || !id) {
-        const { page = 1, limit = 10 } = request.body;
-        selections = await SelectionController.getAll({ page, limit });
-      } else if (type === "teacher" && id && id !== "") {
-        selections = await SelectionController.getAllTeacherSelections(id);
-      } else if (type === "student" && id && id !== "") {
-        selections = await SelectionController.getAllStudentSelections(id);
-      } else {
-        return response
-          .status(400)
-          .send(
-            "need Type as => [teacher,student] given type (" +
-              type +
-              ") need id, given id (" +
-              id +
-              ")"
-          );
-      }
+      const { page = DefaultPage, limit = DefaultLimit } = request.body;
+      const selections = await SelectionController.getAll({ page, limit });
       return Successful(response, selections.reverse());
     } catch (error) {
       return UnexpectedError(response, error);
@@ -70,6 +53,28 @@ router
       return UnexpectedError(response, error);
     }
   });
+
+router.route("/teacher/:id").get(async (request, response) => {
+  try {
+    const selections = await SelectionController.getAllTeacherSelections(
+      request.params.id
+    );
+    return Successful(response, selections.reverse());
+  } catch (error) {
+    return UnexpectedError(response, error);
+  }
+});
+
+router.route("/student/:id").get(async (request, response) => {
+  try {
+    const selections = await SelectionController.getAllStudentSelections(
+      request.params.id
+    );
+    return Successful(response, selections.reverse());
+  } catch (error) {
+    return UnexpectedError(response, error);
+  }
+});
 
 router
   .route("/:id")

@@ -2,6 +2,10 @@ const DefaultArray = [];
 
 const DefaultObject = {};
 
+const DefaultPage = 1;
+
+const DefaultLimit = 10;
+
 const DefaultExperiences = {
   academicExperiences: DefaultArray,
   workExperience: DefaultArray,
@@ -18,4 +22,6 @@ module.exports = {
   DefaultExperiences,
   DefaultSkills,
   DefaultObject,
+  DefaultPage,
+  DefaultLimit,
 };
