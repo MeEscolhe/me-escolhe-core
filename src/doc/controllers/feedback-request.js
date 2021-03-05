@@ -11,7 +11,7 @@ const withoutParameters = {
             schema: {
               type: "array",
               items: {
-                $ref: "#/components/schemas/feedback-request",
+                $ref: "#/components/schemas/feedbackRequest",
               },
             },
           },
@@ -69,7 +69,7 @@ const withoutParameters = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/feedback-request",
+              $ref: "#/components/schemas/feedbackRequest",
             },
           },
         },
@@ -112,7 +112,7 @@ const withParameters = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/feedback-request",
+              $ref: "#/components/schemas/feedbackRequest",
             },
           },
           required: true,
@@ -170,7 +170,7 @@ const withParameters = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/feedback-request",
+              $ref: "#/components/schemas/feedbackRequest",
             },
           },
         },
@@ -211,7 +211,7 @@ const withParameters = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/feedback-request",
+              $ref: "#/components/schemas/feedbackRequest",
             },
           },
           required: true,

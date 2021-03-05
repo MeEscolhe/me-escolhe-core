@@ -12,9 +12,6 @@ app.use(cors());
 
 const {
   labs,
-  workExperiences,
-  academicExperiences,
-  experiences,
   selections,
   phases,
   projects,
@@ -31,9 +28,6 @@ mongoose.set("useUnifiedTopology", true);
 app.use(express.json());
 app.use("/labs", labs);
 app.use("/auth", auth);
-app.use("/workExperiences", workExperiences);
-app.use("/academicExperiences", academicExperiences);
-app.use("/experiences", experiences);
 app.use("/selections", selections);
 app.use("/phases", phases);
 app.use("/projects", projects);

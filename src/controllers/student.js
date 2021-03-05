@@ -1,12 +1,14 @@
 "use strict";
 
+const { Student, validateStudent } = require("../models/student");
 const {
-  Student,
-  validateStudent,
-  getStudentWithSelections,
-} = require("../models/student");
+  defaultArray,
+  defaultSkills,
+  defaultExperiences,
+} = require("../middlewares/default-values-provider");
+const PhaseController = require("../controllers/phase");
+const SelectionController = require("../controllers/selection");
 const { filterProps } = require("../middlewares/util");
-const ExperienceController = require("../controllers/experience");
 
 /**
  * Get all students
@@ -15,27 +17,26 @@ const ExperienceController = require("../controllers/experience");
 const getAll = async () => await Student.find().sort("registration");
 
 /**
- * Get all students
- * @returns {array} list of all students
+ * Get students by list of registrations
+ * @returns {array} list of registrations
  */
-const getAllByRegistrationList = async (registration_list) =>
-  await Student.find({ registration: { $in: registration_list } }).sort(
+const getByRegistrations = async (registrations) =>
+  await Student.find({ registration: { $in: registrations } }).sort(
     "registration"
   );
 
 /**
- * Get student by registration
+ * Get student by registration with selections
  * @param {number} registration
- * @returns {object}
+ * @returns {object} student with selections
  */
 const getByRegistration = async (registration) => {
   let student = await Student.findOne({ registration });
-  if (student) {
-    student = { ...student._doc };
-    student.experiences = await ExperienceController.getAllByListId(
-      student.experiences
-    );
-  }
+  let selectionIds = (await PhaseController.getByIds(student.phases)).map(
+    (phase) => phase.selectionId
+  );
+  const selections = await SelectionController.getByIds(selectionIds);
+  student.selections = selections;
   return student;
 };
 
@@ -47,26 +48,14 @@ const getByRegistration = async (registration) => {
 const getByEmail = async (email) => await Student.findOne({ email });
 
 /**
- * Get student by registration with selections
- * @param {number} registration
- * @returns {object} student with selections
- */
-const getByRegistrationWithSelections = async (registration) => {
-  const student = await getByRegistration(registration);
-  if (student && student.error === undefined)
-    return getStudentWithSelections(student);
-  throw new Error("The student with the given registration was not found.");
-};
-
-/**
  * Create student
  * @param {number} registration
  * @param {string} name
  * @param {string} email
  * @param {number} cra
  * @param {string} description
- * @param {array} skills
- * @param {array} experiences
+ * @param {object} skills
+ * @param {object} experiences
  * @returns {object} student created
  */
 const create = async ({
@@ -75,9 +64,9 @@ const create = async ({
   email,
   cra,
   description,
-  skills,
-  phases,
-  experiences,
+  skills = defaultSkills,
+  phases = defaultArray,
+  experiences = defaultExperiences,
 }) => {
   const student = new Student({
     registration,
@@ -149,10 +138,9 @@ module.exports = {
   getAll,
   getByEmail,
   getByRegistration,
-  getAllByRegistrationList,
+  getByRegistrations,
   create,
   update,
   remove,
   validate,
-  getByRegistrationWithSelections,
 };

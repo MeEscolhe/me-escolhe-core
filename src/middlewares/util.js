@@ -4,6 +4,7 @@ const isEmpty = (obj) => {
   }
   return true;
 };
+
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
  * abstract to find by id and update

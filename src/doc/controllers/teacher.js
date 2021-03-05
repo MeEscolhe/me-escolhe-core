@@ -41,7 +41,7 @@ const withoutParameters = {
       content: {
         "application/json": {
           schema: {
-            $ref: "#/components/forms/teacher-with-password",
+            $ref: "#/components/requests/teacherWithPassword",
           },
         },
       },

@@ -105,6 +105,13 @@ const getById = async (id) => {
 };
 
 /**
+ * Get selections by list of ids
+ * @param {array} ids
+ * @returns {array} list of selections
+ */
+const getByIds = async (ids) => await Selection.find({ _id: { $in: ids } });
+
+/**
  * Create selection,phase and push selection id in project selections list
  * @param {string} role
  * @param {string} description
@@ -188,6 +195,7 @@ module.exports = {
   getAllTeacherSelections,
   getAllStudentSelections,
   getById,
+  getByIds,
   create,
   update,
   remove,

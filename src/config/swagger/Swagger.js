@@ -1,4 +1,10 @@
 const swaggerUi = require("swagger-ui-express");
+const {
+  addPassword,
+  addSelections,
+  removeId,
+} = require("../../doc/middlewares/model-middleware");
+
 const swaggerSpecs = {
   openapi: "3.0.1",
   info: {
@@ -15,20 +21,26 @@ const swaggerSpecs = {
       },
     },
     schemas: {
-      "academic-experience": require("../../doc/models/academic-experience"),
-      experience: require("../../doc/models/experience"),
-      "feedback-request": require("../../doc/models/feedback-request"),
+      feedbackRequest: require("../../doc/models/feedback-request"),
       lab: require("../../doc/models/lab"),
       phase: require("../../doc/models/phase"),
       project: require("../../doc/models/project"),
       selection: require("../../doc/models/selection"),
       student: require("../../doc/models/student"),
       teacher: require("../../doc/models/teacher"),
-      "work-experience": require("../../doc/models/work-experience"),
     },
-    forms: {
-      "teacher-with-password": require("../../doc/models/teacher-with-password"),
-      "student-with-password": require("../../doc/models/student-with-password"),
+    requests: {
+      teacherWithPassword: removeId(
+        addPassword(require("../../doc/models/teacher-with-password"))
+      ),
+      studentWithPassword: removeId(
+        addPassword(require("../../doc/models/student-with-password"))
+      ),
+    },
+    responses: {
+      studentWithSelections: addSelections(
+        require("../../doc/models/student-with-password")
+      ),
     },
   },
   security: [
@@ -42,16 +54,6 @@ const swaggerSpecs = {
     },
   ],
   paths: {
-    "/academicExperiences": require("../../doc/controllers/academic-experience")
-      .withoutParameters,
-    "/academicExperiences/{id}": require("../../doc/controllers/academic-experience")
-      .withParameters,
-
-    "/experiences": require("../../doc/controllers/experience")
-      .withoutParameters,
-    "/experiences/{id}": require("../../doc/controllers/experience")
-      .withParameters,
-
     "/feedbackRequests": require("../../doc/controllers/feedback-request")
       .withoutParameters,
     "/feedbackRequests/{id}": require("../../doc/controllers/feedback-request")
@@ -86,11 +88,6 @@ const swaggerSpecs = {
     "/teachers/email": require("../../doc/controllers/teacher").login,
     "teachers/{id}/selections": require("../../doc/controllers/teacher")
       .selections,
-
-    "/workExperiences": require("../../doc/controllers/work-experience")
-      .withoutParameters,
-    "/workExperiences/{id}": require("../../doc/controllers/work-experience")
-      .withParameters,
   },
 };
 module.exports = {

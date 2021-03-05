@@ -10,7 +10,6 @@ require("dotenv/config");
  * @param {Response} response
  * @param {Next} next
  */
-
 const tokenValidator = (request, response, next) => {
   const authHeader = request.headers.authorization;
 

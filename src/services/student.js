@@ -5,11 +5,11 @@
  */
 const StudentController = require("../controllers/student");
 const PhaseController = require("../controllers/phase");
-const ExperienceController = require("../controllers/experience");
 const CredentialController = require("../controllers/credential");
+
 const router = require("express").Router();
+
 const { isEmpty, validate } = require("../middlewares/util");
-const student = require("../models/student");
 
 router
   .route("/")
@@ -17,12 +17,6 @@ router
     let students = await StudentController.getAll();
     if (isEmpty(students)) {
       return response.status(404).send("No students to show.");
-    }
-    for (let i = 0; i < students.length; i++) {
-      students[i] = { ...students[i]._doc };
-      students[i].experiences = await ExperienceController.getAllByListId(
-        students[i].experiences
-      );
     }
     return response.send(students);
   })
@@ -57,12 +51,9 @@ router.route("/email").get(async (request, response) => {
       .status(404)
       .send("The student with the given email was not found.");
   }
-  student = { ...student._doc };
-  student.experiences = await ExperienceController.getAllByListId(
-    student.experiences
-  );
   return response.send(student);
 });
+
 router.route("/inSelection/").get(async (request, response) => {
   try {
     let { registration, selectionId } = request.query;

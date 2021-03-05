@@ -29,6 +29,22 @@ const getById = async (id) => {
   }
   return phase;
 };
+
+/**
+ * Get phase by list of ids
+ * @param {array} ids
+ * @returns {array} list of phases
+ */
+const getByIds = async (ids) => {
+  let phases = await Phase.find({ _id: { $in: ids } });
+  phases = phases.map(async (phase) => {
+    let students = await StudentController.getByRegistrations(phase.students);
+    phase.students = students;
+    return phase;
+  });
+  return phases;
+};
+
 /**
  *
  * @param {Student} student
@@ -194,4 +210,5 @@ module.exports = {
   validate,
   update,
   getStudentsPhase,
+  getByIds,
 };

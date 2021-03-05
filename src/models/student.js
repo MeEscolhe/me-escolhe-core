@@ -83,7 +83,52 @@ const StudentSchema = mongoose.model(
         },
       ],
     },
-    experiences: foreingKey("Experience", "_id", ObjectId, true),
+    experiences: {
+      academicExperiences: [
+        {
+          title: {
+            type: String,
+            required: true,
+          },
+          category: {
+            type: String,
+            required: true,
+          },
+          institution: {
+            type: String,
+            required: true,
+          },
+          initialDate: {
+            type: Date,
+            required: true,
+          },
+          finalDate: {
+            type: Date,
+            required: true,
+          },
+        },
+      ],
+      workExperiences: [
+        {
+          role: {
+            type: String,
+            required: true,
+          },
+          institution: {
+            type: String,
+            required: true,
+          },
+          initialDate: {
+            type: Date,
+            required: true,
+          },
+          finalDate: {
+            type: Date,
+            required: true,
+          },
+        },
+      ],
+    },
     phases: foreingKey("Phase", "_id", ObjectId, true),
   })
 );
@@ -113,78 +158,27 @@ const validateStudent = (student) =>
           level: numericRange(0, 2),
         }),
       },
-      experiences: arrayOfIds(),
+      experiences: {
+        academicExperiences: array({
+          title: string(),
+          category: string(),
+          institution: string(),
+          initialDate: date(),
+          finalDate: finalDate("initialDate"),
+        }),
+        workExperiences: array({
+          role: string(),
+          institution: string(),
+          initialDate: date(),
+          finalDate: finalDate("initialDate"),
+        }),
+      },
       phases: arrayOfIds(),
     },
     student
   );
 
-/**
- * Get student with his selections
- * @param {StudentSchema} student
- */
-const getStudentWithSelections = (student) => {
-  const { getSelectionFromPhase } = require("../middlewares/util");
-  return Promise.all(
-    student.phases.map((phase) => getSelectionFromPhase(phase))
-  )
-    .then((selections) => {
-      const catchError = selections.filter((selection) => selection.error);
-      if (catchError.length === 0) {
-        const selectionsData = selections.map((selection) => {
-          const {
-            phaseId,
-            selectionId,
-            role,
-            description,
-            phases,
-            current,
-          } = selection;
-          const indexOfPhase = phases.indexOf(phaseId);
-          const currentPhase = phases.length;
-
-          return {
-            selection: { selectionId, role, description, current },
-            phase: {
-              phaseId: phaseId,
-              current: currentPhase,
-              studentIsParticipating: indexOfPhase + 1 === currentPhase,
-            },
-          };
-        });
-        const {
-          registration,
-          name,
-          email,
-          cra,
-          description,
-          skills,
-          experiences,
-        } = student;
-
-        return {
-          registration,
-          name,
-          email,
-          cra,
-          description,
-          skills,
-          experiences,
-          selections: selectionsData,
-        };
-      } else {
-        return {
-          error: catchError,
-        };
-      }
-    })
-    .catch((e) => {
-      return { error: e };
-    });
-};
-
 module.exports = {
   Student: StudentSchema,
   validateStudent,
-  getStudentWithSelections,
 };

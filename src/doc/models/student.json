@@ -87,15 +87,91 @@
         }
       }
     },
-
     "experiences": {
-      "type": "array",
-      "example": ["5f28ac7082e88b35448255e8", "5f28ba7011e35b35448255e8"]
+      "type": "object",
+      "properties": {
+        "academicExperience": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "5f5d1fa6dccfa335d03fdd3e"
+              },
+
+              "title": {
+                "type": "string",
+                "example": "Developer"
+              },
+
+              "category": {
+                "type": "string",
+                "example": "Backend"
+              },
+
+              "institution": {
+                "type": "string",
+                "example": "UFCG"
+              },
+
+              "initialDate": {
+                "type": "string",
+                "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+                "example": "2018-08-22"
+              },
+
+              "finalDate": {
+                "type": "string",
+                "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+                "example": "2019-10-23"
+              }
+            }
+          }
+        },
+        "workExperience": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "5f5d1fa6dccfa335d03fdd3e"
+              },
+
+              "role": {
+                "type": "string",
+                "example": "Developer"
+              },
+
+              "institution": {
+                "type": "string",
+                "example": "Microsoft"
+              },
+
+              "initialDate": {
+                "type": "string",
+                "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+                "example": "2018-08-22"
+              },
+
+              "finalDate": {
+                "type": "string",
+                "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/",
+                "example": "2019-10-23"
+              }
+            }
+          }
+        }
+      }
     },
 
     "phases": {
       "type": "array",
-      "example": ["7f78fr3111x97h53779000a1", "7a65hg8755k73s21116789i8"]
+      "items": {
+        "type": "string",
+        "example": "7a65hg8755k73s21116789i8"
+      }
     }
   }
 }
