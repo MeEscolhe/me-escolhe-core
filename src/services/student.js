@@ -4,55 +4,50 @@
  * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
  * @author Kelvin Cirne
  */
+
+const STUDENT = "student";
+
 const StudentController = require("../controllers/student");
 const PhaseController = require("../controllers/phase");
 const CredentialController = require("../controllers/credential");
 const { isEmpty, validate } = require("../middlewares/utils");
+const {
+  Successful,
+  NotFound,
+  NotFoundById,
+  UnexpectedError,
+} = require("../middlewares/rest-middleware");
 const router = require("express").Router();
-
-// DAQUI PRA BAIXO, FALTA ADICIONAR AS RESPONSTAS USANDO MIDDLEWARE
 
 router
   .route("/")
   .get(async (request, response) => {
     let students = await StudentController.getAll();
-    if (isEmpty(students)) {
-      return response.status(404).send("No students to show.");
-    }
-    return response.send(students);
+    if (isEmpty(students)) return NotFound(response, STUDENT);
+    return Successful(response, students);
   })
 
   .post(async (request, response) => {
-    const { password, ...student } = request.body;
-    const { error, message } = validate(student, StudentController);
-    if (error) {
-      return response.status(400).send(message);
-    } else {
-      try {
-        let createdStudent = await StudentController.create(student);
-        await CredentialController.create(request.body, false);
-        for (let i = 0; i < createdStudent.phases.length; i++) {
-          let phaseId = createdStudent.phases[i];
-          await PhaseController.addStudent(
-            phaseId,
-            createdStudent.registration
-          );
-        }
-        return response.send(createdStudent);
-      } catch (error) {
-        return response.status(400).send(error.message);
+    try {
+      const { password, ...student } = request.body;
+      const { error, message } = validate(student, StudentController);
+      if (error) return UnexpectedError(response, error);
+      let createdStudent = await StudentController.create(student);
+      await CredentialController.create(request.body, false);
+      for (let i = 0; i < createdStudent.phases.length; i++) {
+        let phaseId = createdStudent.phases[i];
+        await PhaseController.addStudent(phaseId, createdStudent.registration);
       }
+      return UnexpectedError(response, createdStudent);
+    } catch (error) {
+      return UnexpectedError(error);
     }
   });
 
 router.route("/email").get(async (request, response) => {
   let student = await StudentController.getByEmail(request.body.email);
-  if (!student) {
-    return response
-      .status(404)
-      .send("The student with the given email was not found.");
-  }
-  return response.send(student);
+  if (!student) return NotFoundById(response, STUDENT);
+  return Successful(response, student);
 });
 
 router.route("/inSelection/").get(async (request, response) => {
@@ -65,35 +60,30 @@ router.route("/inSelection/").get(async (request, response) => {
       (selection) =>
         selection.selection.selectionId.toString() === selectionId.toString()
     );
-    response.send(inSelection.length > 0);
+    return Succesful(response, inSelection.length > 0);
   } catch (error) {
-    response.status(400).send(error.message);
+    return UnexpectedError(response, error);
   }
 });
+
 router
   .route("/:registration")
   .put(async (request, response) => {
-    const registration = request.params.registration;
-    const { error, message } = validate(
-      { registration, ...request.body },
-      StudentController
-    );
-    if (error) {
-      return response.status(400).send(message);
-    } else {
+    try {
+      const registration = request.params.registration;
+      const { error, message } = validate(
+        { registration, ...request.body },
+        StudentController
+      );
+      if (error) return UnexpectedError(response, error);
       const student = await StudentController.update(
         registration,
         request.body,
         true
       );
-      if (!student) {
-        return response
-          .status(404)
-          .send("The student with the given ID was not found.");
-      } else {
-        return response.send(student);
-      }
-    }
+      if (!student) return NotFoundById(response, STUDENT);
+      return Succesful(response, student);
+    } catch (error) {}
   })
 
   .get(async (request, response) => {
@@ -101,30 +91,28 @@ router
       let student = await StudentController.getByRegistrationWithSelections(
         request.params.registration
       );
-      return response.send(student);
+      return Succesful(response, student);
     } catch (error) {
-      return response
-        .status(404)
-        .send("The student with the given ID was not found.");
+      return UnexpectedError(response, error);
     }
   })
 
   .delete(async (request, response) => {
-    let student = await StudentController.getByRegistration(
-      request.params.registration
-    );
-    if (!student) {
-      return response
-        .status(404)
-        .send("The student with the given registration was not found.");
+    try {
+      let student = await StudentController.getByRegistration(
+        request.params.registration
+      );
+      if (!student) return NotFoundById(response, STUDENT);
+      student = { ...student._doc };
+      for (let i = 0; i < student.phases.length; i++) {
+        const phaseId = student.phases[i]._id;
+        await PhaseController.removeStudent(phaseId, student.registration);
+      }
+      await StudentController.remove(student.registration);
+      return Succesful(response, student);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
-    student = { ...student._doc };
-    for (let i = 0; i < student.phases.length; i++) {
-      const phaseId = student.phases[i]._id;
-      await PhaseController.removeStudent(phaseId, student.registration);
-    }
-    await StudentController.remove(student.registration);
-    return response.send(student);
   });
 
 module.exports = router;

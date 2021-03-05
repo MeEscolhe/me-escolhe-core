@@ -9,66 +9,64 @@ const ProjectController = require("../controllers/project");
 const SelectionController = require("../controllers/selection");
 const CredentialController = require("../controllers/credential");
 const { validate, isEmpty, filterProps } = require("../middlewares/utils");
+const {
+  Successful,
+  NotFound,
+  NotFoundById,
+  UnexpectedError,
+  NotFoundByEmail,
+} = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
-// DAQUI PRA BAIXO, FALTA ADICIONAR AS RESPONSTAS USANDO MIDDLEWARE
+const TEACHER = "teacher";
 
 router
   .route("/")
   .get(async (request, response) => {
     const teachers = await TeacherController.getAll();
-    if (isEmpty(teachers)) {
-      return response.status(404).send("No teachers to show.");
-    } else {
-      return response.send(teachers);
-    }
+    if (isEmpty(teachers)) return NotFound(response, TEACHER);
+    return Succesful(response, teachers);
   })
 
   .post(async (request, response) => {
-    const { password, ...teacher } = request.body;
-    const { error, message } = validate(teacher, TeacherController);
-    if (error) {
-      return response.status(400).send(message);
-    } else {
-      try {
-        const createdTeacher = await TeacherController.create(teacher);
-        await CredentialController.create(request.body, true);
-        return response.send(createdTeacher);
-      } catch (error) {
-        return response.status(400).send(error.message);
-      }
+    try {
+      const { password, ...teacher } = request.body;
+      const { error } = validate(teacher, TeacherController);
+      if (error) return UnexpectedError(response, error);
+      const createdTeacher = await TeacherController.create(teacher);
+      await CredentialController.create(request.body, true);
+      return Successful(response, createdTeacher);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
   });
 
 router.route("/email").get(async (request, response) => {
-  const teacher = await TeacherController.getByEmail(request.body.email);
-  if (!teacher) {
-    return response
-      .status(404)
-      .send("The teacher with the given email was not found.");
-  } else {
-    return response.send(teacher);
+  try {
+    const teacher = await TeacherController.getByEmail(request.body.email);
+    if (!teacher) return NotFoundByEmail(response, TEACHER);
+    return Succesful(response, teacher);
+  } catch (error) {
+    return UnexpectedError(response, error);
   }
 });
 
 router
   .route("/:id")
   .get(async (request, response) => {
-    const teacher = await TeacherController.getById(request.params.id);
-    if (!teacher) {
-      return response
-        .status(404)
-        .send("The teacher with the given ID was not found.");
-    } else {
-      return response.send(teacher);
+    try {
+      const teacher = await TeacherController.getById(request.params.id);
+      if (!teacher) return NotFoundById(response, TEACHER);
+      return Successful(response, teacher);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
   })
 
   .put(async (request, response) => {
-    const { error, message } = validate(request.body, TeacherController);
-    if (error) {
-      return response.status(400).send(message);
-    } else {
+    try {
+      const { error } = validate(request.body, TeacherController);
+      if (error) return UnexpectedError(response, error);
       const propsToUpdate = [
         "name",
         "email",
@@ -81,34 +79,27 @@ router
         request.params.id,
         filterProps(request.body, propsToUpdate)
       );
-      if (!teacher) {
-        response
-          .status(404)
-          .send("The teacher with the given ID was not found.");
-      } else {
-        return response.send(teacher);
-      }
+      if (!teacher) return NotFoundById(response, TEACHER);
+      return Succesful(response, teacher);
+    } catch (error) {
+      return UnexpectedError(error);
     }
   })
 
   .delete(async (request, response) => {
-    const teacher = await TeacherController.remove(request.params.id);
-    if (!teacher) {
-      return response
-        .status(404)
-        .send("The teacher with the given ID was not found.");
-    } else {
-      return response.send(teacher);
+    try {
+      const teacher = await TeacherController.remove(request.params.id);
+      if (!teacher) return NotFoundById(response, TEACHER);
+      return Succesful(teacher);
+    } catch (error) {
+      return NotFoundById(response, error);
     }
   });
 
 router.route("/:id/selections").get(async (request, response) => {
-  const teacher = await TeacherController.getById(request.params.id);
-  if (!teacher) {
-    return response
-      .status(404)
-      .send("The teacher with the given ID was not found.");
-  } else {
+  try {
+    const teacher = await TeacherController.getById(request.params.id);
+    if (!teacher) return NotFoundById(response, TEACHER);
     let selectionsByTeacher = [];
     const managements = teacher.managements;
     for (let i = 0; i < managements.length; i++) {
@@ -121,7 +112,9 @@ router.route("/:id/selections").get(async (request, response) => {
         selectionsByTeacher.push(selection);
       }
     }
-    return response.send(selectionsByTeacher);
+    return Succesful(response, selectionsByTeacher);
+  } catch (error) {
+    return UnexpectedError(response, error);
   }
 });
 

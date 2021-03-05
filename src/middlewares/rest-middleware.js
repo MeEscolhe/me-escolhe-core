@@ -17,20 +17,49 @@ const Successful = (response, body) => response.send(body);
 /**
  * Not found resource
  * @param {Response} response
- * @param {string} context
+ * @param {string} object
  * @returns {Response} response with status 404
  */
 const NotFound = (response, objects = "object") =>
   response.status(404).send(`No ${objects}s to show.`);
 
 /**
+ * Message for "Not found by identifier" errors
+ * @param {string} object
+ * @param {string} identifier
+ * @returns {string} message
+ */
+const NotFoundByIdentifierMessage = (object = "object", identifier = "ID") =>
+  `The ${object} with the given ${identifier} was not found.`;
+
+/**
  * Not found resource by ID
  * @param {Response} response
- * @param {string} context
+ * @param {string} object
  * @returns {Response} response with status 404
  */
 const NotFoundById = (response, object = "object") =>
-  response.status(404).send(`The ${object} with the given ID was not found.`);
+  response.status(404).send(NotFoundByIdentifierMessage(object));
+
+/**
+ * Not found resource by email
+ * @param {Response} response
+ * @param {string} object
+ * @returns {Response} response with status 404
+ */
+const NotFoundByEmail = (response, object = "object") =>
+  response.status(404).send(NotFoundByIdentifierMessage(object, "email"));
+
+/**
+ * Not found resource by registration
+ * @param {Response} response
+ * @param {string} object
+ * @returns {Response} response with status 404
+ */
+const NotFoundByRegistration = (response, object = "object") =>
+  response
+    .status(404)
+    .send(NotFoundByIdentifierMessage(object, "registration"));
 
 /**
  * Operation not authorized
@@ -53,6 +82,8 @@ module.exports = {
   Successful,
   NotFound,
   NotFoundById,
+  NotFoundByEmail,
+  NotFoundByRegistration,
   NotAuthorized,
   UnexpectedError,
 };

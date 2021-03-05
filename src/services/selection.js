@@ -4,6 +4,8 @@
  * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
  */
 
+const SELECTION = "selection";
+
 const SelectionController = require("../controllers/selection");
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
@@ -48,29 +50,24 @@ router
     }
   })
 
-  // DAQUI PRA BAIXO, FALTA ADICIONAR AS RESPONSTAS USANDO MIDDLEWARE
-
   .post(async (request, response) => {
-    request.body.phases = [];
-    const { error, message } = validate(request.body, SelectionController);
-    if (error) {
-      return response.status(400).send(message);
-    } else {
-      try {
-        let selection = await SelectionController.create(request.body);
-        await ProjectController.addSelection(selection, selection.projectId);
-        let project = await ProjectController.getById(selection.projectId);
-        let lab = await LabController.getById(project.labId);
+    try {
+      request.body.phases = [];
+      const { error } = validate(request.body, SelectionController);
+      if (error) return UnexpectedError(response, error);
+      let selection = await SelectionController.create(request.body);
+      await ProjectController.addSelection(selection, selection.projectId);
+      let project = await ProjectController.getById(selection.projectId);
+      let lab = await LabController.getById(project.labId);
 
-        project = { ...project._doc, lab };
-        delete project.labId;
+      project = { ...project._doc, lab };
+      delete project.labId;
 
-        selection = { ...selection._doc, project };
-        delete selection.projectId;
-        return response.send(selection);
-      } catch (error) {
-        return response.status(400).send(error.message);
-      }
+      selection = { ...selection._doc, project };
+      delete selection.projectId;
+      return Successful(response, selection);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
   });
 
@@ -79,11 +76,7 @@ router
   .get(async (request, response) => {
     try {
       let selection = await SelectionController.getById(request.params.id);
-      if (!selection) {
-        response
-          .status(404)
-          .send("The selection with the given ID was not found.");
-      }
+      if (!selection) return NotFoundById(response, SELECTION);
       let project = await ProjectController.getById(selection.projectId);
       let lab = await LabController.getById(project.labId);
 
@@ -93,17 +86,16 @@ router
       selection = { ...selection, project };
       delete selection.projectId;
 
-      return response.send(selection);
+      return Successful(response, selection);
     } catch (error) {
-      return response.status(400).send(error.message);
+      return UnexpectedError(response, error);
     }
   })
 
   .put(async (request, response) => {
-    const { error, message } = validate(request.body, SelectionController);
-    if (error) {
-      return response.status(400).send(message);
-    } else {
+    const { error } = validate(request.body, SelectionController);
+    if (error) return UnexpectedError(response, error);
+    try {
       const propsToUpdate = [
         "role",
         "description",
@@ -112,50 +104,43 @@ router
         "projectId",
         "skills",
       ];
-      try {
-        let selection = await SelectionController.update(
-          request.params.id,
-          filterProps(request.body, propsToUpdate)
-        );
-        if (!selection) {
-          response
-            .status(404)
-            .send("The selection with the given ID was not found.");
-        } else {
-          let project = await ProjectController.getById(selection.projectId);
-          let lab = await LabController.getById(project.labId);
+      let selection = await SelectionController.update(
+        request.params.id,
+        filterProps(request.body, propsToUpdate)
+      );
+      if (!selection) return NotFoundById(response, SELECTION);
+      let project = await ProjectController.getById(selection.projectId);
+      let lab = await LabController.getById(project.labId);
 
-          project = { ...project._doc, lab };
-          delete project.labId;
+      project = { ...project._doc, lab };
+      delete project.labId;
 
-          selection = { ...selection._doc, project };
-          delete selection.projectId;
-          return response.send(selection);
-        }
-      } catch (error) {
-        return response.status(400).send(error.message);
-      }
+      selection = { ...selection._doc, project };
+      delete selection.projectId;
+      return Succesful(response, selection);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
   })
 
   .delete(async (request, response) => {
-    let selection = await SelectionController.remove(request.params.id);
-    if (!selection) {
-      return response
-        .status(404)
-        .send("The selection with the given ID was not found.");
+    try {
+      let selection = await SelectionController.remove(request.params.id);
+      if (!selection) return UnexpectedError(response, error);
+      let project = await ProjectController.getById(selection.projectId);
+      let lab = await LabController.getById(project.labId);
+
+      project = { ...project._doc, lab };
+      delete project.labId;
+
+      selection = { ...selection._doc, project };
+      delete selection.projectId;
+
+      await ProjectController.removeSelection(selection._id);
+      return Succesful(response, selection);
+    } catch (error) {
+      return UnexpectedError(response, error);
     }
-    let project = await ProjectController.getById(selection.projectId);
-    let lab = await LabController.getById(project.labId);
-
-    project = { ...project._doc, lab };
-    delete project.labId;
-
-    selection = { ...selection._doc, project };
-    delete selection.projectId;
-
-    await ProjectController.removeSelection(selection._id);
-    return response.send(selection);
   });
 
 module.exports = router;
