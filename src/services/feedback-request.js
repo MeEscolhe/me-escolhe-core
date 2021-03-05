@@ -1,14 +1,13 @@
 "use strict";
 
-const feedbackRequestCtrl = require("../controllers/feedback-request");
-const express = require("express");
-const router = express.Router();
+const FeedbackRequestController = require("../controllers/feedback-request");
 const { isEmpty } = require("../middlewares/util");
+const router = require("express").Router();
 
 router
   .route("/")
   .get(async (request, response) => {
-    const feedbackRequests = await feedbackRequestCtrl.getAll();
+    const feedbackRequests = await FeedbackRequestController.getAll();
     if (isEmpty(feedbackRequests)) {
       return response.status(404).send("No feedback requests to show.");
     } else {
@@ -18,7 +17,9 @@ router
 
   .post(async (request, response) => {
     try {
-      const feedbackRequest = await feedbackRequestCtrl.create(request.body);
+      const feedbackRequest = await FeedbackRequestController.create(
+        request.body
+      );
       return response.send(feedbackRequest);
     } catch (error) {
       return response.status(400).send(error.message);
@@ -28,7 +29,7 @@ router
 router
   .route("/:id")
   .get(async (request, response) => {
-    const feedbackRequest = await feedbackRequestCtrl.getById(
+    const feedbackRequest = await FeedbackRequestController.getById(
       request.params.id
     );
     if (!feedbackRequest) {
@@ -41,7 +42,9 @@ router
   })
 
   .delete(async (request, response) => {
-    const feedbackRequest = await feedbackRequestCtrl.remove(request.params.id);
+    const feedbackRequest = await FeedbackRequestController.remove(
+      request.params.id
+    );
     if (!feedbackRequest) {
       response
         .status(404)

@@ -3,9 +3,8 @@
 const SelectionController = require("../controllers/selection");
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
-const express = require("express");
-const router = express.Router();
 const { validate, filterProps } = require("../middlewares/util");
+const router = require("express").Router();
 router
   .route("/")
   .get(async (request, response) => {

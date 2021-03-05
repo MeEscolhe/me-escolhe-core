@@ -2,11 +2,8 @@
 
 const PhaseController = require("../controllers/phase");
 const SelectionController = require("../controllers/selection");
-const StudentsController = require("../controllers/student");
-const express = require("express");
-const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
-const { Phase } = require("../models/phase");
+const router = require("express").Router();
 
 router
   .route("/")

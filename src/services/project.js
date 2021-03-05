@@ -2,10 +2,8 @@
 
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
-const TeacherController = require("../controllers/teacher");
-const express = require("express");
-const router = express.Router();
 const { isEmpty, validate, filterProps } = require("../middlewares/util");
+const router = require("express").Router();
 
 router
   .route("/")
