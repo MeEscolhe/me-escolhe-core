@@ -40,7 +40,7 @@ const reference = () => Joi.string().min(1).max(30);
 const id = () => reference().required();
 
 // String matcher
-const string = () => Joi.string().allow("").min(0).max(256).required();
+const string = () => Joi.string().allow("").min(0).max(256);
 
 // Boolean matcher
 const boolean = () => Joi.boolean().required();

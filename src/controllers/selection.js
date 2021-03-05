@@ -1,8 +1,7 @@
 "use strict";
 
 const { Selection, validateSelection } = require("../models/selection");
-const mongoose = require("mongoose");
-const ObjectId = mongoose.Types.ObjectId;
+const { ObjectId } = require("../middlewares/types-provider");
 const ProjectController = require("../controllers/project");
 const PhaseController = require("../controllers/phase");
 const LabController = require("../controllers/lab");
@@ -163,21 +162,18 @@ const update = async (id, updateData) =>
  * @returns {object} selection removed
  */
 const remove = async (id) => {
-  const selection = await getById(id);
+  const selection = await Selection.findByIdAndRemove(ObjectId(id));
+  PhaseController.removeByIds(selection.phases);
+  return selection;
+};
 
-  let project = await ProjectController.getById(selection.projectId);
-  if (project) {
-    project.selections = project.selections.filter(
-      (selectionId) => selectionId.toString() !== id.toString()
-    );
-    let phases = selection.phases.map(
-      async (phase) => await PhaseController.remove(phase)
-    );
-    await ProjectController.update(project._id, project);
-    return await Selection.findByIdAndRemove(ObjectId(id));
-  } else {
-    throw new Error("Project id not found");
+const removeByProjectId = async (id) => {
+  const selections = await Selection.remove({ projectId: id });
+  const phasesLists = selections.map((selection) => selection.phases);
+  for (const phasesList in phasesLists) {
+    PhaseController.removeByIds(phasesList);
   }
+  return selections;
 };
 
 /**
@@ -199,5 +195,6 @@ module.exports = {
   create,
   update,
   remove,
+  removeByProjectId,
   validate,
 };

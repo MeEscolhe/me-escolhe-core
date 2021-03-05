@@ -1,7 +1,9 @@
 "use strict";
 
 const { Project, validateProject } = require("../models/project");
-const mongoose = require("mongoose");
+const SelectionController = require("./selection");
+const { ObjectId } = require("../middlewares/types-provider");
+
 /**
  * Get all projects
  * @returns {array} list of all projects
@@ -12,9 +14,9 @@ const getAll = async () => await Project.find().sort("name");
  * Get all projects by list id
  * @returns {array} list of all projects
  */
-const getAllByListId = async (list_id) => {
+const getByIds = async (list_id) => {
   let objectIds = [];
-  list_id.map((id) => objectIds.push(mongoose.Types.ObjectId(id)));
+  list_id.map((id) => objectIds.push(ObjectId(id)));
   return await Project.find({ _id: { $in: objectIds } }).sort("name");
 };
 
@@ -23,8 +25,7 @@ const getAllByListId = async (list_id) => {
  * @param {string} id
  * @returns {object} project
  */
-const getById = async (id) =>
-  await Project.findById(mongoose.Types.ObjectId(id));
+const getById = async (id) => await Project.findById(ObjectId(id));
 
 /**
  * Add selection to your respective project
@@ -77,7 +78,7 @@ const create = async ({ name, description, labId, selections }) => {
  */
 const update = async (id, { name, description, labId, selections }) =>
   await Project.findByIdAndUpdate(
-    mongoose.Types.ObjectId(id),
+    ObjectId(id),
     {
       name: name,
       description: description,
@@ -93,19 +94,23 @@ const update = async (id, { name, description, labId, selections }) =>
  * @returns {object} project removed
  */
 const remove = async (id) => {
-  const project = await Project.findById(mongoose.Types.ObjectId(id));
-  const SelectionController = require("./selection");
+  const project = await Project.findByIdAndRemove(ObjectId(id));
+  SelectionController.removeByProjectId(id);
+  return project;
+};
 
-  if (project) {
-    await Promise.all(
-      project.selections.map(
-        async (selectionId) => await SelectionController.remove(selectionId)
-      )
-    );
-    return await Project.findByIdAndRemove(mongoose.Types.ObjectId(id));
-  } else {
-    throw new Error("The project with the given ID was not found.");
+/**
+ * Remove projects by ids
+ * @param {string} id
+ * @returns {object} removed projects
+ */
+const removeByLabId = async (id) => {
+  const projects = await Project.remove({ labId: ObjectId(id) });
+  const projectIds = projects.map((project) => project._id);
+  for (const projectId in projectIds) {
+    SelectionController.removeByProjectId(projectId);
   }
+  return projects;
 };
 
 /**
@@ -120,11 +125,12 @@ const validate = (object) => {
 
 module.exports = {
   getAll,
-  getAllByListId,
+  getByIds,
   getById,
   create,
   update,
   remove,
+  removeByLabId,
   validate,
   addSelection,
   removeSelection,

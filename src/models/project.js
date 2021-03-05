@@ -26,7 +26,6 @@ const ProjectSchema = mongoose.model(
       required: true,
     },
     labId: foreingKey("Lab", "_id", ObjectId),
-    selections: foreingKey("Selection", "_id", ObjectId, true),
   })
 );
 
@@ -40,7 +39,6 @@ const validateProject = (project) =>
       name: string(),
       description: string(),
       labId: id(),
-      selections: arrayOfIds(),
     },
     project
   );

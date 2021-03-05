@@ -28,13 +28,20 @@ const SelectionModel = new mongoose.Schema({
     required: true,
     default: "",
   },
-  phases: foreingKey("PhaseSchema", "_id", ObjectId, true),
+  phases: {
+    type: [String],
+    required: true,
+    default: [],
+  },
   current: {
     type: Boolean,
     required: true,
     default: true,
   },
-  projectId: foreingKey("Project", "_id", ObjectId, false, false),
+  projectId: {
+    type: String,
+    required: true,
+  },
   skills: {
     hardSkills: [
       {

@@ -1,3 +1,21 @@
+"use strict";
+
+/**
+ * @author Diego Amancio <diego.amancio1998@gmail.com>
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
+ *
+ * validate request body by controller
+ *
+ * @param {object} body
+ * @param {object} controller
+ *
+ * @returns {error} error, if is invalid request body
+ */
+const validate = (body, controller) => {
+  const error = controller.validate(body);
+  if (error) throw Error(error.details[0].message);
+};
+
 const isEmpty = (obj) => {
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) return false;
@@ -18,22 +36,7 @@ const updateObject = (schema, dataId, data) => {
     new: true,
   });
 };
-/**
- * @author Diego Amancio <diego.amancio1998@gmail.com>
- * checks if the requisition body is invalid according to the given controller
- *
- * @param {object} body request body
- * @param {object} controller controller given for example student,lab
- *
- * @typedef {{error: boolean, message: string}} validateResponse
- * @returns {validateResponse}
- */
-const validate = (body, controller) => {
-  const validation = controller.validate(body);
-  return validation && validation.details && validation.details.length > 0
-    ? { error: true, message: validation.details[0].message }
-    : { error: false };
-};
+
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
  * filter null props from request body

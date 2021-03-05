@@ -17,8 +17,15 @@ const { getByRegistration } = require("../controllers/student");
 const PhaseSchema = mongoose.model(
   "Phase",
   new mongoose.Schema({
-    students: foreingKey("Student", "registration", Number, true),
-    selectionId: foreingKey("Selection", "_id", ObjectId),
+    students: {
+      type: [Number],
+      required: true,
+      default: [],
+    },
+    selectionId: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
       default: "",

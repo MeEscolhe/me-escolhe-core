@@ -1,7 +1,9 @@
 "use strict";
 
 const { Phase, validatePhase, getStudentsData } = require("../models/phase");
-const mongoose = require("mongoose");
+const { Student } = require("../models/student");
+const { DefaultObject } = require("../middlewares/values-provider");
+const { ObjectId } = require("../middlewares/types-provider");
 const StudentController = require("./student");
 
 /**
@@ -23,7 +25,7 @@ const getAll = async () => {
  * @returns {object} phase
  */
 const getById = async (id) => {
-  const phase = await Phase.findById(mongoose.Types.ObjectId(id));
+  const phase = await Phase.findById(ObjectId(id));
   if (phase) {
     return await getStudentsData(phase);
   }
@@ -94,11 +96,10 @@ const addStudent = async (phaseId, registration) => {
       phase.students = phase.students.filter(
         (registration) => registration !== student.registration
       );
-      return await Phase.findByIdAndUpdate(
-        mongoose.Types.ObjectId(phaseId),
-        phase,
-        { new: true, runValidators: true }
-      );
+      return await Phase.findByIdAndUpdate(ObjectId(phaseId), phase, {
+        new: true,
+        runValidators: true,
+      });
     }
   }
 };
@@ -122,13 +123,9 @@ const removeStudent = async (phaseId, registration) => {
     true
   );
   if (student) {
-    return await Phase.findByIdAndUpdate(
-      mongoose.Types.ObjectId(phaseId),
-      phase,
-      {
-        new: true,
-      }
-    );
+    return await Phase.findByIdAndUpdate(ObjectId(phaseId), phase, {
+      new: true,
+    });
   } else {
     throw "Student not found";
   }
@@ -139,8 +136,28 @@ const removeStudent = async (phaseId, registration) => {
  * @param {string} id
  * @returns {object} phase removed
  */
-const remove = async (id) =>
-  await Phase.findByIdAndRemove(mongoose.Types.ObjectId(id));
+const remove = async (id) => {
+  await Student.update(DefaultObject, {
+    $pull: { phases: id },
+  });
+  return await Phase.findByIdAndRemove(ObjectId(id));
+};
+
+/**
+ * Remove phase by id
+ * @param {string} id
+ * @returns {object} phase removed
+ */
+const removeByIds = async (ids) => {
+  const phases = await Phase.remove({ _id: { $in: ids } });
+  const phaseIds = phases.map((phase) => phase._id);
+  for (const phaseId in phaseIds) {
+    await Student.update(DefaultObject, {
+      $pull: { phases: phaseId },
+    });
+  }
+  return phase;
+};
 
 /**
  * Update phase by id
@@ -152,7 +169,7 @@ const remove = async (id) =>
  */
 const update = async (id, { students, selectionId, description }) =>
   await Phase.findByIdAndUpdate(
-    mongoose.Types.ObjectId(id),
+    ObjectId(id),
     {
       students: students,
       selectionId: selectionId,
@@ -178,7 +195,7 @@ const validate = (object) => {
  */
 const getPhaseAndStudent = (phaseId, registration) =>
   Promise.all([
-    Phase.findById(mongoose.Types.ObjectId(phaseId)),
+    Phase.findById(ObjectId(phaseId)),
     StudentController.getByRegistration(registration),
   ]);
 
@@ -207,6 +224,7 @@ module.exports = {
   addStudent,
   removeStudent,
   remove,
+  removeByIds,
   validate,
   update,
   getStudentsPhase,

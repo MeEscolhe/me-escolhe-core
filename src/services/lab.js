@@ -16,7 +16,6 @@ const {
   NotFoundById,
   UnexpectedError,
 } = require("../middlewares/rest-middleware");
-const lab = require("../models/lab");
 const router = require("express").Router();
 
 router
@@ -32,10 +31,13 @@ router
   })
 
   .post(async (request, response) => {
-    const { error } = validate(request.body, LabController);
-    if (error) return UnexpectedError(response, error);
-    const lab = await LabController.create(request.body);
-    return Successful(response, lab);
+    try {
+      validate(request.body, LabController);
+      const lab = await LabController.create(request.body);
+      return Successful(response, lab);
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
   });
 
 router
@@ -51,15 +53,14 @@ router
   })
 
   .put(async (request, response) => {
-    const { error } = validate(request.body, LabController);
-    if (error) return UnexpectedError(response, error);
-    const propsToUpdate = ["name", "description"];
-    const lab = await LabController.update(
-      request.params.id,
-      filterProps(request.body, propsToUpdate)
-    );
-    if (!lab) return NotFoundById(response, LAB);
-    return Successful(response, lab);
+    try {
+      validate(request.body, LabController);
+      const lab = await LabController.update(request.params.id, request.body);
+      if (!lab) return NotFoundById(response, LAB);
+      return Successful(response, lab);
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
   })
 
   .delete(async (request, response) => {

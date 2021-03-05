@@ -1,9 +1,13 @@
 "use strict";
 
+/**
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
+ */
+
 const { Lab, validateLab } = require("../models/lab");
-const mongoose = require("mongoose");
-const teacher = require("../models/teacher");
 const ProjectController = require("../controllers/project");
+const { CleanObject, ObjectId } = require("../middlewares/types-provider");
+
 /**
  * Get all labs
  * @returns {array} list of all labs
@@ -15,7 +19,7 @@ const getAll = async () => await Lab.find().sort("name");
  * @param {string} id
  * @returns {object} lab
  */
-const getById = async (id) => await Lab.findById(mongoose.Types.ObjectId(id));
+const getById = async (id) => await Lab.findById(ObjectId(id));
 
 /**
  * Create lab
@@ -40,10 +44,12 @@ const create = async ({ name, description }) => {
  */
 const update = async (id, { name, description }, runValidators = true) =>
   await Lab.findByIdAndUpdate(
-    mongoose.Types.ObjectId(id),
+    ObjectId(id),
     {
-      name: name,
-      description: description,
+      $set: CleanObject({
+        name,
+        description,
+      }),
     },
     { new: true, runValidators: runValidators }
   );
@@ -54,49 +60,8 @@ const update = async (id, { name, description }, runValidators = true) =>
  * @returns {object} lab removed
  */
 const remove = async (id) => {
-  const ProjectController = require("../controllers/project");
-  const SelectionController = require("../controllers/selection");
-  const lab = await getById(id);
-  if (lab) {
-    const projects = await ProjectController.getAll();
-    await projects
-      .filter((project) => project.labId.toString() === id.toString())
-      .forEach(async (project) => await ProjectController.remove(project._id));
-    const teachers = await TeacherController.getAll();
-    await Promise.all(
-      teachers
-        .filter((teacher) => {
-          const { labId } = teacher;
-          return labId ? teacher.labId.toString() === id.toString() : false;
-        })
-        .map((teacher) => {
-          const {
-            description,
-            managements,
-            _id,
-            name,
-            email,
-            password,
-          } = teacher;
-          return TeacherController.update(
-            teacher._id,
-            {
-              description,
-              managements,
-              _id,
-              name,
-              email,
-              password,
-              labId: null,
-            },
-            false
-          );
-        })
-    );
-    return await Lab.findByIdAndRemove(mongoose.Types.ObjectId(id));
-  } else {
-    throw new Error("The lab with the given ID was not found.");
-  }
+  await ProjectController.removeByLabId(id);
+  return await Lab.findByIdAndRemove(ObjectId(id));
 };
 
 /**

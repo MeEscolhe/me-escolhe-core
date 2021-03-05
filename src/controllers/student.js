@@ -2,10 +2,10 @@
 
 const { Student, validateStudent } = require("../models/student");
 const {
-  defaultArray,
-  defaultSkills,
-  defaultExperiences,
-} = require("../middlewares/default-values-provider");
+  DefaultArray,
+  DefaultSkills,
+  DefaultExperiences,
+} = require("../middlewares/values-provider");
 const PhaseController = require("../controllers/phase");
 const SelectionController = require("../controllers/selection");
 const { filterProps } = require("../middlewares/utils");
@@ -21,8 +21,8 @@ const getAll = async () => await Student.find().sort("registration");
  * @returns {array} list of registrations
  */
 const getByRegistrations = async (registrations) =>
-  await Student.find({ registration: { $in: registrations } }).sort(
-    "registration"
+  registrations.map(
+    async (registration) => await getByRegistration(registration)
   );
 
 /**
@@ -64,9 +64,9 @@ const create = async ({
   email,
   cra,
   description,
-  skills = defaultSkills,
-  phases = defaultArray,
-  experiences = defaultExperiences,
+  skills = DefaultSkills,
+  phases = DefaultArray,
+  experiences = DefaultExperiences,
 }) => {
   const student = new Student({
     registration,
