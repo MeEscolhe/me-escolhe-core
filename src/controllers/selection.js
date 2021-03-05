@@ -128,12 +128,12 @@ const create = async ({
   skills,
 }) => {
   let selection = await new Selection({
-    role: role,
-    description: description,
-    phases: phases,
-    current: current,
-    projectId: projectId,
-    skills: skills,
+    role,
+    description,
+    phases,
+    current,
+    projectId,
+    skills,
   }).save();
   const phase = await PhaseController.create({
     students: [],

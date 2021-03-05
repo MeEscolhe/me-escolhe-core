@@ -2,7 +2,6 @@
 
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate");
-const ObjectId = require("mongodb").ObjectID;
 const {
   validate,
   string,
@@ -11,7 +10,6 @@ const {
   boolean,
   numericRange,
   id,
-  foreingKey,
 } = require("../middlewares/model-validator");
 
 /**

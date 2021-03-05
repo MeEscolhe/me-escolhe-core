@@ -32,16 +32,6 @@ const getAll = async () => {
 };
 
 /**
- * Get all projects by list id
- * @returns {array} list of all projects
- */
-const getByIds = async (list_id) => {
-  let objectIds = [];
-  list_id.map((id) => objectIds.push(ObjectId(id)));
-  return await Project.find({ _id: { $in: objectIds } }).sort("name");
-};
-
-/**
  * Get project by id
  * @param {string} id
  * @returns {object} project
@@ -49,27 +39,13 @@ const getByIds = async (list_id) => {
 const getById = async (id) => getLab(await Project.findById(ObjectId(id)));
 
 /**
- * Add selection to your respective project
- * @param {object} selection
+ * Get all projects by list id
+ * @returns {array} list of all projects
  */
-const addSelection = async (selection) => {
-  let project = await getById(selection.projectId);
-  project = { ...project._doc };
-  project.selections.push(selection._id);
-  await update(project._id, project);
-};
-
-/**
- * Remove selection to your respective project
- * @param {string} selectionId
- */
-const removeSelection = async (selectionId) => {
-  let project = await Project.findOne({ selections: selectionId.toString() });
-  project = { ...project._doc };
-  project.selections = project.selections.filter(
-    (item) => item != selectionId.toString()
-  );
-  await update(project._id, project);
+const getByIds = async (list_id) => {
+  let objectIds = [];
+  list_id.map((id) => objectIds.push(ObjectId(id)));
+  return await Project.find({ _id: { $in: objectIds } }).sort("name");
 };
 
 /**
@@ -110,10 +86,10 @@ const update = async (
   await Project.findByIdAndUpdate(
     ObjectId(id),
     {
-      name: name,
-      description: description,
-      labId: labId,
-      selections: selections,
+      name,
+      description,
+      labId,
+      selections,
     },
     { new: true }
   );
@@ -152,6 +128,30 @@ const removeByLabId = async (id) => {
 const validate = (object) => {
   const { error } = validateProject(object);
   return error;
+};
+
+/**
+ * Add selection to your respective project
+ * @param {object} selection
+ */
+const addSelection = async (selection) => {
+  let project = await getById(selection.projectId);
+  project = { ...project._doc };
+  project.selections.push(selection._id);
+  await update(project._id, project);
+};
+
+/**
+ * Remove selection to your respective project
+ * @param {string} selectionId
+ */
+const removeSelection = async (selectionId) => {
+  let project = await Project.findOne({ selections: selectionId.toString() });
+  project = { ...project._doc };
+  project.selections = project.selections.filter(
+    (item) => item != selectionId.toString()
+  );
+  await update(project._id, project);
 };
 
 module.exports = {
