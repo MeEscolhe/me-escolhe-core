@@ -73,6 +73,8 @@ router
     }
   });
 
+// TO-DO: FALTA ESSA DESGRAÇA AQUI. MELHOR DEIXAR POR ÚLTIMO
+
 router.route("/selections/:id").get(async (request, response) => {
   try {
     const lab = await LabController.getById(request.params.id);

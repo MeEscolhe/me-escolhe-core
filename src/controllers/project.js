@@ -22,14 +22,12 @@ const getLab = async (project) => {
  * Get all projects
  * @returns {array} list of all projects
  */
-const getAll = async () => {
-  const projects = await Promise.all(
+const getAll = async () =>
+  await Promise.all(
     (await Project.find().sort("name")).map(
       async (project) => await getLab(project)
     )
   );
-  return projects;
-};
 
 /**
  * Get project by id
@@ -42,9 +40,9 @@ const getById = async (id) => getLab(await Project.findById(ObjectId(id)));
  * Get all projects by list id
  * @returns {array} list of all projects
  */
-const getByIds = async (list_id) => {
+const getByIds = async (ids) => {
   let objectIds = [];
-  list_id.map((id) => objectIds.push(ObjectId(id)));
+  ids.map((id) => objectIds.push(ObjectId(id)));
   return await Project.find({ _id: { $in: objectIds } }).sort("name");
 };
 

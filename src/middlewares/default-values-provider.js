@@ -1,10 +1,14 @@
 const DefaultArray = [];
 
+const DefaultBoolean = true;
+
+const DefaultString = "";
+
 const DefaultObject = {};
 
 const DefaultPage = 1;
 
-const DefaultLimit = 10;
+const DefaultPageLimit = 10;
 
 const DefaultExperiences = {
   academicExperiences: DefaultArray,
@@ -19,9 +23,11 @@ const DefaultSkills = {
 
 module.exports = {
   DefaultArray,
+  DefaultBoolean,
+  DefaultString,
   DefaultExperiences,
   DefaultSkills,
   DefaultObject,
   DefaultPage,
-  DefaultLimit,
+  DefaultPageLimit,
 };

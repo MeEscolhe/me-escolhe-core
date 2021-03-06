@@ -22,20 +22,17 @@ const router = require("express").Router();
  */
 router.route("/").get(async (request, response) => {
   const credential = await CredentialController.getByEmail(request.body.email);
-  if (!credential) {
+  if (!credential) return NotAuthorized(response);
+  if (!validatePassword(request.body.password, credential.password))
     return NotAuthorized(response);
-  }
-  if (!validatePassword(request.body.password, credential.password)) {
-    return NotAuthorized(response);
-  }
-  let responseBody = {};
+  const user = {};
   if (credential.isTeacher) {
-    responseBody.user = await TeacherController.getByEmail(request.body.email);
+    user = await TeacherController.getByEmail(request.body.email);
   } else {
-    responseBody.user = await StudentController.getByEmail(request.body.email);
+    user = await StudentController.getByEmail(request.body.email);
   }
-  responseBody.token = generateToken(request.body);
-  return Successful(response, responseBody);
+  const token = generateToken(request.body);
+  return Successful(response, { user, token });
 });
 
 module.exports = router;

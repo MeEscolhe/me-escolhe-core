@@ -1,39 +1,53 @@
 "use strict";
 
 const { Selection, validateSelection } = require("../models/selection");
+const { Project } = require("../models/project");
+const { Lab } = require("../models/lab");
 const { ObjectId } = require("../middlewares/types-provider");
-const ProjectController = require("../controllers/project");
+const {
+  DefaultBoolean,
+  DefaultArray,
+  DefaultSkills,
+  DefaultString,
+  DefaultObject,
+} = require("../middlewares/default-values-provider");
 const PhaseController = require("../controllers/phase");
-const LabController = require("../controllers/lab");
 const TeacherController = require("../controllers/teacher");
 const { isEmpty } = require("../middlewares/utils");
 const StudentController = require("../controllers/student");
+
+/**
+ * Add project in selection
+ * @param {object} selection
+ * @returns {object} selection with project
+ */
+const addProject = async (selection) => {
+  let project = (
+    await Project.findById(ObjectId(selection.projectId))
+  ).toObject();
+  project.lab = await Lab.findById(ObjectId(project.labId));
+  delete project["labId"];
+
+  selection.project = project;
+  delete selection["projectId"];
+  return selection;
+};
+
 /**
  * Get all selections
  * @returns {array} list of all selections
+ *
  */
 const getAll = async ({ page, limit }) => {
-  const selectionDocsList = await Selection.paginate({}, { page, limit });
-
-  if (isEmpty(selectionDocsList.docs)) {
-    return selectionDocsList;
-  }
-
-  let selections = selectionDocsList.docs;
-  for (let i = 0; i < selections.length; i++) {
-    let project = await ProjectController.getById(selections[i].projectId);
-    let lab = await LabController.getById(project.labId);
-
-    project = { ...project._doc, lab };
-    delete project.labId;
-
-    let selection = { ...selections[i]._doc, project };
-    delete selection.projectId;
-
-    selections[i] = selection;
-  }
-  return selections;
+  let paginate = await Selection.paginate(DefaultObject, { page, limit });
+  paginate.docs = await Promise.all(
+    await paginate.docs.map(
+      async (selection) => await addProject(selection.toObject())
+    )
+  );
+  return paginate;
 };
+
 /**
  * Get all teacher's selections
  * @returns {array} list of all selections
@@ -121,11 +135,11 @@ const getByIds = async (ids) => await Selection.find({ _id: { $in: ids } });
  */
 const create = async ({
   role,
-  description,
-  current,
+  description = DefaultString,
+  current = DefaultBoolean,
   projectId,
-  phases,
-  skills,
+  phases = DefaultArray,
+  skills = DefaultSkills,
 }) => {
   let selection = await new Selection({
     role,
@@ -135,16 +149,7 @@ const create = async ({
     projectId,
     skills,
   }).save();
-  const phase = await PhaseController.create({
-    students: [],
-    selectionId: selection._id,
-    description: "",
-  });
-  selection.phases.push(phase._id);
-  let project = await ProjectController.getById(projectId);
-  project.selections.push(selection._id);
-  await ProjectController.update(projectId, project);
-  return await update(selection._id, selection);
+  return await addProject(selection.toObject());
 };
 
 /**
@@ -170,10 +175,9 @@ const remove = async (id) => {
 const removeByProjectId = async (id) => {
   const selections = await Selection.find({ projectId: id });
   await Selection.deleteMany({ projectId: id });
-  const phasesLists = selections.map((selection) => selection.phases);
-  for (const phasesList in phasesLists) {
-    PhaseController.removeByIds(phasesList);
-  }
+  selections
+    .map((selection) => selection.phases)
+    .forEach((phasesList) => PhaseController.removeByIds(phasesList));
   return selections;
 };
 

@@ -14,7 +14,9 @@ const {
 
 /**
  *  Selection model
- *  @typedef {{role:string, description:string, phases:array, current:boolean}} SelectionSchema
+ *  @typedef {{role:string, description:string, phases:array,
+ *            current:boolean, projectId:boolean,
+ *            skills: {hardSkills: array, softSkills: array, languages: array}}} SelectionSchema
  */
 const SelectionModel = new mongoose.Schema({
   role: {

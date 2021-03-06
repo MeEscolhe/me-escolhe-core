@@ -10,7 +10,7 @@ const SelectionController = require("../controllers/selection");
 const ProjectController = require("../controllers/project");
 const LabController = require("../controllers/lab");
 const {
-  DefaultLimit,
+  DefaultPageLimit,
   DefaultPage,
 } = require("../middlewares/default-values-provider");
 const { validate, filterProps } = require("../middlewares/utils");
@@ -25,9 +25,9 @@ router
   .route("/")
   .get(async (request, response) => {
     try {
-      const { page = DefaultPage, limit = DefaultLimit } = request.body;
+      const { page = DefaultPage, limit = DefaultPageLimit } = request.body;
       const selections = await SelectionController.getAll({ page, limit });
-      return Successful(response, selections.reverse());
+      return Successful(response, selections);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -35,24 +35,15 @@ router
 
   .post(async (request, response) => {
     try {
-      request.body.phases = [];
-      const { error } = validate(request.body, SelectionController);
-      if (error) return UnexpectedError(response, error);
-      let selection = await SelectionController.create(request.body);
-      await ProjectController.addSelection(selection, selection.projectId);
-      let project = await ProjectController.getById(selection.projectId);
-      let lab = await LabController.getById(project.labId);
-
-      project = { ...project._doc, lab };
-      delete project.labId;
-
-      selection = { ...selection._doc, project };
-      delete selection.projectId;
+      validate(request.body, SelectionController);
+      const selection = await SelectionController.create(request.body);
       return Successful(response, selection);
     } catch (error) {
       return UnexpectedError(response, error);
     }
   });
+
+// TO-DO: FALTA TUDO DAQUI PRA BAIXO !!!
 
 router.route("/teacher/:id").get(async (request, response) => {
   try {
