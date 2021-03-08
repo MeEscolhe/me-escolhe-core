@@ -77,17 +77,16 @@ const create = async ({
  * @param {array} selections
  * @returns {object} project updated
  */
-const update = async (
-  id,
-  { name, description, labId, selections = DefaultArray }
-) =>
+const update = async (id, { name, description, labId, selections }) =>
   await Project.findByIdAndUpdate(
     ObjectId(id),
     {
-      name,
-      description,
-      labId,
-      selections,
+      $set: CleanObject({
+        name,
+        description,
+        labId,
+        selections,
+      }),
     },
     { new: true }
   );

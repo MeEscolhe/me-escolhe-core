@@ -1,13 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const {
-  validate,
-  string,
-  id,
-  arrayOfIds,
-  foreingKey,
-} = require("../middlewares/model-validator");
+const { validate, string, id } = require("../middlewares/model-validator");
 
 /**
  *  Phase model

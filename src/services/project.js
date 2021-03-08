@@ -7,7 +7,7 @@
 const PROJECT = "project";
 
 const ProjectController = require("../controllers/project");
-const { isEmpty, validate, filterProps } = require("../middlewares/utils");
+const { isEmpty, validate } = require("../middlewares/utils");
 const {
   Successful,
   NotFound,
