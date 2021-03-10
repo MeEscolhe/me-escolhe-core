@@ -2,6 +2,7 @@
 
 const { Student, validateStudent } = require("../models/student");
 const {
+  DefaultString,
   DefaultArray,
   DefaultSkills,
   DefaultExperiences,
@@ -63,7 +64,7 @@ const create = async ({
   name,
   email,
   cra,
-  description,
+  description = DefaultString,
   skills = DefaultSkills,
   phases = DefaultArray,
   experiences = DefaultExperiences,
