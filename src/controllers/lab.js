@@ -6,20 +6,20 @@
 
 const { Lab, validateLab } = require("../models/lab");
 const ProjectController = require("../controllers/project");
-const { CleanObject, ObjectId } = require("../middlewares/types-provider");
+const MongoDb = require("../middlewares/mongodb-middleware");
 
 /**
  * Get all labs
  * @returns {array} list of all labs
  */
-const getAll = async () => await Lab.find().sort("name");
+const getAll = async () => await MongoDb.getAll(Lab, "name");
 
 /**
  * Get lab by id
  * @param {string} id
  * @returns {object} lab
  */
-const getById = async (id) => await Lab.findById(ObjectId(id));
+const getById = async (id) => await MongoDb.getById(Lab, id);
 
 /**
  * Create lab
@@ -27,13 +27,11 @@ const getById = async (id) => await Lab.findById(ObjectId(id));
  * @param {string} description
  * @returns {object} lab created
  */
-const create = async ({ name, description }) => {
-  const lab = new Lab({
-    name: name,
-    description: description,
+const create = async ({ name, description }) =>
+  await MongoDb.create(Lab, {
+    name,
+    description,
   });
-  return await lab.save();
-};
 
 /**
  * Update lab by id
@@ -43,15 +41,14 @@ const create = async ({ name, description }) => {
  * @returns {object} lab updated
  */
 const update = async (id, { name, description }, runValidators = true) =>
-  await Lab.findByIdAndUpdate(
-    ObjectId(id),
+  await MongoDb.updateById(
+    Lab,
+    id,
     {
-      $set: CleanObject({
-        name,
-        description,
-      }),
+      name,
+      description,
     },
-    { new: true, runValidators: runValidators }
+    runValidators
   );
 
 /**
@@ -61,7 +58,7 @@ const update = async (id, { name, description }, runValidators = true) =>
  */
 const remove = async (id) => {
   await ProjectController.removeByLabId(id);
-  return await Lab.findByIdAndRemove(ObjectId(id));
+  return await MongoDb.removeById(id);
 };
 
 /**

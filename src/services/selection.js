@@ -12,11 +12,13 @@ const LabController = require("../controllers/lab");
 const {
   DefaultPageLimit,
   DefaultPage,
-} = require("../middlewares/default-values-provider");
+} = require("../provider/default-values-provider");
 const { validate, filterProps } = require("../middlewares/utils");
 const {
-  Successful,
-  NotFound,
+  Found,
+  Created,
+  Updated,
+  Removed,
   NotFoundById,
   UnexpectedError,
 } = require("../middlewares/rest-middleware");
@@ -27,7 +29,7 @@ router
     try {
       const { page = DefaultPage, limit = DefaultPageLimit } = request.body;
       const selections = await SelectionController.getAll({ page, limit });
-      return Successful(response, selections);
+      return Found(response, selections);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -37,7 +39,7 @@ router
     try {
       validate(request.body, SelectionController);
       const selection = await SelectionController.create(request.body);
-      return Successful(response, selection);
+      return Created(response, selection);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -50,7 +52,7 @@ router.route("/teacher/:id").get(async (request, response) => {
     const selections = await SelectionController.getAllTeacherSelections(
       request.params.id
     );
-    return Successful(response, selections.reverse());
+    return Found(response, selections.reverse());
   } catch (error) {
     return UnexpectedError(response, error);
   }
@@ -61,7 +63,7 @@ router.route("/student/:id").get(async (request, response) => {
     const selections = await SelectionController.getAllStudentSelections(
       request.params.id
     );
-    return Successful(response, selections.reverse());
+    return Found(response, selections.reverse());
   } catch (error) {
     return UnexpectedError(response, error);
   }
@@ -82,7 +84,7 @@ router
       selection = { ...selection, project };
       delete selection.projectId;
 
-      return Successful(response, selection);
+      return Found(response, selection);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -113,7 +115,7 @@ router
 
       selection = { ...selection._doc, project };
       delete selection.projectId;
-      return Succesful(response, selection);
+      return Updated(response, selection);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -133,7 +135,7 @@ router
       delete selection.projectId;
 
       await ProjectController.removeSelection(selection._id);
-      return Succesful(response, selection);
+      return Removed(response, selection);
     } catch (error) {
       return UnexpectedError(response, error);
     }

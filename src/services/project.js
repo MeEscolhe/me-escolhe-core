@@ -9,7 +9,10 @@ const PROJECT = "project";
 const ProjectController = require("../controllers/project");
 const { isEmpty, validate } = require("../middlewares/utils");
 const {
-  Successful,
+  Found,
+  Created,
+  Updated,
+  Removed,
   NotFound,
   NotFoundById,
   UnexpectedError,
@@ -22,7 +25,7 @@ router
     try {
       let projects = await ProjectController.getAll();
       if (isEmpty(projects)) return NotFound(response, PROJECT);
-      return Successful(response, projects);
+      return Found(response, projects);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -32,7 +35,7 @@ router
     try {
       validate(request.body, ProjectController);
       let project = await ProjectController.create(request.body);
-      return Successful(response, project);
+      return Created(response, project);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -44,7 +47,7 @@ router
     try {
       let project = await ProjectController.getById(request.params.id);
       if (!project) return NotFound(response, PROJECT);
-      return Successful(response, project);
+      return Found(response, project);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -58,7 +61,7 @@ router
         request.body
       );
       if (!project) return NotFoundById(response, PROJECT);
-      return Successful(response, project);
+      return Updated(response, project);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -68,7 +71,7 @@ router.route("/:id").delete(async (request, response) => {
   try {
     const project = await ProjectController.remove(request.params.id);
     if (!project) return NotFoundById(response, PROJECT);
-    return Successful(response, project);
+    return Removed(response, project);
   } catch (error) {
     return UnexpectedError(response, error);
   }

@@ -11,7 +11,10 @@ const ProjectController = require("../controllers/project");
 const SelectionController = require("../controllers/selection");
 const { isEmpty, validate, filterProps } = require("../middlewares/utils");
 const {
-  Successful,
+  Found,
+  Created,
+  Updated,
+  Removed,
   NotFound,
   NotFoundById,
   UnexpectedError,
@@ -24,7 +27,7 @@ router
     try {
       const labs = await LabController.getAll();
       if (isEmpty(labs)) return NotFound(response, LAB);
-      return Successful(response, labs);
+      return Found(response, labs);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -34,7 +37,7 @@ router
     try {
       validate(request.body, LabController);
       const lab = await LabController.create(request.body);
-      return Successful(response, lab);
+      return Created(response, lab);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -46,7 +49,7 @@ router
     try {
       const lab = await LabController.getById(request.params.id);
       if (!lab) return NotFoundById(response, LAB);
-      return Successful(response, lab);
+      return Found(response, lab);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -57,7 +60,7 @@ router
       validate(request.body, LabController);
       const lab = await LabController.update(request.params.id, request.body);
       if (!lab) return NotFoundById(response, LAB);
-      return Successful(response, lab);
+      return Updated(response, lab);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -67,7 +70,7 @@ router
     try {
       const lab = await LabController.remove(request.params.id);
       if (!lab) return NotFoundById(response, LAB);
-      return Successful(response, lab);
+      return Removed(response, lab);
     } catch (error) {
       return UnexpectedError(response, error);
     }

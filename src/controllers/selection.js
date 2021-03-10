@@ -3,14 +3,14 @@
 const { Selection, validateSelection } = require("../models/selection");
 const { Project } = require("../models/project");
 const { Lab } = require("../models/lab");
-const { ObjectId } = require("../middlewares/types-provider");
+const { ObjectId } = require("../providers/types-provider");
 const {
   DefaultBoolean,
   DefaultArray,
   DefaultSkills,
   DefaultString,
   DefaultObject,
-} = require("../middlewares/default-values-provider");
+} = require("../providers/default-values-provider");
 const PhaseController = require("../controllers/phase");
 const TeacherController = require("../controllers/teacher");
 const { isEmpty } = require("../middlewares/utils");

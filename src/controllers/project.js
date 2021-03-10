@@ -2,8 +2,9 @@
 
 const { Project, validateProject } = require("../models/project");
 const SelectionController = require("./selection");
-const { DefaultArray } = require("../middlewares/default-values-provider");
-const { ObjectId } = require("../middlewares/types-provider");
+const MongoDb = require("../middlewares/mongodb-middleware");
+const { DefaultArray } = require("../providers/default-values-provider");
+const { ObjectId } = require("../providers/types-provider");
 const { Lab } = require("../models/lab");
 
 /**
@@ -24,7 +25,7 @@ const getLab = async (project) => {
  */
 const getAll = async () =>
   await Promise.all(
-    (await Project.find().sort("name")).map(
+    (await MongoDb.getAll(Project, "name")).map(
       async (project) => await getLab(project)
     )
   );
@@ -34,17 +35,13 @@ const getAll = async () =>
  * @param {string} id
  * @returns {object} project
  */
-const getById = async (id) => getLab(await Project.findById(ObjectId(id)));
+const getById = async (id) => getLab(await MongoDb.getById(Project, id));
 
 /**
  * Get all projects by list id
  * @returns {array} list of all projects
  */
-const getByIds = async (ids) => {
-  let objectIds = [];
-  ids.map((id) => objectIds.push(ObjectId(id)));
-  return await Project.find({ _id: { $in: objectIds } }).sort("name");
-};
+const getByIds = async (ids) => await MongoDb.getByIds(ids, "name");
 
 /**
  * Create project

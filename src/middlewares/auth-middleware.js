@@ -48,12 +48,8 @@ const generateToken = (params = {}) => {
  * @param {string} password
  * @return {String} password encrypted
  */
-const encryptPassword = (password) => {
-  return bcrypt.hashSync(
-    password,
-    parseInt(process.env.BCRYPT_PASSWORD_ROUNDS)
-  );
-};
+const encryptPassword = (password) =>
+  bcrypt.hashSync(password, parseInt(process.env.BCRYPT_PASSWORD_ROUNDS));
 
 /**
  * Check password

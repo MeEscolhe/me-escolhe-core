@@ -11,7 +11,7 @@ const {
   validatePassword,
   generateToken,
 } = require("../middlewares/auth-middleware");
-const { Successful, NotAuthorized } = require("../middlewares/rest-middleware");
+const { Authorized, NotAuthorized } = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
 /**
@@ -32,7 +32,7 @@ router.route("/").get(async (request, response) => {
     user = await StudentController.getByEmail(request.body.email);
   }
   const token = generateToken(request.body);
-  return Successful(response, { user, token });
+  return Authorized(response, { user, token });
 });
 
 module.exports = router;

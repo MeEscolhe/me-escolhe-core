@@ -7,12 +7,61 @@ const { response } = require("express");
  */
 
 /**
- * Successful request
- * @param {Response} response
- * @param {object | array} body
- * @returns {Response} response with status 200
+ * Check if an object is string
+ * @param {string} object
+ * @returns {string} message
  */
-const Successful = (response, body) => response.send(body);
+const isString = (object) => typeof object === "string";
+
+/**
+ * Return successfuly response
+ * @param {string} object
+ * @returns {string} message
+ */
+const Successful = (response, body, action) =>
+  isString(body)
+    ? response.send({ message: `${body} was ${action}.` })
+    : response.send(body);
+
+/**
+ * Successful POST request
+ * @param {Response} response
+ * @param {object | array} object
+ * @returns {Response} response
+ */
+const Created = (response, body) => Successful(response, body, "created");
+
+/**
+ * Successful PUT request
+ * @param {Response} response
+ * @param {object | array} object
+ * @returns {Response} response
+ */
+const Updated = (response, body) => Successful(response, body, "updated");
+
+/**
+ * Successful REMOVE request
+ * @param {Response} response
+ * @param {object | array} object
+ * @returns {Response} response
+ */
+const Removed = (response, body) => Successful(response, body, "removed");
+
+/**
+ * Successful auth (GET) request
+ * @param {Response} response
+ * @param {object | array} object
+ * @returns {Response} response
+ */
+const Authorized = (response, body) => Successful(response, body);
+
+/**
+ * Successful auth request
+ * @param {Response} response
+ * @param {object | array} object
+ * @returns {Response} response
+ */
+const Found = (response, body) => Successful(response, body);
 
 /**
  * Not found resource
@@ -79,7 +128,11 @@ const UnexpectedError = (response, error) =>
   response.status(400).send(`An unexpected error occurred: ${error.message}.`);
 
 module.exports = {
-  Successful,
+  Found,
+  Created,
+  Updated,
+  Removed,
+  Authorized,
   NotFound,
   NotFoundById,
   NotFoundByEmail,

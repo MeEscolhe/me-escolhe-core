@@ -10,7 +10,10 @@ const PhaseController = require("../controllers/phase");
 const SelectionController = require("../controllers/selection");
 const { isEmpty, validate, filterProps } = require("../middlewares/utils");
 const {
-  Successful,
+  Found,
+  Created,
+  Updated,
+  Removed,
   NotFound,
   NotFoundById,
   UnexpectedError,
@@ -23,7 +26,7 @@ router
     try {
       const phases = await PhaseController.getAll();
       if (isEmpty(phases)) return NotFound(response, PHASE);
-      return Successful(response, phases);
+      return Found(response, phases);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -39,7 +42,7 @@ router
       if (!selection) return NotFoundById(response, PHASE);
       selection.phases.push(phase.id);
       await SelectionController.update(selection._id, selection);
-      return Successful(response, phase);
+      return Created(response, phase);
     } catch (error) {
       return UnexpectedError(error);
     }
@@ -51,7 +54,7 @@ router
     try {
       const phase = await PhaseController.getById(request.params.id);
       if (!phase) return NotFoundById(response, PHASE);
-      return Successful(response, phase);
+      return Found(response, phase);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -67,7 +70,7 @@ router
         filterProps(request.body, propsToUpdate)
       );
       if (!phase) return NotFoundById(response, PHASE);
-      return Successful(response, phase);
+      return Updated(response, phase);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -76,7 +79,7 @@ router
   .delete(async (request, response) => {
     const phases = await PhaseController.remove(request.params.id);
     if (!phases) return NotFoundById(response, PHASE);
-    return Successful(response, phases);
+    return Removed(response, phases);
   });
 
 router
@@ -87,7 +90,7 @@ router
         request.params.id,
         request.params.registration
       );
-      return Successful(response, phase);
+      return Created(response, phase);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -99,7 +102,7 @@ router
         request.params.id,
         request.params.registration
       );
-      return Successful(response, phase);
+      return Removed(response, phase);
     } catch (error) {
       return UnexpectedError(response, error);
     }

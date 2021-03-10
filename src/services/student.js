@@ -12,7 +12,10 @@ const PhaseController = require("../controllers/phase");
 const CredentialController = require("../controllers/credential");
 const { isEmpty, validate } = require("../middlewares/utils");
 const {
-  Successful,
+  Found,
+  Created,
+  Updated,
+  Removed,
   NotFound,
   NotFoundById,
   UnexpectedError,
@@ -24,7 +27,7 @@ router
   .get(async (request, response) => {
     let students = await StudentController.getAll();
     if (isEmpty(students)) return NotFound(response, STUDENT);
-    return Successful(response, students);
+    return Found(response, students);
   })
 
   .post(async (request, response) => {
@@ -38,16 +41,16 @@ router
         let phaseId = createdStudent.phases[i];
         await PhaseController.addStudent(phaseId, createdStudent.registration);
       }
-      return UnexpectedError(response, createdStudent);
+      return Created(response, createdStudent);
     } catch (error) {
-      return UnexpectedError(error);
+      return UnexpectedError(response, error);
     }
   });
 
 router.route("/email").get(async (request, response) => {
   let student = await StudentController.getByEmail(request.body.email);
   if (!student) return NotFoundById(response, STUDENT);
-  return Successful(response, student);
+  return Found(response, student);
 });
 
 router.route("/inSelection/").get(async (request, response) => {
@@ -60,7 +63,7 @@ router.route("/inSelection/").get(async (request, response) => {
       (selection) =>
         selection.selection.selectionId.toString() === selectionId.toString()
     );
-    return Succesful(response, inSelection.length > 0);
+    return Found(response, inSelection.length > 0);
   } catch (error) {
     return UnexpectedError(response, error);
   }
@@ -82,8 +85,10 @@ router
         true
       );
       if (!student) return NotFoundById(response, STUDENT);
-      return Succesful(response, student);
-    } catch (error) {}
+      return Updated(response, student);
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
   })
 
   .get(async (request, response) => {
@@ -91,7 +96,7 @@ router
       let student = await StudentController.getByRegistrationWithSelections(
         request.params.registration
       );
-      return Succesful(response, student);
+      return Found(response, student);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -109,7 +114,7 @@ router
         await PhaseController.removeStudent(phaseId, student.registration);
       }
       await StudentController.remove(student.registration);
-      return Succesful(response, student);
+      return Removed(response, student);
     } catch (error) {
       return UnexpectedError(response, error);
     }

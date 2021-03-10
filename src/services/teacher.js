@@ -10,7 +10,10 @@ const SelectionController = require("../controllers/selection");
 const CredentialController = require("../controllers/credential");
 const { validate, isEmpty, filterProps } = require("../middlewares/utils");
 const {
-  Successful,
+  Found,
+  Created,
+  Updated,
+  Removed,
   NotFound,
   NotFoundById,
   UnexpectedError,
@@ -25,7 +28,7 @@ router
   .get(async (request, response) => {
     const teachers = await TeacherController.getAll();
     if (isEmpty(teachers)) return NotFound(response, TEACHER);
-    return Succesful(response, teachers);
+    return Found(response, teachers);
   })
 
   .post(async (request, response) => {
@@ -35,7 +38,7 @@ router
       if (error) return UnexpectedError(response, error);
       const createdTeacher = await TeacherController.create(teacher);
       await CredentialController.create(request.body, true);
-      return Successful(response, createdTeacher);
+      return Created(response, createdTeacher);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -45,7 +48,7 @@ router.route("/email").get(async (request, response) => {
   try {
     const teacher = await TeacherController.getByEmail(request.body.email);
     if (!teacher) return NotFoundByEmail(response, TEACHER);
-    return Succesful(response, teacher);
+    return Found(response, teacher);
   } catch (error) {
     return UnexpectedError(response, error);
   }
@@ -57,7 +60,7 @@ router
     try {
       const teacher = await TeacherController.getById(request.params.id);
       if (!teacher) return NotFoundById(response, TEACHER);
-      return Successful(response, teacher);
+      return Found(response, teacher);
     } catch (error) {
       return UnexpectedError(response, error);
     }
@@ -80,7 +83,7 @@ router
         filterProps(request.body, propsToUpdate)
       );
       if (!teacher) return NotFoundById(response, TEACHER);
-      return Succesful(response, teacher);
+      return Updated(response, teacher);
     } catch (error) {
       return UnexpectedError(error);
     }
@@ -90,7 +93,7 @@ router
     try {
       const teacher = await TeacherController.remove(request.params.id);
       if (!teacher) return NotFoundById(response, TEACHER);
-      return Succesful(teacher);
+      return Removed(teacher);
     } catch (error) {
       return NotFoundById(response, error);
     }
@@ -112,7 +115,7 @@ router.route("/:id/selections").get(async (request, response) => {
         selectionsByTeacher.push(selection);
       }
     }
-    return Succesful(response, selectionsByTeacher);
+    return Found(response, selectionsByTeacher);
   } catch (error) {
     return UnexpectedError(response, error);
   }
