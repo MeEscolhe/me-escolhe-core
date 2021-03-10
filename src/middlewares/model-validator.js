@@ -52,7 +52,7 @@ const number = () => Joi.number().required();
 const numericRange = (min, max) => number().min(min).max(max);
 
 // Array matcher
-const array = (items) => Joi.array().items(items).required();
+const array = (items) => Joi.array().items(items);
 
 // Array of registrations matcher
 const arrayOfRegistrations = () => array(Joi.number());
@@ -61,11 +61,11 @@ const arrayOfRegistrations = () => array(Joi.number());
 const arrayOfIds = () => array(reference());
 
 // Date matcher
-const date = () => Joi.date().iso().required();
+const date = () => Joi.date().iso();
 
 // Final date of an interval matcher
 const finalDate = (initialDateName) =>
-  Joi.date().iso().greater(Joi.ref(initialDateName)).required();
+  Joi.date().iso().greater(Joi.ref(initialDateName));
 
 /**
  *
