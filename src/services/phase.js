@@ -74,9 +74,14 @@ router
   })
 
   .delete(async (request, response) => {
-    const phases = await PhaseController.remove(request.params.id);
-    if (!phases) return NotFoundById(response, PHASE);
-    return Successful(response, phases);
+    try{
+      const phases = await PhaseController.remove(request.params.id);
+      if (!phases) return NotFoundById(response, PHASE);
+      return Successful(response, phases);
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
+    
   });
 
 router

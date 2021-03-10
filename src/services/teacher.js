@@ -23,17 +23,21 @@ const TEACHER = "teacher";
 router
   .route("/")
   .get(async (request, response) => {
-    const teachers = await TeacherController.getAll();
-    if (isEmpty(teachers)) return NotFound(response, TEACHER);
-    return Succesful(response, teachers);
+    try{
+      let teachers = await TeacherController.getAll();
+      if (isEmpty(teachers)) return NotFound(response, TEACHER);
+      return Succesful(response, teachers);
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
+    
   })
 
   .post(async (request, response) => {
     try {
       const { password, ...teacher } = request.body;
-      const { error } = validate(teacher, TeacherController);
-      if (error) return UnexpectedError(response, error);
-      const createdTeacher = await TeacherController.create(teacher);
+      validate(teacher, TeacherController);
+      let createdTeacher = await TeacherController.create(teacher);
       await CredentialController.create(request.body, true);
       return Successful(response, createdTeacher);
     } catch (error) {
@@ -65,8 +69,7 @@ router
 
   .put(async (request, response) => {
     try {
-      const { error } = validate(request.body, TeacherController);
-      if (error) return UnexpectedError(response, error);
+      validate(request.body, TeacherController);
       const propsToUpdate = [
         "name",
         "email",
@@ -75,7 +78,7 @@ router
         "labId",
         "managements",
       ];
-      const teacher = await TeacherController.update(
+      let teacher = await TeacherController.update(
         request.params.id,
         filterProps(request.body, propsToUpdate)
       );
@@ -90,12 +93,13 @@ router
     try {
       const teacher = await TeacherController.remove(request.params.id);
       if (!teacher) return NotFoundById(response, TEACHER);
-      return Succesful(teacher);
+      return Succesful(response, teacher);
     } catch (error) {
-      return NotFoundById(response, error);
+      return UnexpectedError(response, error);
     }
   });
 
+  //TODO
 router.route("/:id/selections").get(async (request, response) => {
   try {
     const teacher = await TeacherController.getById(request.params.id);

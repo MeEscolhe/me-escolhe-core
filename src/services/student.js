@@ -2,7 +2,7 @@
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
  * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
- * @author Kelvin Cirne
+ * @author Kelvin Cirne <kelvin.cirne.custodio@ccc.ufcg.edu.br>
  */
 
 const STUDENT = "student";
@@ -16,17 +16,23 @@ const {
   NotFound,
   NotFoundById,
   UnexpectedError,
+  NotFoundByEmail
 } = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
 router
   .route("/")
   .get(async (request, response) => {
-    let students = await StudentController.getAll();
-    if (isEmpty(students)) return NotFound(response, STUDENT);
-    return Successful(response, students);
+    try{
+      let students = await StudentController.getAll();
+      if (isEmpty(students)) return NotFound(response, STUDENT);
+      return Successful(response, students);
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
+    
   })
-
+  //TODO
   .post(async (request, response) => {
     try {
       const { password, ...student } = request.body;
@@ -45,9 +51,14 @@ router
   });
 
 router.route("/email").get(async (request, response) => {
-  let student = await StudentController.getByEmail(request.body.email);
-  if (!student) return NotFoundById(response, STUDENT);
-  return Successful(response, student);
+  try{
+    let student = await StudentController.getByEmail(request.body.email);
+    if (!student) return NotFoundByEmail(response, STUDENT);
+    return Successful(response, student);
+  } catch (error) {
+    return UnexpectedError(response, error);
+  }
+  
 });
 
 router.route("/inSelection/").get(async (request, response) => {
@@ -75,7 +86,6 @@ router
         { registration, ...request.body },
         StudentController
       );
-      if (error) return UnexpectedError(response, error);
       const student = await StudentController.update(
         registration,
         request.body,
@@ -83,7 +93,9 @@ router
       );
       if (!student) return NotFoundById(response, STUDENT);
       return Succesful(response, student);
-    } catch (error) {}
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
   })
 
   .get(async (request, response) => {
@@ -91,7 +103,8 @@ router
       let student = await StudentController.getByRegistrationWithSelections(
         request.params.registration
       );
-      return Succesful(response, student);
+      if (!student) return NotFoundById(response, PROJECT);
+      return Successful(response, project);
     } catch (error) {
       return UnexpectedError(response, error);
     }
