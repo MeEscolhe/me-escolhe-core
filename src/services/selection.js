@@ -12,7 +12,7 @@ const LabController = require("../controllers/lab");
 const {
   DefaultPageLimit,
   DefaultPage,
-} = require("../provider/default-values-provider");
+} = require("../providers/default-values-provider");
 const { validate, filterProps } = require("../middlewares/utils");
 const {
   Found,

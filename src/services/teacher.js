@@ -36,9 +36,9 @@ router
       const { password, ...teacher } = request.body;
       const { error } = validate(teacher, TeacherController);
       if (error) return UnexpectedError(response, error);
-      const createdTeacher = await TeacherController.create(teacher);
+      await TeacherController.create(teacher);
       await CredentialController.create(request.body, true);
-      return Created(response, createdTeacher);
+      return Created(response, TEACHER);
     } catch (error) {
       return UnexpectedError(response, error);
     }

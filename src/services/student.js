@@ -41,7 +41,7 @@ router
         let phaseId = createdStudent.phases[i];
         await PhaseController.addStudent(phaseId, createdStudent.registration);
       }
-      return Created(response, createdStudent);
+      return Created(response, STUDENT);
     } catch (error) {
       return UnexpectedError(response, error);
     }
