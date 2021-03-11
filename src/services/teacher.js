@@ -26,16 +26,19 @@ const TEACHER = "teacher";
 router
   .route("/")
   .get(async (request, response) => {
-    const teachers = await TeacherController.getAll();
-    if (isEmpty(teachers)) return NotFound(response, TEACHER);
-    return Found(response, teachers);
+    try {
+      const teachers = await TeacherController.getAll();
+      if (isEmpty(teachers)) return NotFound(response, TEACHER);
+      return Found(response, teachers);
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
   })
 
   .post(async (request, response) => {
     try {
       const { password, ...teacher } = request.body;
-      const { error } = validate(teacher, TeacherController);
-      if (error) return UnexpectedError(response, error);
+      validate(teacher, TeacherController);
       await TeacherController.create(teacher);
       await CredentialController.create(request.body, true);
       return Created(response, TEACHER);
@@ -68,8 +71,7 @@ router
 
   .put(async (request, response) => {
     try {
-      const { error } = validate(request.body, TeacherController);
-      if (error) return UnexpectedError(response, error);
+      validate(request.body, TeacherController);
       const propsToUpdate = [
         "name",
         "email",
@@ -78,7 +80,7 @@ router
         "labId",
         "managements",
       ];
-      const teacher = await TeacherController.update(
+      let teacher = await TeacherController.update(
         request.params.id,
         filterProps(request.body, propsToUpdate)
       );
@@ -95,10 +97,11 @@ router
       if (!teacher) return NotFoundById(response, TEACHER);
       return Removed(teacher);
     } catch (error) {
-      return NotFoundById(response, error);
+      return UnexpectedError(response, error);
     }
   });
 
+//TODO
 router.route("/:id/selections").get(async (request, response) => {
   try {
     const teacher = await TeacherController.getById(request.params.id);

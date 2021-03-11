@@ -46,7 +46,7 @@ router
   .get(async (request, response) => {
     try {
       let project = await ProjectController.getById(request.params.id);
-      if (!project) return NotFound(response, PROJECT);
+      if (!project) return NotFoundById(response, PROJECT);
       return Found(response, project);
     } catch (error) {
       return UnexpectedError(response, error);

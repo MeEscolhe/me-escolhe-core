@@ -2,7 +2,7 @@
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
  * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
- * @author Kelvin Cirne
+ * @author Kelvin Cirne <kelvin.cirne.custodio@ccc.ufcg.edu.br>
  */
 
 const STUDENT = "student";
@@ -19,17 +19,22 @@ const {
   NotFound,
   NotFoundById,
   UnexpectedError,
+  NotFoundByEmail,
 } = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
 router
   .route("/")
   .get(async (request, response) => {
-    let students = await StudentController.getAll();
-    if (isEmpty(students)) return NotFound(response, STUDENT);
-    return Found(response, students);
+    try {
+      let students = await StudentController.getAll();
+      if (isEmpty(students)) return NotFound(response, STUDENT);
+      return Found(response, students);
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
   })
-
+  //TODO
   .post(async (request, response) => {
     try {
       validate(student, StudentController);
@@ -46,9 +51,13 @@ router
   });
 
 router.route("/email").get(async (request, response) => {
-  let student = await StudentController.getByEmail(request.body.email);
-  if (!student) return NotFoundById(response, STUDENT);
-  return Found(response, student);
+  try {
+    let student = await StudentController.getByEmail(request.body.email);
+    if (!student) return NotFoundByEmail(response, STUDENT);
+    return Found(response, student);
+  } catch (error) {
+    return UnexpectedError(response, error);
+  }
 });
 
 router.route("/inSelection/").get(async (request, response) => {
@@ -76,7 +85,6 @@ router
         { registration, ...request.body },
         StudentController
       );
-      if (error) return UnexpectedError(response, error);
       const student = await StudentController.update(
         registration,
         request.body,
