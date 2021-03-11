@@ -1,23 +1,30 @@
 "use strict";
 
-const { Phase, validatePhase, getStudentsData } = require("../models/phase");
+const { Phase, validatePhase } = require("../models/phase");
 const { Student } = require("../models/student");
-const { DefaultObject } = require("../providers/default-values-provider");
+const MongoDb = require("../middlewares/mongodb-middleware");
+const {
+  DefaultObject,
+  DefaultArray,
+  DefaultString,
+} = require("../providers/default-values-provider");
 const { ObjectId } = require("../providers/types-provider");
-const StudentController = require("./student");
+const phase = require("../models/phase");
 
 /**
  * Get all phases
  * @returns {array} list of all phases
  */
-const getAll = async () => {
-  const phases = await Phase.find().sort("name");
-  for (let i = 0; i < phases.length; i++) {
-    let phase = { ...phases[i]._doc };
-    phases[i] = await getStudentsData(phase);
-  }
-  return phases;
-};
+const getAll = async () =>
+  await Promise.all(
+    (await MongoDb.getAll(Phase, "name")).map(async (phase) => {
+      phase.students = await MongoDb.getByRegistrations(
+        Student,
+        phase.students
+      );
+      return phase;
+    })
+  );
 
 /**
  * Get phase by id
@@ -25,10 +32,9 @@ const getAll = async () => {
  * @returns {object} phase
  */
 const getById = async (id) => {
-  const phase = await Phase.findById(ObjectId(id));
-  if (phase) {
-    return await getStudentsData(phase);
-  }
+  let phase = await MongoDb.getById(Phase, id);
+  if (phase)
+    phase.students = await MongoDb.getByRegistrations(Student, phase.students);
   return phase;
 };
 
@@ -60,14 +66,16 @@ const getStudentsPhase = async (student) =>
  * @param {string} description
  * @returns {object} phase created
  */
-const create = async ({ students, selectionId, description }) => {
-  const phase = new Phase({
-    students: students,
-    selectionId: selectionId,
-    description: description ? description : "",
+const create = async ({
+  students = DefaultArray,
+  selectionId,
+  description = DefaultString,
+}) =>
+  await MongoDb.create(Phase, {
+    students,
+    selectionId,
+    description,
   });
-  return await phase.save();
-};
 
 /**
  * Add student to phase
@@ -76,32 +84,8 @@ const create = async ({ students, selectionId, description }) => {
  * @returns {object} phase updated
  */
 const addStudent = async (phaseId, registration) => {
-  let [phase, student] = await getPhaseAndStudent(phaseId, registration);
-  verifyAddOrRemoveStudent(phase, student, true);
-  phase.students.push(student.registration);
-  phase = await Phase.findByIdAndUpdate(phaseId, phase, { new: true });
-  if (!phase) {
-    throw new Error("Phase not found");
-  } else {
-    student.phases.push(phaseId);
-    student = await StudentController.update(
-      student.registration,
-      { phases: student.phases },
-      true
-    );
-
-    if (student) {
-      return phase;
-    } else {
-      phase.students = phase.students.filter(
-        (registration) => registration !== student.registration
-      );
-      return await Phase.findByIdAndUpdate(ObjectId(phaseId), phase, {
-        new: true,
-        runValidators: true,
-      });
-    }
-  }
+  await MongoDb.addOnArray(Student, "phases", phaseId);
+  await MongoDb.addOnArray(Phase, "students", registration);
 };
 
 /**
@@ -111,24 +95,8 @@ const addStudent = async (phaseId, registration) => {
  * @returns {object} phase updated
  */
 const removeStudent = async (phaseId, registration) => {
-  let [phase, student] = await getPhaseAndStudent(phaseId, registration);
-  verifyAddOrRemoveStudent(phase, student, false);
-  phase.students = phase.students.filter(
-    (studentFK) => studentFK.toString() !== registration.toString()
-  );
-  student.phases = student.phases.filter((phase) => !phase.equals(phaseId));
-  student = await StudentController.update(
-    student.registration,
-    { phases: student.phases },
-    true
-  );
-  if (student) {
-    return await Phase.findByIdAndUpdate(ObjectId(phaseId), phase, {
-      new: true,
-    });
-  } else {
-    throw "Student not found";
-  }
+  await MongoDb.removeOfArray(Student, "phases", phaseId);
+  await MongoDb.removeOfArray(Phase, "students", registration);
 };
 
 /**
@@ -137,10 +105,9 @@ const removeStudent = async (phaseId, registration) => {
  * @returns {object} phase removed
  */
 const remove = async (id) => {
-  await Student.update(DefaultObject, {
-    $pull: { phases: id },
-  });
-  return await Phase.findByIdAndRemove(ObjectId(id));
+  await MongoDb.removeOfArray(Selection, "phases", id);
+  await MongoDb.removeOfArray(Student, "phases", id);
+  return await MongoDb.removeById(id);
 };
 
 /**
@@ -167,16 +134,11 @@ const removeByIds = async (ids) => {
  * @param {string} description
  * @returns {object} phase updated
  */
-const update = async (id, { students, selectionId, description }) =>
-  await Phase.findByIdAndUpdate(
-    ObjectId(id),
-    {
-      students: students,
-      selectionId: selectionId,
-      description: description,
-    },
-    { new: true, runValidators: true }
-  );
+const update = async (id, { selectionId, description }) =>
+  await MongoDb.updateById(Phase, id, {
+    selectionId,
+    description,
+  });
 
 /**
  * Validate phase

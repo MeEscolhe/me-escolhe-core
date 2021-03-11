@@ -9,7 +9,7 @@ const LAB = "lab";
 const LabController = require("../controllers/lab");
 const ProjectController = require("../controllers/project");
 const SelectionController = require("../controllers/selection");
-const { isEmpty, validate, filterProps } = require("../middlewares/utils");
+const { isEmpty, validate } = require("../middlewares/utils");
 const {
   Found,
   Created,

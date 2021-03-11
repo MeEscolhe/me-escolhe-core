@@ -7,8 +7,7 @@
 const PHASE = "phase";
 
 const PhaseController = require("../controllers/phase");
-const SelectionController = require("../controllers/selection");
-const { isEmpty, validate, filterProps } = require("../middlewares/utils");
+const { isEmpty, validate } = require("../middlewares/utils");
 const {
   Found,
   Created,
@@ -33,18 +32,12 @@ router
   })
 
   .post(async (request, response) => {
-    const { error } = validate(request.body, PhaseController);
-    if (error) return UnexpectedError(error);
-    const phase = await PhaseController.create(request.body);
-    const { selectionId } = request.body;
     try {
-      const selection = await SelectionController.getById(selectionId);
-      if (!selection) return NotFoundById(response, PHASE);
-      selection.phases.push(phase.id);
-      await SelectionController.update(selection._id, selection);
+      validate(request.body, PhaseController);
+      const phase = await PhaseController.create(request.body);
       return Created(response, phase);
     } catch (error) {
-      return UnexpectedError(error);
+      return UnexpectedError(response, error);
     }
   });
 
@@ -61,13 +54,11 @@ router
   })
 
   .put(async (request, response) => {
-    const { error } = validate(request.body, PhaseController);
-    if (error) return UnexpectedError(response, error);
     try {
-      const propsToUpdate = ["students", "selectionId", "description"];
+      validate(request.body, PhaseController);
       const phase = await PhaseController.update(
         request.params.id,
-        filterProps(request.body, propsToUpdate)
+        request.body
       );
       if (!phase) return NotFoundById(response, PHASE);
       return Updated(response, phase);
@@ -86,10 +77,8 @@ router
   .route("/:id/student/:registration")
   .post(async (request, response) => {
     try {
-      const phase = await PhaseController.addStudent(
-        request.params.id,
-        request.params.registration
-      );
+      const { id, registration } = request.params;
+      const phase = await PhaseController.addStudent(id, registration);
       return Created(response, phase);
     } catch (error) {
       return UnexpectedError(response, error);
@@ -98,10 +87,8 @@ router
 
   .delete(async (request, response) => {
     try {
-      const phase = await PhaseController.removeStudent(
-        request.params.id,
-        request.params.registration
-      );
+      const { id, registration } = request.params;
+      const phase = await PhaseController.removeStudent(id, registration);
       return Removed(response, phase);
     } catch (error) {
       return UnexpectedError(response, error);

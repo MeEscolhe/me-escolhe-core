@@ -1,11 +1,13 @@
 "use strict";
 
 const { Project, validateProject } = require("../models/project");
+const { Lab } = require("../models/lab");
+const { Selection } = require("../models/selection");
 const SelectionController = require("./selection");
 const MongoDb = require("../middlewares/mongodb-middleware");
 const { DefaultArray } = require("../providers/default-values-provider");
 const { ObjectId } = require("../providers/types-provider");
-const { Lab } = require("../models/lab");
+const { Student } = require("../models/student");
 
 /**
  * Get project with lab

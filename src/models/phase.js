@@ -7,9 +7,7 @@ const {
   id,
   arrayOfRegistrations,
   string,
-  foreingKey,
 } = require("../middlewares/model-validator");
-const { getByRegistration } = require("../controllers/student");
 /**
  *  Phase model
  *  @typedef {{students: array, selectionId: string, description: string}} PhaseSchema
@@ -46,15 +44,8 @@ const validatePhase = (phase) =>
     },
     phase
   );
-const getStudentsData = async (phase) => {
-  let { _id, selectionId, description, students } = phase;
-  const studentsPhase = await Promise.all(
-    students.map(async (student) => await getByRegistration(student))
-  );
-  return { _id, students: studentsPhase, selectionId, description };
-};
+
 module.exports = {
   Phase: PhaseSchema,
   validatePhase,
-  getStudentsData,
 };
