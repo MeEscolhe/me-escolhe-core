@@ -100,4 +100,17 @@ router
     }
   });
 
+router.route("/:id/student/:registration").get(async (request, response) => {
+  try {
+    let { registration, id } = request.params;
+    const contains = await SelectionController.constainsStudent(
+      id,
+      registration
+    );
+    return Found(response, contains);
+  } catch (error) {
+    return UnexpectedError(response, error);
+  }
+});
+
 module.exports = router;

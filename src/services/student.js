@@ -57,22 +57,6 @@ router.route("/email").get(async (request, response) => {
   }
 });
 
-router.route("/inSelection/").get(async (request, response) => {
-  try {
-    let { registration, selectionId } = request.query;
-    const student = await StudentController.getByRegistrationWithSelections(
-      registration
-    );
-    const inSelection = student.selections.filter(
-      (selection) =>
-        selection.selection.selectionId.toString() === selectionId.toString()
-    );
-    return Found(response, inSelection.length > 0);
-  } catch (error) {
-    return UnexpectedError(response, error);
-  }
-});
-
 router
   .route("/:registration")
   .put(async (request, response) => {

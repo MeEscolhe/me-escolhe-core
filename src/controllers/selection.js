@@ -3,6 +3,7 @@
 const { Selection, validateSelection } = require("../models/selection");
 const { Project } = require("../models/project");
 const { Lab } = require("../models/lab");
+const MongoDb = require("../middlewares/mongodb-middleware");
 const { ObjectId } = require("../providers/types-provider");
 const {
   DefaultBoolean,
@@ -13,7 +14,6 @@ const {
 } = require("../providers/default-values-provider");
 const PhaseController = require("../controllers/phase");
 const TeacherController = require("../controllers/teacher");
-const { isEmpty } = require("../middlewares/utils");
 const StudentController = require("../controllers/student");
 
 /**
@@ -104,7 +104,7 @@ const getAllTeacherSelections = async (teacherId) => {
  * @returns {object} selection
  */
 const getById = async (id) => {
-  let selection = await Selection.findById(ObjectId(id));
+  let selection = await MongoDb.getById(Selection, id);
   if (selection) {
     let project = await ProjectController.getById(selection.projectId);
     let lab = await LabController.getById(project.labId);

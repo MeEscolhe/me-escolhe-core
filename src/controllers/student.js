@@ -36,8 +36,7 @@ const getByRegistration = async (registration) => {
   let selectionIds = (await PhaseController.getByIds(student.phases)).map(
     (phase) => phase.selectionId
   );
-  const selections = await SelectionController.getByIds(selectionIds);
-  student.selections = selections;
+  student.selections = await SelectionController.getByIds(selectionIds);
   return student;
 };
 
@@ -80,6 +79,8 @@ const create = async ({
     experiences,
   });
 
+// METE O MONGODB MIDDLEWARE ABAIXO (A GENTE TAVA MUITO LOUCO NESSE DIA)
+
 /**
  * Update student
  * @param {number} registration
@@ -87,7 +88,6 @@ const create = async ({
  * @param {number} updatePhase, phase to update
  * @returns {object} student updated
  */
-// METE O MONGODB MIDDLEWARE AQUI !
 const update = async (registration, updateData, updatePhase) => {
   let propsToUpdate = [
     "name",
