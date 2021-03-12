@@ -1,7 +1,11 @@
 ("use strict");
 
 const { Model } = require("mongoose");
-const { DefaultObject } = require("../providers/default-values-provider");
+const {
+  DefaultObject,
+  DefaultPage,
+  DefaultPageLimit,
+} = require("../providers/default-values-provider");
 const { ObjectId, CleanObject } = require("../providers/types-provider");
 
 /**
@@ -11,8 +15,13 @@ const { ObjectId, CleanObject } = require("../providers/types-provider");
  * @returns {Array} list of all objects.
  * If sortBy was passed, the array will be sorted
  */
-const getAll = async (Model, sortBy = "") => {
-  let objects = await Model.find();
+const getAll = async (Model, sortBy = "", { page, limit }) => {
+  let objects = [];
+  if (page === DefaultPage) {
+    objects = await Model.find();
+  } else {
+    objects = await Model.paginate(DefaultObject, { page, limit });
+  }
   if (sortBy !== "") objects = objects.sort(sortBy);
   return objects;
 };

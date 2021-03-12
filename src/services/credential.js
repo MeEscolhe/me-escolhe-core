@@ -17,7 +17,7 @@ const CredentialController = require("../controllers/credential");
  */
 router.route("/").post(async (request, response) => {
   try {
-    const credential = await CredentialController.authenticate(response.body);
+    const credential = await CredentialController.authenticate(request.body);
     if (!credential) return NotAuthorized(response);
     return Authorized(response, credential);
   } catch (error) {

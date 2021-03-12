@@ -2,20 +2,20 @@
 
 const { Selection, validateSelection } = require("../models/selection");
 const { Project } = require("../models/project");
-const { Lab } = require("../models/lab");
 const MongoDb = require("../middlewares/mongodb-middleware");
-const { ObjectId } = require("../providers/types-provider");
 const {
   DefaultBoolean,
   DefaultArray,
   DefaultSkills,
   DefaultString,
   DefaultObject,
+  DefaultPage,
+  DefaultPageLimit,
 } = require("../providers/default-values-provider");
 const TeacherController = require("./teacher");
 const StudentController = require("./student");
 const ProjectController = require("./project");
-const { overrideAttribute } = require("../middlewares/utils");
+const { overrideAttribute, isEmpty } = require("../middlewares/utils");
 const { Student } = require("../models/student");
 
 /**
@@ -23,37 +23,41 @@ const { Student } = require("../models/student");
  * @returns {array} list of all selections
  *
  */
-const getAll = async ({ page, limit }) => {
-  let paginate = await Selection.paginate(DefaultObject, { page, limit });
+const getAll = async ({ page = DefaultPage, limit = DefaultPageLimit }) => {
+  let paginate = await MongoDb.getAll(Selection, "", { page, limit });
   paginate.docs = await Promise.all(
     await paginate.docs.map(
-      async (selection) => await addProject(selection.toObject())
+      async (selection) =>
+        await overrideAttribute(
+          selection,
+          "projectId",
+          "project",
+          await MongoDb.getById(Project, selection.projectId)
+        )
     )
   );
   return paginate;
 };
 
 /**
- * Get all teacher's selections
+ * Get all students with selections
  * @returns {array} list of all selections
  */
-const getAllStudentSelections = async (studentRegistration) => {
-  const student = await StudentController.getByRegistration(
-    studentRegistration
+const getAllStudentsWithSelections = async () => {
+  let students = await MongoDb.getAll(Student, "name");
+  if (isEmpty(students)) return students;
+  return await Promise.all(
+    students.map(async (student) => {
+      student.selections = await student.selections.map(
+        async (selectionId) => await MongoDb.getById(Selection, selectionId)
+      );
+      return student;
+    })
   );
-  if (student) {
-    const studentPhases = await PhaseController.getStudentsPhase(student);
-    const studentSelections = await Promise.all(
-      studentPhases.map(
-        async (phase) => await getByIdWithProjectAndLab(phase.selectionId)
-      )
-    );
-    return studentSelections;
-  } else {
-    throw new Error("The teacher with the given ID was not found.");
-  }
 };
+
 /**
+ * TO-DO
  * Get all teacher's selections
  * @returns {array} list of all selections
  */
@@ -176,7 +180,6 @@ const validate = (object) => {
 module.exports = {
   getAll,
   getAllTeacherSelections,
-  getAllStudentSelections,
   getByIdWithProjectAndLab,
   getByIds,
   create,

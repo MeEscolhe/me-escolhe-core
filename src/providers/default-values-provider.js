@@ -6,9 +6,9 @@ const DefaultString = "";
 
 const DefaultObject = {};
 
-const DefaultPage = 1;
+const DefaultPage = 0;
 
-const DefaultPageLimit = 10;
+const DefaultPageLimit = 99;
 
 const DefaultExperiences = {
   academicExperiences: DefaultArray,

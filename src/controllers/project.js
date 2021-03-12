@@ -4,7 +4,7 @@ const { Project, validateProject } = require("../models/project");
 const { Lab } = require("../models/lab");
 const MongoDb = require("../middlewares/mongodb-middleware");
 const { DefaultArray } = require("../providers/default-values-provider");
-const { overrideAttribute } = require("../middlewares/utils");
+const { overrideAttribute, isEmpty } = require("../middlewares/utils");
 
 /**
  * Get all projects
@@ -97,7 +97,7 @@ const remove = async (id) => await MongoDb.removeById(Project, id);
  */
 const removeByLabId = async (labId) => {
   const removedProjects = await MongoDb.removeByAttributes(Project, { labId });
-  if (removedProjects.length === 0) return removedProjects;
+  if (isEmpty(removedProjects)) return removedProjects;
   await Promise.all(
     removedProjects.forEach(async (project) => {
       await MongoDb.removeByIds(project.selections);
