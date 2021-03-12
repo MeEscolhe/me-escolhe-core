@@ -7,7 +7,6 @@ const {
   DefaultSkills,
   DefaultExperiences,
 } = require("../providers/default-values-provider");
-const PhaseController = require("../controllers/phase");
 const SelectionController = require("../controllers/selection");
 const MongoDb = require("../middlewares/mongodb-middleware");
 
@@ -46,7 +45,7 @@ const getByRegistration = async (registration) => {
  * @param {string} email
  * @returns {object} student
  */
-const getByEmail = async (email) => await Student.findOne({ email });
+const getByEmail = async (email) => MongoDb.getByEmail(email);
 
 /**
  * Create student
@@ -80,42 +79,24 @@ const create = async ({
     experiences,
   });
 
-// METE O MONGODB MIDDLEWARE ABAIXO (A GENTE TAVA MUITO LOUCO NESSE DIA)
-
 /**
  * Update student
  * @param {number} registration
  * @param {object} updateData, student to update
- * @param {number} updatePhase, phase to update
  * @returns {object} student updated
  */
-const update = async (registration, updateData, updatePhase) => {
-  let propsToUpdate = [
-    "name",
-    "email",
-    "cra",
-    "description",
-    "skills",
-    "experiences",
-  ];
-  if (updatePhase) propsToUpdate.push("phases");
-  return await Student.findOneAndUpdate(
-    { registration },
-    {
-      registration,
-      ...filterProps(
-        updateData,
-        propsToUpdate,
-        (key, value) =>
-          (key !== "registration" && value) ||
-          (key === "description" && value === "")
-      ),
-    },
-    {
-      new: true,
-    }
-  );
-};
+const update = async (
+  registration,
+  { name, email, cra, description, skills, experiences }
+) =>
+  await MongoDb.updateByRegistration(Student, registration, {
+    name,
+    email,
+    cra,
+    description,
+    skills,
+    experiences,
+  });
 
 /**
  * Remove student by registration

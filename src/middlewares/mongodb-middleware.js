@@ -36,6 +36,15 @@ const getByRegistration = async (Model, registration) =>
   (await Model.findOne({ registration })).toObject();
 
 /**
+ * Get object by email
+ * @param {Model} Model
+ * @param {String} email
+ * @returns {Array} object with registration
+ */
+const getByEmail = async (Model, email) =>
+  (await Model.findOne({ email })).toObject();
+
+/**
  * Get objects by ids
  * @param {Model} Model
  * @param {Array} id
@@ -89,6 +98,49 @@ const updateById = async (Model, id, newObject, runValidators = true) =>
   ).toObject();
 
 /**
+ * Update by registration
+ * @param {Model} Model
+ * @param {String} registration
+ * @param {Object} newObject
+ * @param {Boolean} runValidators (default: true)
+ * @returns {Object} Updated object
+ */
+const updateByRegistration = async (
+  Model,
+  registration,
+  newObject,
+  runValidators = true
+) =>
+  (
+    await Model.findOneAndUpdate(
+      { registration },
+      {
+        $set: CleanObject(newObject),
+      },
+      { new: true, runValidators }
+    )
+  ).toObject();
+
+/**
+ * Update by email
+ * @param {Model} Model
+ * @param {String} email
+ * @param {Object} newObject
+ * @param {Boolean} runValidators (default: true)
+ * @returns {Object} Updated object
+ */
+const updateByEmail = async (Model, email, newObject, runValidators = true) =>
+  (
+    await Model.findOneAndUpdate(
+      { email },
+      {
+        $set: CleanObject(newObject),
+      },
+      { new: true, runValidators }
+    )
+  ).toObject();
+
+/**
  * Remove by id
  * @param {Model} Model
  * @param {String} id
@@ -96,6 +148,24 @@ const updateById = async (Model, id, newObject, runValidators = true) =>
  */
 const removeById = async (Model, id) =>
   (await Model.findByIdAndRemove(ObjectId(id))).toObject();
+
+/**
+ * Remove by id
+ * @param {Model} Model
+ * @param {String} registration
+ * @returns {Object} Removed object
+ */
+const removeByRegistration = async (Model, registration) =>
+  (await Model.findByIdAndRemove({ registration })).toObject();
+
+/**
+ * Remove by email
+ * @param {Model} Model
+ * @param {String} email
+ * @returns {Object} Removed object
+ */
+const removeByEmail = async (Model, email) =>
+  (await Model.findByIdAndRemove({ email })).toObject();
 
 /**
  * Add id in array
@@ -130,10 +200,15 @@ module.exports = {
   getAll,
   getById,
   getByRegistration,
+  getByEmail,
   getByIds,
   getByRegistrations,
   create,
   updateById,
+  updateByRegistration,
+  updateByEmail,
   removeById,
+  removeByRegistration,
+  removeByEmail,
   removeOfArray,
 };
