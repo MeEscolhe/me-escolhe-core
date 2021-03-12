@@ -197,7 +197,7 @@ const addOnArray = async (Model, arrayAttribute, id) => {
  * Remove of arrays in model objects by id
  * @param {Model} Model
  * @param {String} arrayAttribute field
- * @param {String} id
+ * @param {String} identifier id or registration
  */
 const removeOfArray = async (Model, arrayAttribute, id) => {
   let filter = {};

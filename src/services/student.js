@@ -91,16 +91,8 @@ router
 
   .delete(async (request, response) => {
     try {
-      let student = await StudentController.getByRegistration(
-        request.params.registration
-      );
+      let student = await StudentController.remove(request.params.registration);
       if (!student) return NotFoundById(response, STUDENT);
-      // student = { ...student._doc };
-      // for (let i = 0; i < student.phases.length; i++) {
-      //   const phaseId = student.phases[i]._id;
-      //   await PhaseController.removeStudent(phaseId, student.registration);
-      // }
-      await StudentController.remove(student.registration);
       return Removed(response, student);
     } catch (error) {
       return UnexpectedError(response, error);
