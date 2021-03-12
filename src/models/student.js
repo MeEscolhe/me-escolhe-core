@@ -11,6 +11,7 @@ const {
   arrayOfIds,
   foreingKey,
   date,
+  finalDate,
 } = require("../middlewares/model-validator");
 
 /**
