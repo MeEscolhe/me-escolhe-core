@@ -6,7 +6,7 @@ const DefaultString = "";
 
 const DefaultObject = {};
 
-const DefaultPage = 0;
+const DefaultPage = 1;
 
 const DefaultPageLimit = 99;
 

@@ -16,7 +16,7 @@ const { ObjectId, CleanObject } = require("../providers/types-provider");
  */
 const getAll = async (Model, sortBy = "", { page, limit }) => {
   let objects = [];
-  if (page === DefaultPage) {
+  if (!page) {
     objects = await Model.find();
   } else {
     objects = await Model.paginate(DefaultObject, { page, limit });
