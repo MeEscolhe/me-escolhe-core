@@ -10,6 +10,7 @@ const {
   string,
   arrayOfIds,
   foreingKey,
+  date,
 } = require("../middlewares/model-validator");
 
 /**
