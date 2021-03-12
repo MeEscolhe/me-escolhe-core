@@ -2,6 +2,7 @@
 
 const { Credential, validateCredential } = require("../models/credential");
 const { encryptPassword } = require("../middlewares/auth-middleware");
+const MongoDb = require("../middlewares/mongodb-middleware");
 const mongoose = require("mongoose");
 
 /**
@@ -24,15 +25,11 @@ const getByEmail = async (email) => await Credential.findOne({ email });
  * @param {boolean} isTeacher
  * @returns {object} credential created
  */
-const create = async ({ email, password }, isTeacher) => {
-  password = encryptPassword(password);
-  const credential = new Credential({
+const create = async ({ email, password }, isTeacher) =>
+  await MongoDb.create(Credential, {
     email,
-    password,
-    isTeacher,
+    password: encryptPassword(password),
   });
-  return await credential.save();
-};
 
 /**
  * Update credential

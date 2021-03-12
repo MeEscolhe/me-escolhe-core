@@ -8,7 +8,7 @@ const TeacherController = require("../controllers/teacher");
 const ProjectController = require("../controllers/project");
 const SelectionController = require("../controllers/selection");
 const CredentialController = require("../controllers/credential");
-const { validate, isEmpty, filterProps } = require("../middlewares/utils");
+const { validate, isEmpty } = require("../middlewares/utils");
 const {
   Found,
   Created,
@@ -72,17 +72,9 @@ router
   .put(async (request, response) => {
     try {
       validate(request.body, TeacherController);
-      const propsToUpdate = [
-        "name",
-        "email",
-        "password",
-        "description",
-        "labId",
-        "managements",
-      ];
       let teacher = await TeacherController.update(
         request.params.id,
-        filterProps(request.body, propsToUpdate)
+        request.body
       );
       if (!teacher) return NotFoundById(response, TEACHER);
       return Updated(response, teacher);
@@ -101,7 +93,7 @@ router
     }
   });
 
-//TODO
+//TO-DO
 router.route("/:id/selections").get(async (request, response) => {
   try {
     const teacher = await TeacherController.getById(request.params.id);

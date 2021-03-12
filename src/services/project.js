@@ -34,7 +34,7 @@ router
   .post(async (request, response) => {
     try {
       validate(request.body, ProjectController);
-      let project = await ProjectController.create(request.body);
+      const project = await ProjectController.create(request.body);
       return Created(response, project);
     } catch (error) {
       return UnexpectedError(response, error);
@@ -45,7 +45,7 @@ router
   .route("/:id")
   .get(async (request, response) => {
     try {
-      let project = await ProjectController.getById(request.params.id);
+      const project = await ProjectController.getById(request.params.id);
       if (!project) return NotFoundById(response, PROJECT);
       return Found(response, project);
     } catch (error) {

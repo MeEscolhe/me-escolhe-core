@@ -2,6 +2,10 @@
 
 const { Teacher, validateTeacher } = require("../models/teacher");
 const mongoose = require("mongoose");
+const {
+  DefaultArray,
+  DefaultString,
+} = require("../providers/default-values-provider");
 
 /**
  * Get all teachers
@@ -56,17 +60,23 @@ const create = async ({ name, email, description, labId, managements }) => {
  */
 const update = async (
   id,
-  { name, email, description, labId, managements },
+  {
+    name,
+    email,
+    description = DefaultString,
+    labId,
+    managements = DefaultArray,
+  },
   runValidators = true
 ) =>
   await Teacher.findByIdAndUpdate(
     mongoose.Types.ObjectId(id),
     {
-      name: name,
-      email: email,
-      description: description,
-      labId: labId,
-      managements: managements,
+      name,
+      email,
+      description,
+      labId,
+      managements,
     },
     { new: true, runValidators: runValidators }
   );

@@ -33,25 +33,6 @@ const updateObject = (schema, dataId, data) => {
 };
 
 /**
- * @author Diego Amancio <diego.amancio1998@gmail.com>
- * filter null props from request body
- *
- * @param {Object} data request body
- * @param {Array.<String>} propsToFilter props Tto filter
- * @param {Boolean} conditionFunction function to apply more conditions in filter
- * @returns {object}
- */
-const filterProps = (data, propsToFilter, conditionFunction) =>
-  Object.entries(data).reduce((accumulate, [key, value]) => {
-    if (
-      propsToFilter.includes(key) &&
-      (conditionFunction === undefined || conditionFunction(key, value))
-    )
-      accumulate[key] = value;
-    return accumulate;
-  }, {});
-
-/**
  * get selection from phase id
  * @param {string} phaseId
  *
@@ -81,7 +62,6 @@ const getSelectionFromPhase = (phaseId) => {
 module.exports = {
   validate,
   isEmpty,
-  filterProps,
   getSelectionFromPhase,
   updateObject,
 };

@@ -8,13 +8,11 @@
 const SELECTION = "selection";
 
 const SelectionController = require("../controllers/selection");
-const ProjectController = require("../controllers/project");
-const LabController = require("../controllers/lab");
 const {
   DefaultPageLimit,
   DefaultPage,
 } = require("../providers/default-values-provider");
-const { validate, filterProps } = require("../middlewares/utils");
+const { validate } = require("../middlewares/utils");
 const {
   Found,
   Created,
@@ -79,24 +77,12 @@ router
       return UnexpectedError(response, error);
     }
   })
-
-  //Ainda pode melhorar.
   .put(async (request, response) => {
-    const { error } = validate(request.body, SelectionController);
-    if (error) return UnexpectedError(response, error);
     try {
-      const propsToUpdate = [
-        "role",
-        "description",
-        "phases",
-        "current",
-        "projectId",
-        "skills",
-      ];
-      validate(filterProps(request.body, propsToUpdate), SelectionController);
-      let selection = await SelectionController.update(
+      validate(request.body, SelectionController);
+      const selection = await SelectionController.update(
         request.params.id,
-        filterProps(request.body, propsToUpdate)
+        request.body
       );
       if (!selection) return NotFoundById(response, SELECTION);
       return Updated(response, selection);
@@ -106,8 +92,8 @@ router
   })
   .delete(async (request, response) => {
     try {
-      let selection = await SelectionController.remove(request.params.id);
-      if (!lab) return NotFoundById(response, selection);
+      const selection = await SelectionController.remove(request.params.id);
+      if (!selection) return NotFoundById(response, selection);
       return Removed(response, selection);
     } catch (error) {
       return UnexpectedError(response, error);

@@ -1,5 +1,3 @@
-const { response } = require("express");
-
 ("use strict");
 
 /**

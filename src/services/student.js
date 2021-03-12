@@ -34,16 +34,12 @@ router
       return UnexpectedError(response, error);
     }
   })
-  //TODO
+
   .post(async (request, response) => {
     try {
-      validate(student, StudentController);
-      let createdStudent = await StudentController.create(student);
+      validate(request.body, StudentController);
+      await StudentController.create(request.body);
       await CredentialController.create(request.body, false);
-      for (let i = 0; i < createdStudent.phases.length; i++) {
-        let phaseId = createdStudent.phases[i];
-        await PhaseController.addStudent(phaseId, createdStudent.registration);
-      }
       return Created(response, STUDENT);
     } catch (error) {
       return UnexpectedError(response, error);

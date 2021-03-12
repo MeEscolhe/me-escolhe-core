@@ -11,7 +11,11 @@ const {
   validatePassword,
   generateToken,
 } = require("../middlewares/auth-middleware");
-const { Authorized, NotAuthorized } = require("../middlewares/rest-middleware");
+const {
+  Authorized,
+  NotAuthorized,
+  UnexpectedError,
+} = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
 /**
@@ -21,18 +25,24 @@ const router = require("express").Router();
  * @returns {object} user (teacher or student object) and token
  */
 router.route("/").get(async (request, response) => {
-  const credential = await CredentialController.getByEmail(request.body.email);
-  if (!credential) return NotAuthorized(response);
-  if (!validatePassword(request.body.password, credential.password))
-    return NotAuthorized(response);
-  const user = {};
-  if (credential.isTeacher) {
-    user = await TeacherController.getByEmail(request.body.email);
-  } else {
-    user = await StudentController.getByEmail(request.body.email);
+  try {
+    const credential = await CredentialController.getByEmail(
+      request.body.email
+    );
+    if (!credential) return NotAuthorized(response);
+    if (!validatePassword(request.body.password, credential.password))
+      return NotAuthorized(response);
+    const user = {};
+    if (credential.isTeacher) {
+      user = await TeacherController.getByEmail(request.body.email);
+    } else {
+      user = await StudentController.getByEmail(request.body.email);
+    }
+    const token = generateToken(request.body);
+    return Authorized(response, { user, token });
+  } catch (error) {
+    return UnexpectedError(response, error);
   }
-  const token = generateToken(request.body);
-  return Authorized(response, { user, token });
 });
 
 module.exports = router;

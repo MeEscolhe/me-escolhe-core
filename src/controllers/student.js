@@ -9,7 +9,7 @@ const {
 } = require("../providers/default-values-provider");
 const PhaseController = require("../controllers/phase");
 const SelectionController = require("../controllers/selection");
-const { filterProps } = require("../middlewares/utils");
+const MongoDb = require("../middlewares/mongodb-middleware");
 
 /**
  * Get all students
@@ -68,8 +68,8 @@ const create = async ({
   skills = DefaultSkills,
   phases = DefaultArray,
   experiences = DefaultExperiences,
-}) => {
-  const student = new Student({
+}) =>
+  await MongoDb.create(Student, {
     registration,
     name,
     email,
@@ -79,8 +79,6 @@ const create = async ({
     phases,
     experiences,
   });
-  return await student.save();
-};
 
 /**
  * Update student
@@ -89,6 +87,7 @@ const create = async ({
  * @param {number} updatePhase, phase to update
  * @returns {object} student updated
  */
+// METE O MONGODB MIDDLEWARE AQUI !
 const update = async (registration, updateData, updatePhase) => {
   let propsToUpdate = [
     "name",
