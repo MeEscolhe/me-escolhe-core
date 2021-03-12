@@ -6,18 +6,7 @@ const SelectionController = require("./selection");
 const MongoDb = require("../middlewares/mongodb-middleware");
 const { DefaultArray } = require("../providers/default-values-provider");
 const { ObjectId } = require("../providers/types-provider");
-
-/**
- * Get project with lab
- * @param {string} project
- * @returns {object} project with lab
- */
-const getLab = async (project) => {
-  project = project.toObject();
-  project.lab = await Lab.findById(ObjectId(project.labId));
-  delete project["labId"];
-  return project;
-};
+const { overrideAttribute } = require("../middlewares/utils");
 
 /**
  * Get all projects
@@ -35,7 +24,17 @@ const getAll = async () =>
  * @param {string} id
  * @returns {object} project
  */
-const getById = async (id) => getLab(await MongoDb.getById(Project, id));
+const getById = async (id) => {
+  let project = await MongoDb.getById(Project, id);
+  if (project)
+    project = overrideAttribute(
+      project,
+      "labId",
+      "lab",
+      await MongoDb.getById(Lab, project.labId)
+    );
+  return project;
+};
 
 /**
  * Get all projects by list id

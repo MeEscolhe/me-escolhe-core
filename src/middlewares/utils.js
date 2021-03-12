@@ -4,11 +4,10 @@
  * @author Diego Amancio <diego.amancio1998@gmail.com>
  * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
  *
- * validate request body by controller
+ * Validate request body by controller
  *
  * @param {object} body
  * @param {object} controller
- *
  * @returns {error} error, if is invalid request body
  */
 const validate = (body, controller) => {
@@ -16,7 +15,29 @@ const validate = (body, controller) => {
   if (error) throw Error(error.details[0].message);
 };
 
+/**
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
+ * Check if an array is empty
+ * @param {Array} schema
+ * @param {String} dataId
+ * @param {Object} data
+ */
 const isEmpty = (array) => array && array.length === 0;
+
+/**
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
+ * Add a new attribute and remove an old attribute
+ * @param {Object} object
+ * @param {String} oldAttribute
+ * @param {String} newAttribute
+ * @param {any} newValue
+ * @returns {Object} updated object
+ */
+const overrideAttribute = (object, oldAttribute, newAttribute, newValue) => {
+  object[newAttribute] = newValue;
+  delete object[oldAttribute];
+  return object;
+};
 
 /**
  * @author Diego Amancio <diego.amancio1998@gmail.com>
@@ -62,6 +83,7 @@ const getSelectionFromPhase = (phaseId) => {
 module.exports = {
   validate,
   isEmpty,
+  overrideAttribute,
   getSelectionFromPhase,
   updateObject,
 };

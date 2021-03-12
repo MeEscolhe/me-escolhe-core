@@ -131,7 +131,11 @@ const StudentSchema = mongoose.model(
         },
       ],
     },
-    phases: foreingKey("Phase", "_id", ObjectId, true),
+    selections: {
+      type: [String],
+      required: true,
+      default: [],
+    },
   })
 );
 
@@ -175,7 +179,7 @@ const validateStudent = (student) =>
           finalDate: finalDate("initialDate"),
         }),
       },
-      phases: arrayOfIds(),
+      selections: arrayOfIds(),
     },
     student
   );

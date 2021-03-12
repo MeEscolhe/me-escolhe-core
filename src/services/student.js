@@ -80,9 +80,10 @@ router
 
   .get(async (request, response) => {
     try {
-      let student = await StudentController.getByRegistrationWithSelections(
+      const student = await StudentController.getByRegistration(
         request.params.registration
       );
+      if (!student) NotFound(response, STUDENT);
       return Found(response, student);
     } catch (error) {
       return UnexpectedError(response, error);

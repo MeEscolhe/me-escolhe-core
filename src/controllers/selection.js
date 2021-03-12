@@ -12,9 +12,10 @@ const {
   DefaultString,
   DefaultObject,
 } = require("../providers/default-values-provider");
-const PhaseController = require("../controllers/phase");
-const TeacherController = require("../controllers/teacher");
-const StudentController = require("../controllers/student");
+const TeacherController = require("./teacher");
+const StudentController = require("./student");
+const ProjectController = require("./project");
+const { overrideAttribute } = require("../middlewares/utils");
 
 /**
  * Add project in selection
@@ -98,6 +99,7 @@ const getAllTeacherSelections = async (teacherId) => {
     throw new Error("The teacher with the given ID was not found.");
   }
 };
+
 /**
  * Get selection by id
  * @param {string} id
@@ -105,16 +107,14 @@ const getAllTeacherSelections = async (teacherId) => {
  */
 const getById = async (id) => {
   let selection = await MongoDb.getById(Selection, id);
-  if (selection) {
-    let project = await ProjectController.getById(selection.projectId);
-    let lab = await LabController.getById(project.labId);
-    delete project.labId;
-    delete selection.projectId;
-    project = { ...project._doc, lab };
-    return { ...selection._doc, project };
-  } else {
-    throw new Error("The selection with the given ID was not found.");
-  }
+  if (selection)
+    selection = overrideAttribute(
+      selection,
+      "projectId",
+      "project",
+      await ProjectController.getById(selection.projectId)
+    );
+  return selection;
 };
 
 /**

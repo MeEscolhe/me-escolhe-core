@@ -10,6 +10,7 @@ const {
   boolean,
   numericRange,
   id,
+  arrayOfRegistrations,
 } = require("../middlewares/model-validator");
 
 /**
@@ -28,8 +29,8 @@ const SelectionModel = new mongoose.Schema({
     required: true,
     default: "",
   },
-  phases: {
-    type: [String],
+  students: {
+    type: [Number],
     required: true,
     default: [],
   },
@@ -97,7 +98,7 @@ const validateSelection = (selection) =>
     {
       role: string(),
       description: string(),
-      phases: arrayOfIds(),
+      students: arrayOfRegistrations(),
       current: boolean(),
       projectId: id(),
       skills: {
