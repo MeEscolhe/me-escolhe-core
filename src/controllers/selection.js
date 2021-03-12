@@ -8,7 +8,6 @@ const {
   DefaultArray,
   DefaultSkills,
   DefaultString,
-  DefaultObject,
   DefaultPage,
   DefaultPageLimit,
 } = require("../providers/default-values-provider");
@@ -40,62 +39,11 @@ const getAll = async ({ page = DefaultPage, limit = DefaultPageLimit }) => {
 };
 
 /**
- * Get all students with selections
- * @returns {array} list of all selections
- */
-const getAllStudentsWithSelections = async () => {
-  let students = await MongoDb.getAll(Student, "name");
-  if (isEmpty(students)) return students;
-  return await Promise.all(
-    students.map(async (student) => {
-      student.selections = await student.selections.map(
-        async (selectionId) => await MongoDb.getById(Selection, selectionId)
-      );
-      return student;
-    })
-  );
-};
-
-/**
- * TO-DO
- * Get all teacher's selections
- * @returns {array} list of all selections
- */
-const getAllTeacherSelections = async (teacherId) => {
-  const teacher = await TeacherController.getById(teacherId);
-  if (teacher) {
-    const allprojects = await ProjectController.getAll();
-    const teacherProjects = allprojects.filter((project) =>
-      teacher.managements.some((teacherProjectId) =>
-        project._id.equals(teacherProjectId)
-      )
-    );
-    const teacherSelections = await Promise.all(
-      teacherProjects.map(async (project) => {
-        const selections = await Selection.find()
-          .where("_id")
-          .in(project.selections);
-        let lab = await LabController.getById(project.labId);
-        delete project.labId;
-        project = { ...project._doc, lab };
-        return selections.map((selection) => {
-          delete selection.projectId;
-          return { ...selection._doc, project };
-        });
-      })
-    );
-    return teacherSelections.reduce((list, line) => list.concat(line), []);
-  } else {
-    throw new Error("The teacher with the given ID was not found.");
-  }
-};
-
-/**
- * Get selection by id
+ * Get selection by id with students, project and lab
  * @param {string} id
  * @returns {object} selection
  */
-const getByIdWithProjectAndLab = async (id) => {
+const getFullById = async (id) => {
   let selection = await MongoDb.getById(Selection, id);
   if (selection)
     selection = overrideAttribute(
@@ -104,6 +52,7 @@ const getByIdWithProjectAndLab = async (id) => {
       "project",
       await ProjectController.getById(selection.projectId)
     );
+  selection.students = await MongoDb.getByRegistrations(selection.students);
   return selection;
 };
 
@@ -179,8 +128,7 @@ const validate = (object) => {
 
 module.exports = {
   getAll,
-  getAllTeacherSelections,
-  getByIdWithProjectAndLab,
+  getFullById,
   getByIds,
   create,
   update,

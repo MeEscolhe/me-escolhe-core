@@ -75,7 +75,7 @@ router
 
   .get(async (request, response) => {
     try {
-      const student = await StudentController.getByRegistration(
+      const student = await StudentController.getByRegistrationWithSelections(
         request.params.registration
       );
       if (!student) NotFound(response, STUDENT);

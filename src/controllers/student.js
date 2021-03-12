@@ -30,8 +30,8 @@ const getByRegistrations = async (registrations) =>
  * @param {number} registration
  * @returns {object} student with selections
  */
-const getByRegistration = async (registration) => {
-  let student = await MongoDb.getByRegistration(Student, registration);
+const getByRegistrationWithSelections = async (registration) => {
+  let student = await getByRegistration(registration);
   if (!student) return student;
   student.selections = await Promise.all(
     student.selections.map(
@@ -40,6 +40,14 @@ const getByRegistration = async (registration) => {
   );
   return student;
 };
+
+/**
+ * Get student by registration
+ * @param {number} registration
+ * @returns {object} student
+ */
+const getByRegistration = async (registration) =>
+  await MongoDb.getByRegistration(Student, registration);
 
 /**
  * Get student by email
@@ -126,6 +134,7 @@ module.exports = {
   getAll,
   getByEmail,
   getByRegistration,
+  getByRegistrationWithSelections,
   getByRegistrations,
   create,
   update,

@@ -44,35 +44,11 @@ router
     }
   });
 
-router.route("/teacher/:id").get(async (request, response) => {
-  try {
-    let selections = await SelectionController.getAllTeacherSelections(
-      request.params.id
-    );
-    return Found(response, selections.reverse());
-  } catch (error) {
-    return UnexpectedError(response, error);
-  }
-});
-
-router.route("/student/:id").get(async (request, response) => {
-  try {
-    const selections = await SelectionController.getAllStudentSelections(
-      request.params.id
-    );
-    return Found(response, selections.reverse());
-  } catch (error) {
-    return UnexpectedError(response, error);
-  }
-});
-
 router
   .route("/:id")
   .get(async (request, response) => {
     try {
-      let selection = await SelectionController.getByIdWithProjectAndLab(
-        request.params.id
-      );
+      let selection = await SelectionController.getFullById(request.params.id);
       if (!selection) return NotFoundById(response, SELECTION);
       return Found(response, selection);
     } catch (error) {
