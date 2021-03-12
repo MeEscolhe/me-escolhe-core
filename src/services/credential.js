@@ -8,6 +8,7 @@ const {
 const router = require("express").Router();
 
 const CredentialController = require("../controllers/credential");
+const { validate } = require("../middlewares/utils");
 
 /**
  * Login and get user (teacher or student object)
@@ -17,6 +18,7 @@ const CredentialController = require("../controllers/credential");
  */
 router.route("/").post(async (request, response) => {
   try {
+    validate(request.body, CredentialController);
     const credential = await CredentialController.authenticate(request.body);
     if (!credential) return NotAuthorized(response);
     return Authorized(response, credential);

@@ -5,9 +5,11 @@
  */
 
 const { Credential, validateCredential } = require("../models/credential");
-const { encryptPassword } = require("../middlewares/auth-middleware");
+const {
+  encryptPassword,
+  validatePassword,
+} = require("../middlewares/auth-middleware");
 const MongoDb = require("../middlewares/mongodb-middleware");
-const mongoose = require("mongoose");
 
 const TeacherController = require("./teacher");
 const StudentController = require("./student");
