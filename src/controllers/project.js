@@ -2,10 +2,8 @@
 
 const { Project, validateProject } = require("../models/project");
 const { Lab } = require("../models/lab");
-const SelectionController = require("./selection");
 const MongoDb = require("../middlewares/mongodb-middleware");
 const { DefaultArray } = require("../providers/default-values-provider");
-const { ObjectId } = require("../providers/types-provider");
 const { overrideAttribute } = require("../middlewares/utils");
 
 /**
@@ -55,14 +53,18 @@ const create = async ({
   labId,
   selections = DefaultArray,
 }) => {
-  const project = new Project({
+  const project = MongoDb.create(Project, {
     name,
     description,
     labId,
     selections,
   });
-  let createdProject = getLab(await project.save());
-  return createdProject;
+  return await overrideAttribute(
+    project,
+    "labId",
+    "lab",
+    await MongoDb.getById(Lab, labId)
+  );
 };
 
 /**
@@ -74,67 +76,34 @@ const create = async ({
  * @returns {object} project updated
  */
 const update = async (id, { name, description, labId, selections }) =>
-  await Project.findByIdAndUpdate(
-    ObjectId(id),
-    {
-      $set: CleanObject({
-        name,
-        description,
-        labId,
-        selections,
-      }),
-    },
-    { new: true }
-  );
+  await MongoDb.updateById(Project, id, {
+    name,
+    description,
+    labId,
+    selections,
+  });
 
 /**
  * Remove project by id
  * @param {string} id
  * @returns {object} project removed
  */
-const remove = async (id) => {
-  const project = await Project.findByIdAndRemove(ObjectId(id));
-  SelectionController.removeByProjectId(id);
-  return project;
-};
+const remove = async (id) => await MongoDb.removeById(Project, id);
 
 /**
  * Remove projects by ids
- * @param {string} id
+ * @param {string} labId
  * @returns {object} removed projects
  */
-const removeByLabId = async (id) => {
-  const projects = await Project.find({ labId: id });
-  await Project.deleteMany({ labId: id });
-  const projectIds = projects.map((project) => project._id);
-  for (const projectId in projectIds) {
-    SelectionController.removeByProjectId(projectId);
-  }
-  return projects;
-};
-
-/**
- * Add selection to your respective project
- * @param {object} selection
- */
-const addSelection = async (selection) => {
-  let project = await getById(selection.projectId);
-  project = { ...project._doc };
-  project.selections.push(selection._id);
-  await update(project._id, project);
-};
-
-/**
- * Remove selection to your respective project
- * @param {string} selectionId
- */
-const removeSelection = async (selectionId) => {
-  let project = await Project.findOne({ selections: selectionId.toString() });
-  project = { ...project._doc };
-  project.selections = project.selections.filter(
-    (item) => item != selectionId.toString()
+const removeByLabId = async (labId) => {
+  const removedProjects = await MongoDb.removeByAttributes(Project, { labId });
+  if (removedProjects.length === 0) return removedProjects;
+  await Promise.all(
+    removedProjects.forEach(async (project) => {
+      await MongoDb.removeByIds(project.selections);
+    })
   );
-  await update(project._id, project);
+  return removedProjects;
 };
 
 /**
@@ -155,7 +124,5 @@ module.exports = {
   update,
   remove,
   removeByLabId,
-  addSelection,
-  removeSelection,
   validate,
 };

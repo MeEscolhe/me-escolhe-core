@@ -168,7 +168,7 @@ const removeById = async (Model, id) =>
  * @returns {Object} Removed object
  */
 const removeByRegistration = async (Model, registration) =>
-  (await Model.findByIdAndRemove({ registration })).toObject();
+  (await Model.findOneAndRemove({ registration })).toObject();
 
 /**
  * Remove by email
@@ -177,20 +177,45 @@ const removeByRegistration = async (Model, registration) =>
  * @returns {Object} Removed object
  */
 const removeByEmail = async (Model, email) =>
-  (await Model.findByIdAndRemove({ email })).toObject();
+  (await Model.findOneAndRemove({ email })).toObject();
 
 /**
- * Add id in array
+ * Remove objects by ids
+ * @param {Model} Model
+ * @param {Array} ids
+ * @returns {Array} objects with ids
+ */
+const removeByIds = async (Model, ids, sortBy = "") => {
+  ids = ids.map((id) => ObjectId(id));
+  let objects = await Model.deleteMany({ _id: { $in: ids } });
+  if (sortBy !== "") objects = objects.sort(sortBy);
+  return objects;
+};
+
+/**
+ * Remove by attributes
+ * @param {Model} Model
+ * @param {Object} attributes
+ * @returns {Object} Removed object
+ */
+const removeByAttributes = async (Model, attributes) =>
+  await Model.remove(attributes);
+
+/**
+ * Add id in array of model
  * @param {Model} Model
  * @param {String} arrayAttribute field
  * @param {String} id
  */
-const addOnArray = async (Model, arrayAttribute, id) => {
+const addOnArrayById = async (Model, modelId, arrayAttribute, id) => {
   let filter = {};
   filter[arrayAttribute] = id;
-  await Model.update(DefaultObject, {
-    $push: filter,
-  });
+  await Model.update(
+    { _id: ObjectId(modelId) },
+    {
+      $push: filter,
+    }
+  );
 };
 
 /**
@@ -199,7 +224,7 @@ const addOnArray = async (Model, arrayAttribute, id) => {
  * @param {String} arrayAttribute field
  * @param {String} identifier id or registration
  */
-const removeOfArray = async (Model, arrayAttribute, id) => {
+const removeOfArrays = async (Model, arrayAttribute, id) => {
   let filter = {};
   filter[arrayAttribute] = id;
   await Model.update(DefaultObject, {
@@ -208,7 +233,7 @@ const removeOfArray = async (Model, arrayAttribute, id) => {
 };
 
 module.exports = {
-  addOnArray,
+  addOnArrayById,
   getAll,
   getById,
   getByRegistration,
@@ -223,5 +248,7 @@ module.exports = {
   removeById,
   removeByRegistration,
   removeByEmail,
-  removeOfArray,
+  removeByAttributes,
+  removeByIds,
+  removeOfArrays,
 };

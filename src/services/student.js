@@ -60,11 +60,7 @@ router
   .route("/:registration")
   .put(async (request, response) => {
     try {
-      const registration = request.params.registration;
-      const { error, message } = validate(
-        { registration, ...request.body },
-        StudentController
-      );
+      validate({ registration, ...request.body }, StudentController);
       const student = await StudentController.update(
         registration,
         request.body,

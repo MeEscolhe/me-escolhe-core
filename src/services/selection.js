@@ -70,7 +70,7 @@ router
   .route("/:id")
   .get(async (request, response) => {
     try {
-      let selection = await SelectionController.getByIdWithProjectsAndLabs(
+      let selection = await SelectionController.getByIdWithProjectAndLab(
         request.params.id
       );
       if (!selection) return NotFoundById(response, SELECTION);
@@ -105,7 +105,7 @@ router
 router.route("/:id/student/:registration").get(async (request, response) => {
   try {
     let { registration, id } = request.params;
-    const contains = await SelectionController.constainsStudent(
+    const contains = await SelectionController.containsStudent(
       id,
       registration
     );

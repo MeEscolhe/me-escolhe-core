@@ -16,23 +16,7 @@ const TeacherController = require("./teacher");
 const StudentController = require("./student");
 const ProjectController = require("./project");
 const { overrideAttribute } = require("../middlewares/utils");
-
-/**
- * Add project in selection
- * @param {object} selection
- * @returns {object} selection with project
- */
-const addProject = async (selection) => {
-  let project = (
-    await Project.findById(ObjectId(selection.projectId))
-  ).toObject();
-  project.lab = await Lab.findById(ObjectId(project.labId));
-  delete project["labId"];
-
-  selection.project = project;
-  delete selection["projectId"];
-  return selection;
-};
+const { Student } = require("../models/student");
 
 /**
  * Get all selections
@@ -61,7 +45,7 @@ const getAllStudentSelections = async (studentRegistration) => {
     const studentPhases = await PhaseController.getStudentsPhase(student);
     const studentSelections = await Promise.all(
       studentPhases.map(
-        async (phase) => await getByIdWithProjectsAndLabs(phase.selectionId)
+        async (phase) => await getByIdWithProjectAndLab(phase.selectionId)
       )
     );
     return studentSelections;
@@ -107,7 +91,7 @@ const getAllTeacherSelections = async (teacherId) => {
  * @param {string} id
  * @returns {object} selection
  */
-const getByIdWithProjectsAndLabs = async (id) => {
+const getByIdWithProjectAndLab = async (id) => {
   let selection = await MongoDb.getById(Selection, id);
   if (selection)
     selection = overrideAttribute(
@@ -143,15 +127,21 @@ const create = async ({
   phases = DefaultArray,
   skills = DefaultSkills,
 }) => {
-  let selection = await new Selection({
+  const selection = MongoDb.create(Selection, {
     role,
     description,
     phases,
     current,
     projectId,
     skills,
-  }).save();
-  return await addProject(selection.toObject());
+  });
+  await MongoDb.addOnArrayById(Project, projectId, "selections", selection._id);
+  return overrideAttribute(
+    selection,
+    "projectId",
+    "project",
+    await MongoDb.getById(Project, projectId)
+  );
 };
 
 /**
@@ -161,7 +151,7 @@ const create = async ({
  * @returns {object} selection updated
  */
 const update = async (id, updateData) =>
-  await Selection.findByIdAndUpdate(ObjectId(id), updateData, { new: true });
+  await MongoDb.updateById(Selection, id, updateData);
 
 /**
  * Remove selection by id
@@ -169,18 +159,8 @@ const update = async (id, updateData) =>
  * @returns {object} selection removed
  */
 const remove = async (id) => {
-  const selection = await Selection.findByIdAndRemove(ObjectId(id));
-  PhaseController.removeByIds(selection.phases);
-  return selection;
-};
-
-const removeByProjectId = async (id) => {
-  const selections = await Selection.find({ projectId: id });
-  await Selection.deleteMany({ projectId: id });
-  selections
-    .map((selection) => selection.phases)
-    .forEach((phasesList) => PhaseController.removeByIds(phasesList));
-  return selections;
+  await MongoDb.removeOfArrays(Student, "selections", id);
+  return await MongoDb.removeById(Project, id);
 };
 
 /**
@@ -197,11 +177,10 @@ module.exports = {
   getAll,
   getAllTeacherSelections,
   getAllStudentSelections,
-  getByIdWithProjectsAndLabs,
+  getByIdWithProjectAndLab,
   getByIds,
   create,
   update,
   remove,
-  removeByProjectId,
   validate,
 };

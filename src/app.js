@@ -13,11 +13,10 @@ app.use(cors());
 const {
   labs,
   selections,
-  phases,
   projects,
   students,
   teachers,
-  auth,
+  credential,
 } = require("./Router");
 
 mongoose.set("useFindAndModify", false);
@@ -26,7 +25,7 @@ mongoose.set("useUnifiedTopology", true);
 
 app.use(express.json());
 app.use("/labs", labs);
-app.use("/auth", auth);
+app.use("/auth", credential);
 app.use("/selections", selections);
 app.use("/projects", projects);
 app.use("/students", students);
