@@ -35,8 +35,7 @@ const getByRegistration = async (registration) => {
   let student = MongoDb.getByRegistration(registration);
   student.selections = await Promise.all(
     student.selections.map(
-      async (selectionId) =>
-        await SelectionController.getByIds(student.selections)
+      async (selectionId) => await SelectionController.getByIds(selectionId)
     )
   );
   return student;
