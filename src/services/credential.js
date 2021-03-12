@@ -8,7 +8,6 @@ const {
 const router = require("express").Router();
 
 const CredentialController = require("../controllers/credential");
-const { validate } = require("../middlewares/utils");
 
 /**
  * Login and get user (teacher or student object)

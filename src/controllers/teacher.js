@@ -1,6 +1,7 @@
 "use strict";
 
 const { Teacher, validateTeacher } = require("../models/teacher");
+const MongoDb = require("../middlewares/mongodb-middleware");
 const mongoose = require("mongoose");
 const {
   DefaultArray,
@@ -26,7 +27,8 @@ const getById = async (id) =>
  * @param {string} email
  * @returns {object} teacher
  */
-const getByEmail = async (email) => await Teacher.findOne({ email });
+const getByEmail = async (email) =>
+  await MongoDb.getByEmail(Teacher, { email });
 
 /**
  * Create student

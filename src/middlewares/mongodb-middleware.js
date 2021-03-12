@@ -4,7 +4,6 @@ const { Model } = require("mongoose");
 const {
   DefaultObject,
   DefaultPage,
-  DefaultPageLimit,
 } = require("../providers/default-values-provider");
 const { ObjectId, CleanObject } = require("../providers/types-provider");
 

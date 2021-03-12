@@ -46,7 +46,7 @@ const getByRegistration = async (registration) => {
  * @param {string} email
  * @returns {object} student
  */
-const getByEmail = async (email) => MongoDb.getByEmail(email);
+const getByEmail = async (email) => MongoDb.getByEmail(Student, email);
 
 /**
  * Create student
