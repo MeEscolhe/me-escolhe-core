@@ -18,7 +18,6 @@ const { validate } = require("../middlewares/utils");
  */
 router.route("/").post(async (request, response) => {
   try {
-    validate(request.body, CredentialController);
     const credential = await CredentialController.authenticate(request.body);
     if (!credential) return NotAuthorized(response);
     return Authorized(response, credential);
