@@ -32,7 +32,7 @@ router.route("/").get(async (request, response) => {
     if (!credential) return NotAuthorized(response);
     if (!validatePassword(request.body.password, credential.password))
       return NotAuthorized(response);
-    const user = {};
+    let user = {};
     if (credential.isTeacher) {
       user = await TeacherController.getByEmail(request.body.email);
     } else {
