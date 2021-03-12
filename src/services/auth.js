@@ -24,22 +24,27 @@ const router = require("express").Router();
  * @param {Response} reponse
  * @returns {object} user (teacher or student object) and token
  */
-router.route("/").get(async (request, response) => {
+router.route("/").post(async (request, response) => {
   try {
     const credential = await CredentialController.getByEmail(
       request.body.email
     );
     if (!credential) return NotAuthorized(response);
-    if (!validatePassword(request.body.password, credential.password))
+    const { password, isTeacher } = credential;
+    if (!validatePassword(request.body.password, password))
       return NotAuthorized(response);
     let user = {};
-    if (credential.isTeacher) {
+    if (isTeacher) {
       user = await TeacherController.getByEmail(request.body.email);
     } else {
       user = await StudentController.getByEmail(request.body.email);
     }
     const token = generateToken(request.body);
-    return Authorized(response, { user, token });
+    return Authorized(response, {
+      user,
+      token,
+      isTeacher,
+    });
   } catch (error) {
     return UnexpectedError(response, error);
   }
