@@ -38,8 +38,8 @@ router
   .post(async (request, response) => {
     try {
       const { email, password, ...student } = request.body;
-      validate({ email, student }, StudentController);
-      await StudentController.create({ email, student });
+      validate({ email, ...student }, StudentController);
+      await StudentController.create({ email, ...student });
       await CredentialController.create({ email, password }, false);
       return Created(response, STUDENT);
     } catch (error) {
