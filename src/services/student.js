@@ -8,7 +8,6 @@
 const STUDENT = "student";
 
 const StudentController = require("../controllers/student");
-const PhaseController = require("../controllers/phase");
 const CredentialController = require("../controllers/credential");
 const { isEmpty, validate } = require("../middlewares/utils");
 const {
@@ -96,11 +95,11 @@ router
         request.params.registration
       );
       if (!student) return NotFoundById(response, STUDENT);
-      student = { ...student._doc };
-      for (let i = 0; i < student.phases.length; i++) {
-        const phaseId = student.phases[i]._id;
-        await PhaseController.removeStudent(phaseId, student.registration);
-      }
+      // student = { ...student._doc };
+      // for (let i = 0; i < student.phases.length; i++) {
+      //   const phaseId = student.phases[i]._id;
+      //   await PhaseController.removeStudent(phaseId, student.registration);
+      // }
       await StudentController.remove(student.registration);
       return Removed(response, student);
     } catch (error) {

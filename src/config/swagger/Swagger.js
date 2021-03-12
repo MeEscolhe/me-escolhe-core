@@ -22,7 +22,6 @@ const swaggerSpecs = {
     },
     schemas: {
       lab: require("../../doc/models/lab"),
-      phase: require("../../doc/models/phase"),
       project: require("../../doc/models/project"),
       selection: require("../../doc/models/selection"),
       student: require("../../doc/models/student"),
@@ -56,11 +55,6 @@ const swaggerSpecs = {
     "/login": require("../../doc/controllers/login").withoutParameters,
     "/labs": require("../../doc/controllers/lab").withoutParameters,
     "/labs/{id}": require("../../doc/controllers/lab").withParameters,
-
-    "/phases": require("../../doc/controllers/phase").withoutParameters,
-    "/phases/{id}": require("../../doc/controllers/phase").withParameters,
-    "/phases/{id}/student/{registration}": require("../../doc/controllers/phase")
-      .StudentRoute,
 
     "/projects": require("../../doc/controllers/project").withoutParameters,
     "/projects/{id}": require("../../doc/controllers/project").withParameters,

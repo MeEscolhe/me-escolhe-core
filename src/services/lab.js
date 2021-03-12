@@ -7,8 +7,6 @@
 const LAB = "lab";
 
 const LabController = require("../controllers/lab");
-const ProjectController = require("../controllers/project");
-const SelectionController = require("../controllers/selection");
 const { isEmpty, validate } = require("../middlewares/utils");
 const {
   Found,
@@ -47,7 +45,9 @@ router
   .route("/:id")
   .get(async (request, response) => {
     try {
-      const lab = await LabController.getById(request.params.id);
+      const lab = await LabController.getByIdWithProjectsAndSelections(
+        request.params.id
+      );
       if (!lab) return NotFoundById(response, LAB);
       return Found(response, lab);
     } catch (error) {
@@ -75,25 +75,5 @@ router
       return UnexpectedError(response, error);
     }
   });
-
-// TO-DO: FALTA ESSA DESGRAÇA AQUI. MELHOR DEIXAR POR ÚLTIMO
-
-router.route("/selections/:id").get(async (request, response) => {
-  try {
-    const lab = await LabController.getById(request.params.id);
-    if (!lab) return NotFoundById(response, LAB);
-    let selections = [];
-    lab.managements.forEach(async (projectId) => {
-      const project = await ProjectController.getById(projectId);
-      project.selections.forEach(async (selectionId) => {
-        const selection = await SelectionController.getById(selectionId);
-        selections.push(selection);
-      });
-    });
-    return Successful(response, selections);
-  } catch (error) {
-    return UnexpectedError(response, error);
-  }
-});
 
 module.exports = router;

@@ -28,7 +28,6 @@ app.use(express.json());
 app.use("/labs", labs);
 app.use("/auth", auth);
 app.use("/selections", selections);
-app.use("/phases", phases);
 app.use("/projects", projects);
 app.use("/students", students);
 app.use("/teachers", teachers);

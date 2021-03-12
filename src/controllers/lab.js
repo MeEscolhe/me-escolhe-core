@@ -7,6 +7,7 @@
 const { Lab, validateLab } = require("../models/lab");
 const ProjectController = require("../controllers/project");
 const MongoDb = require("../middlewares/mongodb-middleware");
+const { Project } = require("../models/project");
 
 /**
  * Get all labs
@@ -20,6 +21,27 @@ const getAll = async () => await MongoDb.getAll(Lab, "name");
  * @returns {object} lab
  */
 const getById = async (id) => await MongoDb.getById(Lab, id);
+
+/**
+ * Get lab by id with projects and selections
+ * @param {string} id
+ * @returns {object} lab
+ */
+const getByIdWithProjectsAndSelections = async (id) => {
+  let lab = await getById(id);
+  lab.projects = await Promise.all(
+    (await MongoDb.getByAttributes(Project, { labId: lab._id }, "name")).map(
+      async (project) => {
+        project.selections = await MongoDb.getByAttributes(
+          Selection,
+          { projectId: project._id },
+          "name"
+        );
+        return project;
+      }
+    )
+  );
+};
 
 /**
  * Create lab
@@ -71,4 +93,12 @@ const validate = (object) => {
   return error;
 };
 
-module.exports = { getAll, getById, create, update, remove, validate };
+module.exports = {
+  getAll,
+  getById,
+  getByIdWithProjectsAndSelections,
+  create,
+  update,
+  remove,
+  validate,
+};

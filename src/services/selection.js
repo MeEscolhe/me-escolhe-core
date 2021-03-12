@@ -70,7 +70,9 @@ router
   .route("/:id")
   .get(async (request, response) => {
     try {
-      let selection = await SelectionController.getById(request.params.id);
+      let selection = await SelectionController.getByIdWithProjectsAndLabs(
+        request.params.id
+      );
       if (!selection) return NotFoundById(response, SELECTION);
       return Found(response, selection);
     } catch (error) {

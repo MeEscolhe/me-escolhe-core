@@ -58,6 +58,18 @@ const getByIds = async (Model, ids, sortBy = "") => {
 };
 
 /**
+ * Get objects by ids
+ * @param {Model} Model
+ * @param {Object} attributes
+ * @returns {Array} objects with ids
+ */
+const getByAttributes = async (Model, attributes, sortBy = "") => {
+  let objects = await Model.find(attributes);
+  if (sortBy !== "") objects = objects.sort(sortBy);
+  return objects;
+};
+
+/**
  * Get objects by registrations
  * @param {Model} Model
  * @param {Array} registrations
@@ -203,6 +215,7 @@ module.exports = {
   getByEmail,
   getByIds,
   getByRegistrations,
+  getByAttributes,
   create,
   updateById,
   updateByRegistration,

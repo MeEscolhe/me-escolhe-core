@@ -60,7 +60,9 @@ const getAllStudentSelections = async (studentRegistration) => {
   if (student) {
     const studentPhases = await PhaseController.getStudentsPhase(student);
     const studentSelections = await Promise.all(
-      studentPhases.map(async (phase) => await getById(phase.selectionId))
+      studentPhases.map(
+        async (phase) => await getByIdWithProjectsAndLabs(phase.selectionId)
+      )
     );
     return studentSelections;
   } else {
@@ -105,7 +107,7 @@ const getAllTeacherSelections = async (teacherId) => {
  * @param {string} id
  * @returns {object} selection
  */
-const getById = async (id) => {
+const getByIdWithProjectsAndLabs = async (id) => {
   let selection = await MongoDb.getById(Selection, id);
   if (selection)
     selection = overrideAttribute(
@@ -195,7 +197,7 @@ module.exports = {
   getAll,
   getAllTeacherSelections,
   getAllStudentSelections,
-  getById,
+  getByIdWithProjectsAndLabs,
   getByIds,
   create,
   update,
