@@ -100,6 +100,7 @@ const update = async (
   registration,
   { name, email, password, cra, description, skills, experiences }
 ) => {
+  const oldStudent = await MongoDb.getByRegistration(Credential, registration);
   const newStudent = await MongoDb.updateByRegistration(Student, registration, {
     name,
     email,
@@ -108,10 +109,10 @@ const update = async (
     skills,
     experiences,
   });
-  if (newStudent.email && password)
-    await MongoDb.updateByEmail(Credential, newStudent.email, {
-      password,
-    });
+  await MongoDb.updateByEmail(Credential, oldStudent.email, {
+    email,
+    password,
+  });
   return newStudent;
 };
 
