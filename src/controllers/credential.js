@@ -36,11 +36,13 @@ const getByEmail = async (email) => await MongoDb.getByEmail(Credential, email);
  * @returns {object} credential created
  */
 const create = async ({ email, password }, isTeacher) =>
-  await MongoDb.create(Credential, {
-    email,
-    password: encryptPassword(password),
-    isTeacher,
-  });
+  email && password
+    ? await MongoDb.create(Credential, {
+        email,
+        password: encryptPassword(password),
+        isTeacher,
+      })
+    : null;
 
 /**
  * Update credential

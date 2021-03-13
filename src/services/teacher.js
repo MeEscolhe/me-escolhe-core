@@ -18,6 +18,7 @@ const {
   NotFoundById,
   UnexpectedError,
   NotFoundByEmail,
+  NotAuthorized,
 } = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
@@ -39,7 +40,11 @@ router
     try {
       const { email, password, ...teacher } = request.body;
       validate({ email, ...teacher }, TeacherController);
-      await CredentialController.create({ email, password }, true);
+      const credential = await CredentialController.create(
+        { email, password },
+        true
+      );
+      if (!credential) NotAuthorized(response);
       await TeacherController.create({ email, ...teacher });
       return Created(response, TEACHER);
     } catch (error) {
