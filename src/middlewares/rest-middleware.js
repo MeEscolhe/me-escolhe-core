@@ -114,7 +114,7 @@ const NotFoundByRegistration = (response, object = "object") =>
  * @returns {Response} response with status 403
  */
 const NotAuthorized = (response) =>
-  response.status(403).send("Email or password incorrect");
+  response.status(403).send({ message: "Email or password incorrect" });
 
 /**
  * An unexpected error occurred
