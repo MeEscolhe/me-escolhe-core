@@ -39,8 +39,8 @@ router
     try {
       const { email, password, ...teacher } = request.body;
       validate({ email, ...teacher }, TeacherController);
-      await TeacherController.create({ email, ...teacher });
       await CredentialController.create({ email, password }, true);
+      await TeacherController.create({ email, ...teacher });
       return Created(response, TEACHER);
     } catch (error) {
       return UnexpectedError(response, error);
