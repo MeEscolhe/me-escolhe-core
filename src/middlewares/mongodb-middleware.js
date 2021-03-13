@@ -167,7 +167,7 @@ const updateByEmail = async (Model, email, newObject, runValidators = true) =>
  * @returns {Object} Removed object
  */
 const removeById = async (Model, id) =>
-  (await Model.findByIdAndRemove(ObjectId(id))).toObject();
+  await Model.findByIdAndRemove(ObjectId(id));
 
 /**
  * Remove by id
@@ -176,7 +176,7 @@ const removeById = async (Model, id) =>
  * @returns {Object} Removed object
  */
 const removeByRegistration = async (Model, registration) =>
-  (await Model.deleteOne({ registration })).toObject();
+  await Model.deleteOne({ registration });
 
 /**
  * Remove by email
@@ -184,8 +184,7 @@ const removeByRegistration = async (Model, registration) =>
  * @param {String} email
  * @returns {Object} Removed object
  */
-const removeByEmail = async (Model, email) =>
-  (await Model.deleteOne({ email })).toObject();
+const removeByEmail = async (Model, email) => await Model.deleteOne({ email });
 
 /**
  * Remove objects by ids
