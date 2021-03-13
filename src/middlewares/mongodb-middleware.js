@@ -19,7 +19,8 @@ const getAll = async (Model, sortBy, paginate) => {
   } else {
     objects = await Model.find();
   }
-  if (sortBy) objects.sort((a, b) => a[sortBy].localeCompare(b[sortBy]));
+  if (sortBy)
+    objects.sort((a, b) => parseFloat(a[sortBy]) - parseFloat(b[sortBy]));
   return objects;
 };
 
@@ -60,7 +61,9 @@ const getByIds = async (Model, ids, sortBy) => {
   ids = ids.map((id) => ObjectId(id));
   let objects = await Model.find({ _id: { $in: ids } });
   if (sortBy)
-    objects = objects.sort((a, b) => a[sortBy].localeCompare(b[sortBy]));
+    objects = objects.sort(
+      (a, b) => parseFloat(a[sortBy]) - parseFloat(b[sortBy])
+    );
   return objects;
 };
 
@@ -73,7 +76,9 @@ const getByIds = async (Model, ids, sortBy) => {
 const getByAttributes = async (Model, attributes, sortBy) => {
   let objects = await Model.find(attributes);
   if (sortBy)
-    objects = objects.sort((a, b) => a[sortBy].localeCompare(b[sortBy]));
+    objects = objects.sort(
+      (a, b) => parseFloat(a[sortBy]) - parseFloat(b[sortBy])
+    );
   return objects;
 };
 

@@ -16,7 +16,7 @@ const MongoDb = require("../middlewares/mongodb-middleware");
  * Get all students
  * @returns {array} list of all students
  */
-const getAll = async () => await Student.find().sort("registration");
+const getAll = async () => await MongoDb.getAll(Student, "registration");
 
 /**
  * Get students by list of registrations

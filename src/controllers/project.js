@@ -23,7 +23,6 @@ const getAll = async () => {
         )
     )
   );
-  console.log(projects);
   return projects;
 };
 
