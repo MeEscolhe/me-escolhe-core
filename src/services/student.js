@@ -61,11 +61,11 @@ router
   .put(async (request, response) => {
     try {
       const registration = request.params.registration;
-      validate({ registration, ...request.body }, StudentController);
+      const { password, ...student } = request.body;
+      validate({ registration, ...student }, StudentController);
       const student = await StudentController.update(
         registration,
-        request.body,
-        true
+        request.body
       );
       if (!student) return NotFoundById(response, STUDENT);
       return Updated(response, student);

@@ -98,9 +98,12 @@ const create = async ({
  */
 const update = async (
   registration,
-  { name, email, cra, description, skills, experiences }
-) =>
-  await MongoDb.updateByRegistration(Student, registration, {
+  { name, email, password, cra, description, skills, experiences }
+) => {
+  const oldStudent = await MongoDb.getByRegistration(Student, registration);
+  if (password)
+    await MongoDb.updateByEmail(Credential, oldStudent.email, { password });
+  return await MongoDb.updateByRegistration(Student, registration, {
     name,
     email,
     cra,
@@ -108,6 +111,7 @@ const update = async (
     skills,
     experiences,
   });
+};
 
 /**
  * Remove student by registration
