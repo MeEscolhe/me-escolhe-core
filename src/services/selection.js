@@ -26,8 +26,7 @@ router
   .route("/")
   .get(async (request, response) => {
     try {
-      const { page = DefaultPage, limit = DefaultPageLimit } = request.body;
-      const selections = await SelectionController.getAll({ page, limit });
+      const selections = await SelectionController.getAll(request.body);
       return Found(response, selections);
     } catch (error) {
       return UnexpectedError(response, error);
