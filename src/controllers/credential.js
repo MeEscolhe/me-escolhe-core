@@ -76,8 +76,8 @@ const remove = async (email) => await MongoDb.getByEmail(Credential, email);
  */
 const authenticate = async ({ email, password }) => {
   const credential = await getByEmail(email);
-  if (!credential) return credential;
-  if (!validatePassword(password, credential.password)) return credential;
+  if (!credential || !validatePassword(password, credential.password))
+    return null;
   return {
     user: credential.isTeacher
       ? await TeacherController.getByEmail(email)
