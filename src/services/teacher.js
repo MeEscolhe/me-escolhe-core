@@ -44,7 +44,7 @@ router
         { email, password },
         true
       );
-      if (!credential) NotAuthorized(response);
+      if (!credential) return NotAuthorized(response);
       await TeacherController.create({ email, ...teacher });
       return Created(response, TEACHER);
     } catch (error) {
