@@ -61,8 +61,8 @@ router
   .put(async (request, response) => {
     try {
       const registration = request.params.registration;
-      const { password, ...student } = request.body;
-      validate({ registration, ...student }, StudentController);
+      const { password, ...body } = request.body;
+      validate({ registration, ...body }, StudentController);
       const student = await StudentController.update(
         registration,
         request.body
