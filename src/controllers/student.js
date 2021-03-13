@@ -11,6 +11,7 @@ const {
 } = require("../providers/default-values-provider");
 const SelectionController = require("../controllers/selection");
 const MongoDb = require("../middlewares/mongodb-middleware");
+const { encryptPassword } = require("../middlewares/auth-middleware");
 
 /**
  * Get all students
@@ -100,7 +101,7 @@ const update = async (
   registration,
   { name, email, password, cra, description, skills, experiences }
 ) => {
-  const oldStudent = await MongoDb.getByRegistration(Credential, registration);
+  const oldStudent = await MongoDb.getByRegistration(Student, registration);
   const newStudent = await MongoDb.updateByRegistration(Student, registration, {
     name,
     email,
@@ -109,6 +110,7 @@ const update = async (
     skills,
     experiences,
   });
+  if (password) password = encryptPassword(password);
   await MongoDb.updateByEmail(Credential, oldStudent.email, {
     email,
     password,

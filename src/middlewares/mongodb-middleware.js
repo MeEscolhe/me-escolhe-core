@@ -36,22 +36,22 @@ const getAll = async (Model, sortBy, paginate) => {
  * @returns {Array} object with id
  */
 const getById = async (Model, id) => {
-  let response = null;
-  let obj = await Model.findById(ObjectId(id));
-  if (obj) {
-    response = obj.toObject();
-  }
-  return response;
+  let object = await Model.findById(ObjectId(id));
+  if (object) object = object.toObject();
+  return object;
 };
 
 /**
  * Get object by registration
  * @param {Model} Model
- * @param {String} registration
+ * @param {Number} registration
  * @returns {Array} object with registration
  */
-const getByRegistration = async (Model, registration) =>
-  (await Model.findOne({ registration })).toObject();
+const getByRegistration = async (Model, registration) => {
+  let object = await Model.findOne({ registration: parseInt(registration) });
+  if (object) object = object.toObject();
+  return object;
+};
 
 /**
  * Get object by email
@@ -59,8 +59,11 @@ const getByRegistration = async (Model, registration) =>
  * @param {String} email
  * @returns {Array} object with registration
  */
-const getByEmail = async (Model, email) =>
-  (await Model.findOne({ email })).toObject();
+const getByEmail = async (Model, email) => {
+  let object = await Model.findOne({ email });
+  if (object) object = object.toObject();
+  return object;
+};
 
 /**
  * Get objects by ids
@@ -148,7 +151,7 @@ const updateByRegistration = async (
   runValidators = true
 ) =>
   await Model.findOneAndUpdate(
-    { registration },
+    { registration: parseInt(registration) },
     {
       $set: CleanObject(newObject),
     },
