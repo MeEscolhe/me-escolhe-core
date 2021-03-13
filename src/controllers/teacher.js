@@ -86,7 +86,7 @@ const update = async (
  * @param {string} id
  * @returns {object} teacher removed
  */
-const remove = async (id) => await MongoDb.findByIdAndRemove(Teacher, id);
+const remove = async (id) => await MongoDb.removeById(Teacher, id);
 
 //Teacher.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
