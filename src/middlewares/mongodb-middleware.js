@@ -166,15 +166,13 @@ const updateByRegistration = async (
  * @returns {Object} Updated object
  */
 const updateByEmail = async (Model, email, newObject, runValidators = true) =>
-  (
-    await Model.findOneAndUpdate(
-      { email },
-      {
-        $set: CleanObject(newObject),
-      },
-      { new: true, runValidators }
-    )
-  ).toObject();
+  await Model.findOneAndUpdate(
+    { email },
+    {
+      $set: CleanObject(newObject),
+    },
+    { new: true, runValidators }
+  );
 
 /**
  * Remove by id
