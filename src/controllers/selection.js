@@ -46,13 +46,16 @@ const getAll = async ({ page = DefaultPage, limit = DefaultPageLimit }) => {
 const getFullById = async (id) => {
   let selection = await MongoDb.getById(Selection, id);
   if (selection)
-    selection = overrideAttribute(
+    selection = await overrideAttribute(
       selection,
       "projectId",
       "project",
       await ProjectController.getById(selection.projectId)
     );
-  selection.students = await MongoDb.getByRegistrations(selection.students);
+  selection.students = await MongoDb.getByRegistrations(
+    Student,
+    selection.students
+  );
   return selection;
 };
 
