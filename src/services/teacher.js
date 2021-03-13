@@ -76,7 +76,8 @@ router
 
   .put(async (request, response) => {
     try {
-      validate(request.body, TeacherController);
+      const { password, ...body } = request.body;
+      validate({ ...body }, TeacherController);
       let teacher = await TeacherController.update(
         request.params.id,
         request.body
@@ -98,7 +99,7 @@ router
     }
   });
 
-//TO-DO
+// TO-DO
 router.route("/:id/selections").get(async (request, response) => {
   try {
     const teacher = await TeacherController.getById(request.params.id);

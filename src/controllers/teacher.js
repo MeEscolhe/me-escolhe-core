@@ -65,21 +65,23 @@ const create = async ({
 
 const update = async (
   id,
-  {
-    name,
-    email,
-    description = DefaultString,
-    labId,
-    managements = DefaultArray,
-  }
-) =>
-  await MongoDb.updateById(Teacher, id, {
+  { name, password, email, description, labId, managements }
+) => {
+  const oldTeacher = MongoDb.getById(Teacher, id);
+  const newTeacher = await MongoDb.updateById(Teacher, id, {
     name,
     email,
     description,
     labId,
     managements,
   });
+  if (password) password = encryptPassword(password);
+  await MongoDb.updateByEmail(Credential, oldTeacher.email, {
+    email,
+    password,
+  });
+  return newTeacher;
+};
 
 /**
  * Remove teacher by id
