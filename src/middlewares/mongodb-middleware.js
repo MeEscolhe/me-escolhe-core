@@ -1,5 +1,10 @@
 ("use strict");
 
+/**
+ * @author Amintas Victor <amintas.pereira@ccc.ufcg.edu.br>
+ * @author Kelvin Cirne <kelvin.cirne.custodio@ccc.ufcg.edu.br>
+ */
+
 const { Model } = require("mongoose");
 const { DefaultObject } = require("../providers/default-values-provider");
 const { ObjectId, CleanObject } = require("../providers/types-provider");
@@ -29,8 +34,14 @@ const getAll = async (Model, sortBy, paginate) => {
  * @param {String} id
  * @returns {Array} object with id
  */
-const getById = async (Model, id) =>
-  (await Model.findById(ObjectId(id))).toObject();
+const getById = async (Model, id) => {
+  let response = null;
+  let obj = await Model.findById(ObjectId(id));
+  if (obj) {
+    response = obj.toObject();
+  }
+  return response;
+};
 
 /**
  * Get object by registration
