@@ -68,7 +68,7 @@ const Found = (response, body) => Successful(response, body);
  * @returns {Response} response with status 404
  */
 const NotFound = (response, objects = "object") =>
-  response.status(404).json(`No ${objects}s to show.`);
+  response.status(404).json({ message: `No ${objects}s to show.` });
 
 /**
  * Message for "Not found by identifier" errors
@@ -76,8 +76,9 @@ const NotFound = (response, objects = "object") =>
  * @param {string} identifier
  * @returns {string} message
  */
-const NotFoundByIdentifierMessage = (object = "object", identifier = "ID") =>
-  `The ${object} with the given ${identifier} was not found.`;
+const NotFoundByIdentifierMessage = (object = "object", identifier = "ID") => {
+  message: `The ${object} with the given ${identifier} was not found.`;
+};
 
 /**
  * Not found resource by ID
@@ -123,7 +124,9 @@ const NotAuthorized = (response) =>
  * @returns {Response} response with status 400
  */
 const UnexpectedError = (response, error) =>
-  response.status(400).json(`An unexpected error occurred: ${error.message}.`);
+  response
+    .status(400)
+    .json({ message: `An unexpected error occurred: ${error.message}.` });
 
 module.exports = {
   Found,
