@@ -19,7 +19,7 @@ const getAll = async () => await MongoDb.getAll(Teacher, "name");
  * @param {string} id
  * @returns {object} teacher
  */
-const getById = async (id) => await MongoDb.findById(Teacher, id);
+const getById = async (id) => await MongoDb.getById(Teacher, id);
 
 /**
  * Get teacher by email
@@ -38,9 +38,20 @@ const getByEmail = async (email) =>
  * @param {array} managements
  * @returns {object} teacher created
  */
-const create = async ({ name, email, description, labId, managements }) => {
-  return MongoDb.create(name, email, description, labId, managements);
-};
+const create = async ({
+  name,
+  email,
+  description = DefaultString,
+  labId,
+  managements = DefaultArray,
+}) =>
+  await MongoDb.create(Teacher, {
+    name,
+    email,
+    description,
+    labId,
+    managements,
+  });
 
 /**
  * Update student
