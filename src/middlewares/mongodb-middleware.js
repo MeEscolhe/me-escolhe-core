@@ -1,10 +1,7 @@
 ("use strict");
 
 const { Model } = require("mongoose");
-const {
-  DefaultObject,
-  DefaultPage,
-} = require("../providers/default-values-provider");
+const { DefaultObject } = require("../providers/default-values-provider");
 const { ObjectId, CleanObject } = require("../providers/types-provider");
 
 /**
@@ -14,14 +11,14 @@ const { ObjectId, CleanObject } = require("../providers/types-provider");
  * @returns {Array} list of all objects.
  * If sortBy was passed, the array will be sorted
  */
-const getAll = async (Model, sortBy = "", { page, limit }) => {
+const getAll = async (Model, sortBy, paginate) => {
   let objects = [];
-  if (!page) {
-    objects = await Model.find();
+  if (paginate) {
+    objects = await Model.paginate(DefaultObject, paginate);
   } else {
-    objects = await Model.paginate(DefaultObject, { page, limit });
+    objects = await Model.find();
   }
-  if (sortBy !== "") objects = objects.sort(sortBy);
+  if (sortBy) objects.sort((a, b) => a[sortBy].localeCompare(b[sortBy]));
   return objects;
 };
 
@@ -58,10 +55,11 @@ const getByEmail = async (Model, email) =>
  * @param {Array} id
  * @returns {Array} objects with ids
  */
-const getByIds = async (Model, ids, sortBy = "") => {
+const getByIds = async (Model, ids, sortBy) => {
   ids = ids.map((id) => ObjectId(id));
   let objects = await Model.find({ _id: { $in: ids } });
-  if (sortBy !== "") objects = objects.sort(sortBy);
+  if (sortBy)
+    objects = objects.sort((a, b) => a[sortBy].localeCompare(b[sortBy]));
   return objects;
 };
 
@@ -71,9 +69,10 @@ const getByIds = async (Model, ids, sortBy = "") => {
  * @param {Object} attributes
  * @returns {Array} objects with ids
  */
-const getByAttributes = async (Model, attributes, sortBy = "") => {
+const getByAttributes = async (Model, attributes, sortBy) => {
   let objects = await Model.find(attributes);
-  if (sortBy !== "") objects = objects.sort(sortBy);
+  if (sortBy)
+    objects = objects.sort((a, b) => a[sortBy].localeCompare(b[sortBy]));
   return objects;
 };
 
@@ -206,8 +205,11 @@ const removeByIds = async (Model, ids, sortBy = "") => {
  * @param {Object} attributes
  * @returns {Object} Removed object
  */
-const removeByAttributes = async (Model, attributes) =>
-  await Model.remove(attributes);
+const removeByAttributes = async (Model, attributes) => {
+  const objects = getByAttributes(Model, attributes);
+  await Model.deleteMany(attributes);
+  return objects;
+};
 
 /**
  * Add id in array of model

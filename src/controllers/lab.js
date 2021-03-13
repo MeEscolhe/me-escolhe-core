@@ -8,6 +8,7 @@ const { Lab, validateLab } = require("../models/lab");
 const ProjectController = require("../controllers/project");
 const MongoDb = require("../middlewares/mongodb-middleware");
 const { Project } = require("../models/project");
+const { Selection } = require("../models/selection");
 
 /**
  * Get all labs
@@ -29,18 +30,18 @@ const getById = async (id) => await MongoDb.getById(Lab, id);
  */
 const getByIdWithProjectsAndSelections = async (id) => {
   let lab = await getById(id);
+  if (!lab) return lab;
   lab.projects = await Promise.all(
-    (await MongoDb.getByAttributes(Project, { labId: lab._id }, "name")).map(
+    (await MongoDb.getByAttributes(Project, { labId: lab._id })).map(
       async (project) => {
-        project.selections = await MongoDb.getByAttributes(
-          Selection,
-          { projectId: project._id },
-          "name"
-        );
+        project.selections = await MongoDb.getByAttributes(Selection, {
+          projectId: project._id,
+        });
         return project;
       }
     )
   );
+  return lab;
 };
 
 /**
@@ -80,7 +81,7 @@ const update = async (id, { name, description }, runValidators = true) =>
  */
 const remove = async (id) => {
   await ProjectController.removeByLabId(id);
-  return await MongoDb.removeById(id);
+  return await MongoDb.removeById(Lab, id);
 };
 
 /**
