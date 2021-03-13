@@ -147,15 +147,13 @@ const updateByRegistration = async (
   newObject,
   runValidators = true
 ) =>
-  (
-    await Model.findOneAndUpdate(
-      { registration },
-      {
-        $set: CleanObject(newObject),
-      },
-      { new: true, runValidators }
-    )
-  ).toObject();
+  await Model.findOneAndUpdate(
+    { registration },
+    {
+      $set: CleanObject(newObject),
+    },
+    { new: true, runValidators }
+  );
 
 /**
  * Update by email
