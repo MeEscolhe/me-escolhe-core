@@ -38,8 +38,12 @@ router
     try {
       const { email, password, ...student } = request.body;
       validate({ email, ...student }, StudentController);
+      const credential = await CredentialController.create(
+        { email, password },
+        false
+      );
+      if (!credential) return NotAuthorized(response);
       await StudentController.create({ email, ...student });
-      await CredentialController.create({ email, password }, false);
       return Created(response, STUDENT);
     } catch (error) {
       return UnexpectedError(response, error);
