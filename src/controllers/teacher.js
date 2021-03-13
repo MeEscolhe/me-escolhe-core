@@ -26,8 +26,7 @@ const getById = async (id) => await MongoDb.getById(Teacher, id);
  * @param {string} email
  * @returns {object} teacher
  */
-const getByEmail = async (email) =>
-  await MongoDb.getByEmail(Teacher, { email });
+const getByEmail = async (email) => await MongoDb.getByEmail(Teacher, email);
 
 /**
  * Create student
