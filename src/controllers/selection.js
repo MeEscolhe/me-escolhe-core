@@ -23,19 +23,19 @@ const { Student } = require("../models/student");
  *
  */
 const getAll = async ({ page = DefaultPage, limit = DefaultPageLimit }) => {
-  let paginate = await MongoDb.getAll(Selection, "", { page, limit });
-  paginate.docs = await Promise.all(
-    await paginate.docs.map(
+  let { docs } = await MongoDb.getAll(Selection, null, { page, limit });
+  docs = await Promise.all(
+    await docs.map(
       async (selection) =>
         await overrideAttribute(
-          selection,
+          selection.toObject(),
           "projectId",
           "project",
           await MongoDb.getById(Project, selection.projectId)
         )
     )
   );
-  return paginate;
+  return docs;
 };
 
 /**
