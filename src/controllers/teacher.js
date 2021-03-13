@@ -1,8 +1,9 @@
 "use strict";
 
 const { Teacher, validateTeacher } = require("../models/teacher");
+const { Credential } = require("../models/credential");
+const { encryptPassword } = require("../middlewares/auth-middleware");
 const MongoDb = require("../middlewares/mongodb-middleware");
-const mongoose = require("mongoose");
 const {
   DefaultArray,
   DefaultString,
@@ -67,7 +68,7 @@ const update = async (
   id,
   { name, password, email, description, labId, managements }
 ) => {
-  const oldTeacher = MongoDb.getById(Teacher, id);
+  const oldTeacher = await MongoDb.getById(Teacher, id);
   const newTeacher = await MongoDb.updateById(Teacher, id, {
     name,
     email,

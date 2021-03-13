@@ -85,7 +85,7 @@ router
       if (!teacher) return NotFoundById(response, TEACHER);
       return Updated(response, teacher);
     } catch (error) {
-      return UnexpectedError(error);
+      return UnexpectedError(response, error);
     }
   })
 

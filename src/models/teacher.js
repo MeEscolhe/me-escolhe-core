@@ -1,12 +1,11 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const ObjectId = require("mongodb").ObjectID;
 const {
   validate,
   string,
-  id,
   arrayOfIds,
+  reference,
 } = require("../middlewares/model-validator");
 
 /**
@@ -50,7 +49,7 @@ const validateTeacher = (teacher) =>
       name: string(),
       email: string(),
       description: string(),
-      labId: id(),
+      labId: reference(),
       managements: arrayOfIds(),
     },
     teacher
