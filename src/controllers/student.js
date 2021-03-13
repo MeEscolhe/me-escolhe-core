@@ -1,6 +1,8 @@
 "use strict";
 
 const { Student, validateStudent } = require("../models/student");
+const { Credential } = require("../models/credential");
+const { Selection } = require("../models/selection");
 const {
   DefaultString,
   DefaultArray,
