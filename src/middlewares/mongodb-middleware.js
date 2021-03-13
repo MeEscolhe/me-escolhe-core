@@ -237,7 +237,7 @@ const addOnArrayById = async (Model, modelId, arrayAttribute, id) => {
 const removeOfArrays = async (Model, arrayAttribute, id) => {
   let filter = {};
   filter[arrayAttribute] = id;
-  await Model.update(DefaultObject, {
+  await Model.updateMany(DefaultObject, {
     $pull: filter,
   });
 };
