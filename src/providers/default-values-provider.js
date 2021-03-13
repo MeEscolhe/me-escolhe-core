@@ -2,6 +2,8 @@ const DefaultArray = [];
 
 const DefaultBoolean = true;
 
+const DefaultNumber = 0;
+
 const DefaultString = "";
 
 const DefaultObject = {};
@@ -24,6 +26,7 @@ const DefaultSkills = {
 module.exports = {
   DefaultArray,
   DefaultBoolean,
+  DefaultNumber,
   DefaultString,
   DefaultExperiences,
   DefaultSkills,

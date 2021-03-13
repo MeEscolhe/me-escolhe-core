@@ -8,6 +8,7 @@ const { ObjectId, CleanObject } = require("../providers/types-provider");
  * Get all objects
  * @param {Model} Model
  * @param {String} sortBy
+ * @param {String} paginate { page, limit }
  * @returns {Array} list of all objects.
  * If sortBy was passed, the array will be sorted
  */

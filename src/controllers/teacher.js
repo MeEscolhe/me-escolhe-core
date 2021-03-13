@@ -53,20 +53,32 @@ const create = async ({ name, email, description, labId, managements }) => {
  * @returns {object} teacher updated
  */
 
-
-const update = async MongoDb.updateById(Teacher, id, 
-  {name, email, description = DefaultString, labId, managements = DefaultArray});
-
+const update = async (
+  id,
+  {
+    name,
+    email,
+    description = DefaultString,
+    labId,
+    managements = DefaultArray,
+  }
+) =>
+  await MongoDb.updateById(Teacher, id, {
+    name,
+    email,
+    description,
+    labId,
+    managements,
+  });
 
 /**
  * Remove teacher by id
  * @param {string} id
  * @returns {object} teacher removed
  */
-const remove = async (id) =>
-  await MongoDb.findByIdAndRemove(Teacher, id);
-  
-  //Teacher.findByIdAndRemove(mongoose.Types.ObjectId(id));
+const remove = async (id) => await MongoDb.findByIdAndRemove(Teacher, id);
+
+//Teacher.findByIdAndRemove(mongoose.Types.ObjectId(id));
 
 /**
  * Validate teacher
