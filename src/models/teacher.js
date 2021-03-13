@@ -30,8 +30,14 @@ const TeacherSchema = mongoose.model(
       type: String,
       default: "",
     },
-    labId: foreingKey("Lab", "_id", ObjectId),
-    managements: foreingKey("Project", "_id", ObjectId, true),
+    labId: {
+      type: String,
+      required: true,
+    },
+    managements: {
+      type: [String],
+      required: true,
+    },
   })
 );
 
