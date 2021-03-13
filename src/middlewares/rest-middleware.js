@@ -68,7 +68,7 @@ const Found = (response, body) => Successful(response, body);
  * @returns {Response} response with status 404
  */
 const NotFound = (response, objects = "object") =>
-  response.status(404).send(`No ${objects}s to show.`);
+  response.status(404).json(`No ${objects}s to show.`);
 
 /**
  * Message for "Not found by identifier" errors
@@ -86,7 +86,7 @@ const NotFoundByIdentifierMessage = (object = "object", identifier = "ID") =>
  * @returns {Response} response with status 404
  */
 const NotFoundById = (response, object = "object") =>
-  response.status(404).send(NotFoundByIdentifierMessage(object));
+  response.status(404).json(NotFoundByIdentifierMessage(object));
 
 /**
  * Not found resource by email
@@ -95,7 +95,7 @@ const NotFoundById = (response, object = "object") =>
  * @returns {Response} response with status 404
  */
 const NotFoundByEmail = (response, object = "object") =>
-  response.status(404).send(NotFoundByIdentifierMessage(object, "email"));
+  response.status(404).json(NotFoundByIdentifierMessage(object, "email"));
 
 /**
  * Not found resource by registration
@@ -106,7 +106,7 @@ const NotFoundByEmail = (response, object = "object") =>
 const NotFoundByRegistration = (response, object = "object") =>
   response
     .status(404)
-    .send(NotFoundByIdentifierMessage(object, "registration"));
+    .json(NotFoundByIdentifierMessage(object, "registration"));
 
 /**
  * Operation not authorized
@@ -114,7 +114,7 @@ const NotFoundByRegistration = (response, object = "object") =>
  * @returns {Response} response with status 403
  */
 const NotAuthorized = (response) =>
-  response.status(403).send({ message: "Email or password incorrect" });
+  response.status(403).json({ message: "Email or password incorrect" });
 
 /**
  * An unexpected error occurred
@@ -123,7 +123,7 @@ const NotAuthorized = (response) =>
  * @returns {Response} response with status 400
  */
 const UnexpectedError = (response, error) =>
-  response.status(400).send(`An unexpected error occurred: ${error.message}.`);
+  response.status(400).json(`An unexpected error occurred: ${error.message}.`);
 
 module.exports = {
   Found,
