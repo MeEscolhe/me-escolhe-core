@@ -176,7 +176,7 @@ const removeById = async (Model, id) =>
  * @returns {Object} Removed object
  */
 const removeByRegistration = async (Model, registration) =>
-  (await Model.findOneAndRemove({ registration })).toObject();
+  (await Model.deleteOne({ registration })).toObject();
 
 /**
  * Remove by email

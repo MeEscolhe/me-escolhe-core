@@ -113,8 +113,9 @@ const update = async (
  * @returns {object} student removed
  */
 const remove = async (registration) => {
-  const student = await MongoDb.removeByRegistration(Student, registration);
+  const student = await MongoDb.getById(Student, registration);
   if (!student) return student;
+  await MongoDb.removeByRegistration(Student, registration);
   await MongoDb.removeByEmail(Credential, student.email);
   await MongoDb.removeOfArrays(Selection, "students", registration);
   return student;
