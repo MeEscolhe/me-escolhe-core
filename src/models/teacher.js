@@ -7,7 +7,6 @@ const {
   string,
   id,
   arrayOfIds,
-  foreingKey,
 } = require("../middlewares/model-validator");
 
 /**

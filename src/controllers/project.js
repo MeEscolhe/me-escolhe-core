@@ -10,12 +10,22 @@ const { overrideAttribute, isEmpty } = require("../middlewares/utils");
  * Get all projects
  * @returns {array} list of all projects
  */
-const getAll = async () =>
-  await Promise.all(
-    (await MongoDb.getAll(Project, "name")).map(
-      async (project) => await getLab(project)
+const getAll = async () => {
+  let projects = await MongoDb.getAll(Project, "name");
+  projects = await Promise.all(
+    projects.map(
+      async (project) =>
+        await overrideAttribute(
+          project.toObject(),
+          "labId",
+          "lab",
+          await MongoDb.getById(Lab, project.labId)
+        )
     )
   );
+  console.log(projects);
+  return projects;
+};
 
 /**
  * Get project by id
