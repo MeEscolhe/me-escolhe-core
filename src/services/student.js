@@ -19,6 +19,7 @@ const {
   NotFoundById,
   UnexpectedError,
   NotFoundByEmail,
+  RegExists,
 } = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
@@ -38,11 +39,21 @@ router
     try {
       const { email, password, ...student } = request.body;
       validate({ email, ...student }, StudentController);
+
       const credential = await CredentialController.create(
         { email, password },
         false
       );
+
       if (!credential) return NotAuthorized(response);
+
+      const std = await StudentController.getByRegistration(
+        request.body.registration
+      );
+      if (std) {
+        await CredentialController.remove(email);
+        return RegExists(response);
+      }
       await StudentController.create({ email, ...student });
       return Created(response, STUDENT);
     } catch (error) {

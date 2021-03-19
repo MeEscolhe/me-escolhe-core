@@ -70,6 +70,9 @@ const Found = (response, body) => Successful(response, body);
 const NotFound = (response, objects = "object") =>
   response.status(404).json({ message: `No ${objects}s to show.` });
 
+const RegExists = (response) =>
+  response.status(404).json({ message: `This registration already exists.` });
+
 /**
  * Message for "Not found by identifier" errors
  * @param {string} object
@@ -140,4 +143,5 @@ module.exports = {
   NotFoundByRegistration,
   NotAuthorized,
   UnexpectedError,
+  RegExists,
 };

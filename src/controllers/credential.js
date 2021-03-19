@@ -66,9 +66,14 @@ const update = async ({ email, password, isTeacher }, runValidators = true) =>
 /**
  * Remove credential by email
  * @param {string} email
- * @returns {object} lab removed
+ * @returns {object} credential removed
  */
-const remove = async (email) => await MongoDb.getByEmail(Credential, email);
+const remove = async (email) => {
+  const credential = await MongoDb.getByEmail(Credential, email);
+  if (!credential) return credential;
+  await MongoDb.removeByEmail(Credential, email);
+  return credential;
+};
 
 /**
  * Authenticate login
