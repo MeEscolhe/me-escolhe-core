@@ -5,7 +5,6 @@ const mongoosePaginate = require("mongoose-paginate");
 const {
   validate,
   string,
-  arrayOfIds,
   array,
   boolean,
   numericRange,

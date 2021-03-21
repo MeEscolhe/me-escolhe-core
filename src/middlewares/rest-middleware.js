@@ -38,6 +38,14 @@ const Created = (response, body) => Successful(response, body, "created");
 const Updated = (response, body) => Successful(response, body, "updated");
 
 /**
+ * Successful ADD (PUT) request
+ * @param {Response} response
+ * @param {object | array} object
+ * @returns {Response} response
+ */
+const Added = (response, body) => Successful(response, body, "added");
+
+/**
  * Successful REMOVE request
  * @param {Response} response
  * @param {object | array} object
@@ -70,8 +78,14 @@ const Found = (response, body) => Successful(response, body);
 const NotFound = (response, objects = "object") =>
   response.status(404).json({ message: `No ${objects}s to show.` });
 
-const RegExists = (response) =>
-  response.status(404).json({ message: `This registration already exists.` });
+/**
+ * Already exists resource
+ * @param {Response} response
+ * @param {string} object
+ * @returns {Response} response with status 404
+ */
+const AlreadyExists = (response, object = "object") =>
+  response.status(404).json({ message: `The ${object} already exists` });
 
 /**
  * Message for "Not found by identifier" errors
@@ -135,6 +149,7 @@ module.exports = {
   Found,
   Created,
   Updated,
+  Added,
   Removed,
   Authorized,
   NotFound,
@@ -143,5 +158,5 @@ module.exports = {
   NotFoundByRegistration,
   NotAuthorized,
   UnexpectedError,
-  RegExists,
+  AlreadyExists,
 };

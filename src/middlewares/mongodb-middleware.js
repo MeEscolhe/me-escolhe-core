@@ -227,38 +227,94 @@ const removeByAttributes = async (Model, attributes) => {
 };
 
 /**
- * Add id in array of model
+ * Add identifier in array of model
  * @param {Model} Model
  * @param {String} arrayAttribute field
  * @param {String} id
  */
-const addOnArrayById = async (Model, modelId, arrayAttribute, id) => {
+const addOnArray = async (Model, condition, arrayAttribute, id) => {
   let filter = {};
   filter[arrayAttribute] = id;
-  await Model.update(
-    { _id: ObjectId(modelId) },
-    {
-      $push: filter,
-    }
-  );
+  await Model.update(condition, {
+    $push: filter,
+  });
 };
 
 /**
- * Remove of arrays in model objects by id
+ * Add identifier on array of model by ID
+ * @param {Model} Model
+ * @param {String} arrayAttribute field
+ * @param {String} id
+ */
+const addOnArrayById = async (Model, modelId, arrayAttribute, id) =>
+  await addOnArray(Model, { _id: ObjectId(modelId) }, arrayAttribute, id);
+
+/**
+ * Add identifier on array of model by ID
+ * @param {Model} Model
+ * @param {String} arrayAttribute field
+ * @param {String} id
+ */
+const addOnArrayByRegistration = async (
+  Model,
+  registration,
+  arrayAttribute,
+  id
+) => await addOnArray(Model, { registration }, arrayAttribute, id);
+
+/**
+ * Remove identifier from array in model objects
  * @param {Model} Model
  * @param {String} arrayAttribute field
  * @param {String} identifier id or registration
  */
-const removeOfArrays = async (Model, arrayAttribute, id) => {
+const removeFromArray = async (
+  Model,
+  condition,
+  arrayAttribute,
+  identifier
+) => {
   let filter = {};
-  filter[arrayAttribute] = id;
-  await Model.updateMany(DefaultObject, {
+  filter[arrayAttribute] = identifier;
+  await Model.updateMany(condition, {
     $pull: filter,
   });
 };
 
+/**
+ * Remove identifier from arrays in model objects
+ * @param {Model} Model
+ * @param {String} arrayAttribute field
+ * @param {String} identifier id or registration
+ */
+const removeFromArrays = async (Model, arrayAttribute, id) =>
+  await removeFromArray(Model, DefaultObject, arrayAttribute, id);
+
+/**
+ * Remove identifier from array in model objects by id
+ * @param {Model} Model
+ * @param {String} arrayAttribute field
+ * @param {String} identifier id or registration
+ */
+const removeFromArrayById = async (Model, modelId, arrayAttribute, id) =>
+  await removeFromArray(Model, { _id: ObjectId(modelId) }, arrayAttribute, id);
+
+/**
+ * Remove identifier from array in model objects by id
+ * @param {Model} Model
+ * @param {String} arrayAttribute field
+ * @param {String} identifier id or registration
+ */
+const removeFromArrayByRegistration = async (
+  Model,
+  registration,
+  arrayAttribute,
+  id
+) => await removeFromArray(Model, { registration }, arrayAttribute, id);
+
 module.exports = {
   addOnArrayById,
+  addOnArrayByRegistration,
   getAll,
   getById,
   getByRegistration,
@@ -275,5 +331,7 @@ module.exports = {
   removeByEmail,
   removeByAttributes,
   removeByIds,
-  removeOfArrays,
+  removeFromArrays,
+  removeFromArrayById,
+  removeFromArrayByRegistration,
 };

@@ -6,6 +6,7 @@
  */
 
 const STUDENT = "student";
+const SELECTION = "selection";
 
 const StudentController = require("../controllers/student");
 const CredentialController = require("../controllers/credential");
@@ -19,7 +20,8 @@ const {
   NotFoundById,
   UnexpectedError,
   NotFoundByEmail,
-  RegExists,
+  AlreadyExists,
+  Added,
 } = require("../middlewares/rest-middleware");
 const router = require("express").Router();
 
@@ -37,24 +39,16 @@ router
 
   .post(async (request, response) => {
     try {
-      const { email, password, ...student } = request.body;
-      validate({ email, ...student }, StudentController);
+      const { email, password, registration, ...student } = request.body;
+      validate({ email, registration, ...student }, StudentController);
 
-      const credential = await CredentialController.create(
-        { email, password },
-        false
-      );
+      if (await StudentController.getByRegistration(registration))
+        return AlreadyExists(response, STUDENT);
 
+      await CredentialController.create({ email, password }, false);
       if (!credential) return NotAuthorized(response);
 
-      const std = await StudentController.getByRegistration(
-        request.body.registration
-      );
-      if (std) {
-        await CredentialController.remove(email);
-        return RegExists(response);
-      }
-      await StudentController.create({ email, ...student });
+      await StudentController.create({ email, registration, ...student });
       return Created(response, STUDENT);
     } catch (error) {
       return UnexpectedError(response, error);
@@ -103,9 +97,30 @@ router
 
   .delete(async (request, response) => {
     try {
-      let student = await StudentController.remove(request.params.registration);
+      const student = await StudentController.remove(
+        request.params.registration
+      );
       if (!student) return NotFoundById(response, STUDENT);
       return Removed(response, student);
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
+  });
+
+router
+  .route("/:registration/selection/:selectionId")
+  .put(async (request, response) => {
+    try {
+      await StudentController.addSelection(request.params);
+      return Added(response, SELECTION);
+    } catch (error) {
+      return UnexpectedError(response, error);
+    }
+  })
+  .delete(async (request, response) => {
+    try {
+      await StudentController.removeSelection(request.params);
+      return Removed(response, SELECTION);
     } catch (error) {
       return UnexpectedError(response, error);
     }

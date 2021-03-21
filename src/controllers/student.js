@@ -128,8 +128,38 @@ const remove = async (registration) => {
   if (!student) return student;
   await MongoDb.removeByRegistration(Student, registration);
   await MongoDb.removeByEmail(Credential, student.email);
-  await MongoDb.removeOfArrays(Selection, "students", registration);
+  await MongoDb.removeFromArrays(Selection, "students", registration);
   return student;
+};
+
+const addSelection = async ({ registration, selectionId }) => {
+  await MongoDb.addOnArrayByRegistration(
+    Student,
+    registration,
+    "selections",
+    selectionId
+  );
+  await MongoDb.addOnArrayById(
+    Selection,
+    selectionId,
+    "students",
+    registration
+  );
+};
+
+const removeSelection = async ({ registration, selectionId }) => {
+  await MongoDb.removeFromArrayByRegistration(
+    Student,
+    registration,
+    "selections",
+    selectionId
+  );
+  await MongoDb.removeFromArrayById(
+    Selection,
+    selectionId,
+    "students",
+    registration
+  );
 };
 
 /**
@@ -150,6 +180,8 @@ module.exports = {
   getByRegistrations,
   create,
   update,
+  addSelection,
+  removeSelection,
   remove,
   validate,
 };

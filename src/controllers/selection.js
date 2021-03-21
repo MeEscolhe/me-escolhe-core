@@ -116,7 +116,7 @@ const update = async (id, updateData) =>
  * @returns {object} selection removed
  */
 const remove = async (id) => {
-  await MongoDb.removeOfArrays(Student, "selections", id);
+  await MongoDb.removeFromArrays(Student, "selections", id);
   return await MongoDb.removeById(Project, id);
 };
 
