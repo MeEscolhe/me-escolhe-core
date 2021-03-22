@@ -45,7 +45,10 @@ router
       if (await StudentController.getByRegistration(registration))
         return AlreadyExists(response, STUDENT);
 
-      await CredentialController.create({ email, password }, false);
+      const credential = await CredentialController.create(
+        { email, password },
+        false
+      );
       if (!credential) return NotAuthorized(response);
 
       await StudentController.create({ email, registration, ...student });
