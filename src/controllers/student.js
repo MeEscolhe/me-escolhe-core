@@ -132,6 +132,11 @@ const remove = async (registration) => {
   return student;
 };
 
+/**
+ * Add student in selection
+ * @param {string} registration
+ * @param {string} selectionId
+ */
 const addSelection = async ({ registration, selectionId }) => {
   await MongoDb.addOnArrayByRegistration(
     Student,
@@ -147,6 +152,11 @@ const addSelection = async ({ registration, selectionId }) => {
   );
 };
 
+/**
+ * Remove student from selection
+ * @param {string} registration
+ * @param {string} selectionId
+ */
 const removeSelection = async ({ registration, selectionId }) => {
   await MongoDb.removeFromArrayByRegistration(
     Student,
