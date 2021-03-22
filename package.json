@@ -36,8 +36,7 @@
   },
   "lint-staged": {
     "src/*.{js,json}": [
-      "prettier --double-quote --write",
-      "git add"
+      "prettier --double-quote --write"
     ]
   }
 }
