@@ -1,6 +1,16 @@
-# Me Escolhe !
+<h3 align="center">
+    <img alt="Logo" title="#logo" width="300px" src="./public/images/Logo-me-escolhe-v7.png">
+    </br>
+    <b>CORE: API REST</b>  
+    <br>
+</h3>
 
-Plataforma de seleções de projetos.
+<p align="center">
+    <img alt="Node.js" src="https://img.shields.io/badge/-Node.js-43853d?style=for-the-badge&logo=Node.js&logoColor=white" />
+    <img alt="MongoDB" src="https://img.shields.io/badge/-Mongo DB-13aa52?style=for-the-badge&logo=mongodb&logoColor=white" />
+    <img alt="Swagger" src="https://img.shields.io/badge/-Swagger-77D228?style=for-the-badge&logo=swagger&logoColor=white" />
+    <img alt="Insomnia" src="https://img.shields.io/badge/-Insomnia-5849BE?style=for-the-badge&logo=insomnia&logoColor=white" />
+</p>
 
 ## Preparando Ambiente
 
@@ -64,3 +74,9 @@ Para executar corretamente, e em ambiente seguro, a API é necessário utilizar 
 
 > AVISO:
 > Caso sejam usadas outras versões, podem haver problemas de compilação e comportamentos indesejados. Isso pode causar transtornos não apenas em ambiente de desenvolvimento, como também em produção. Esteja avisado.
+
+## Contribuindo
+Faça um pull request e deixe claro quais alterações foram feitas e quais bugs persistem. Não introduza bugs, seja proativo!
+
+## Licença
+* **MIT License** - [*Ver detalhes*](./LICENSE.txt)
